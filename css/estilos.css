@@ -1,0 +1,12 @@
+* {
+    font-family: 'Solway', serif;
+}
+
+
+/***********************************************************
+*******************ESTILOS PARA INDEX.PHP*******************
+***********************************************************/
+body.categorias{
+    min-height: 100vh;
+    background-image: linear-gradient(190deg,#ffcccc,#cd84f1);
+}
