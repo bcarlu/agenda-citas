@@ -3,5 +3,6 @@
 
 <body>
     <?php include_once'navbar.php';?>
-    <?php listaEsteticistas();?>
+    <?php //contarEsteticistas(); ?>
+    <?php agendaDisponible(); ?>
 </body>
