@@ -4,8 +4,8 @@
     <?php include_once'navbar.php';?>
     <div class="container">
         <div class="row">
-            <div class="col text-center font-weight-bold py-5">
-                <span>Categorias</span>
+            <div class="col text-center py-5">
+                <h3 class="hcate">Categorias</h3>
             </div>
         </div>
         <div class="row text-center">

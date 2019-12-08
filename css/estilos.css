@@ -1,5 +1,5 @@
 * {
-    font-family: 'Solway', serif;
+    font-family: 'Noto Serif', serif;
 }
 
 
@@ -9,4 +9,8 @@
 body.categorias{
     min-height: 100vh;
     background-image: linear-gradient(190deg,#ffcccc,#cd84f1);
+}
+
+h3.hcate{
+    font-weight: 700;
 }
