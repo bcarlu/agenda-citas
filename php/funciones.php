@@ -54,48 +54,54 @@ function contarEsteticistas(){
     $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
     $resultado = mysqli_fetch_assoc($queryTablaEstet);
 
-    echo $resultado['cantidad'];
+    echo $resultado['cantidad'] . "<br>";
+    
 }
 
 function agendaDisponible(){
     require_once'conexion.php';
     
-
+    //Selecciona tabla de servicios y se busca la categoria
     $nombreServ = $_GET['serv'];
     $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
     $arrayTablaServ = mysqli_fetch_array($queryTablaServ);
 
-    //Se almacena el id de categoria y se busca en la tabla esteticistas los que coincidan con id cat
+    //Se almacena el id de categoria
     $idCat = $arrayTablaServ ['id_cat'];
-
-
 
     $anio = date("Y");
     $mes = date("m");
-    $dia = date("d");
     
-    //Consulta horas del dia
-    $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
+    $semana = array (
+        array ("dia" => date("d")),
+        array ("dia" => date("d")+1),
+        array ("dia" => date("d")+2),
+    );
 
-
-    while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
-        $hora = $arregloHorasDia['nombre'];
-        //Consulta numero de citas programadas por fecha y hora
-        $consultaCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$dia' AND hora ='$hora' AND id_cat ='$idCat'");
-        $resultado = mysqli_fetch_assoc($consultaCitas);
-        echo "Citas para $dia de $mes a las $hora : " . (string) $resultado['numCitas'] . "<br>";
+    foreach ($semana as $diasem) {
+        $d = $diasem['dia'];
+        //Consulta horas del dia
+        $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
+        while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
+            $hora = $arregloHorasDia['nombre'];
+            //Consulta numero de citas programadas por fecha y hora
+            $consultaCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
+            $resultado = mysqli_fetch_assoc($consultaCitas);
+            echo "Citas para $d de $mes a las $hora : " . (string) $resultado['numCitas'] . "<br>";
+        }
     }
+    
 
     
     //Consulta numero de dias que tiene el mes actual
     $idDiasxMes = date("Ym");
     $consultaDiasxMes = mysqli_query($conexion,"SELECT * FROM t_diasxmes WHERE id_diasxmes ='$idDiasxMes'");
     $arregloDiasxMes = mysqli_fetch_array($consultaDiasxMes);
-    echo "Dias de este mes: " . $arregloDiasxMes['num_diasxmes'] . "<br>";
+    echo "Este mes es de: " . $arregloDiasxMes['num_diasxmes'] . " dias. <br>";
 
-    //Contar cuantos dias faltan para terminar el mes
-    $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - $dia;
-    echo "A este mes le quedan $lequedanAlMes dias.";
+    //Calcula cuantos dias faltan para terminar el mes
+    $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
+    echo "Faltan $lequedanAlMes dias para terminar el mes.";
 
     
 }

@@ -4,5 +4,6 @@
 <body>
     <?php include_once'navbar.php';?>
     <?php //contarEsteticistas(); ?>
+    
     <?php agendaDisponible(); ?>
 </body>
