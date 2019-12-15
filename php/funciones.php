@@ -52,23 +52,26 @@ function contarEsteticistas(){
     en la tabla esteticistas para esa categoria*/
     $idCat = $arrayTablaServ ['id_cat'];
     $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
-    $resultado = mysqli_fetch_assoc($queryTablaEstet);
-
-    echo $resultado['cantidad'] . "<br>";
+    $numEsteticistas = mysqli_fetch_assoc($queryTablaEstet);
     
 }
 
 function agendaDisponible(){
     require_once'conexion.php';
     
-    //Selecciona tabla de servicios y se busca la categoria
+    /*********** CANTIDAD ESTETICISTAS ***************/
+    //Se consulta la tabla de servicios y se buscan los registros que coincidan con el nombre recibido
     $nombreServ = $_GET['serv'];
     $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
     $arrayTablaServ = mysqli_fetch_array($queryTablaServ);
 
-    //Se almacena el id de categoria
+    /*Se almacena el id de categoria, se busca y se cuenta el numero de empleadas 
+    en la tabla esteticistas para esa categoria*/
     $idCat = $arrayTablaServ ['id_cat'];
+    $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
+    $numEsteticistas = mysqli_fetch_assoc($queryTablaEstet);
 
+    /*********** CITAS AGENDADAS ***************/
     $anio = date("Y");
     $mes = date("m");
     
@@ -80,6 +83,7 @@ function agendaDisponible(){
 
     foreach ($semana as $diasem) {
         $d = $diasem['dia'];
+        echo "$d-$mes <br>";
         //Consulta horas del dia
         $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
         while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
@@ -87,7 +91,9 @@ function agendaDisponible(){
             //Consulta numero de citas programadas por fecha y hora
             $consultaCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
             $resultado = mysqli_fetch_assoc($consultaCitas);
-            echo "Citas para $d de $mes a las $hora : " . (string) $resultado['numCitas'] . "<br>";
+            if ($numEsteticistas['cantidad'] > $resultado['numCitas']) {
+                echo "$hora <br>";
+            }
         }
     }
     
