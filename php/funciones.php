@@ -40,22 +40,6 @@ function listaEsteticistas(){
     }
 }
 
-function contarEsteticistas(){
-    require_once'conexion.php';
-    
-    //Se consulta la tabla de servicios y se buscan los registros que coincidan con el nombre recibido
-    $nombreServ = $_GET['serv'];
-    $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
-    $arrayTablaServ = mysqli_fetch_array($queryTablaServ);
-
-    /*Se almacena el id de categoria, se busca y se cuenta el numero de empleadas 
-    en la tabla esteticistas para esa categoria*/
-    $idCat = $arrayTablaServ ['id_cat'];
-    $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
-    $numEsteticistas = mysqli_fetch_assoc($queryTablaEstet);
-    
-}
-
 function agendaDisponible(){
     require_once'conexion.php';
     
@@ -74,6 +58,9 @@ function agendaDisponible(){
     /*********** CITAS AGENDADAS ***************/
     $anio = date("Y");
     $mes = date("m");
+    $buscarnMes = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_meses WHERE id_mes = '$mes'"));
+    $nombreMes = $buscarnMes['nombre'];
+
     
     $semana = array (
         array ("dia" => date("d")),
@@ -83,7 +70,7 @@ function agendaDisponible(){
 
     foreach ($semana as $diasem) {
         $d = $diasem['dia'];
-        echo "$d-$mes <br>";
+        echo "$d de $nombreMes <br>";
         //Consulta horas del dia
         $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
         while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
