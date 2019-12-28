@@ -2,8 +2,7 @@
 <?php include_once'php/funciones.php';?>
 
 <body>
-    <?php include_once'navbar.php';?>
-    <?php //contarEsteticistas(); ?>
-    
+    <?php include_once'navbar.php';?>  
+    <div class="text-center h4 alert-primary">Agenda disponible para <?php echo "<b>{$_GET['serv']}</b>"; ?></div>  
     <?php agendaDisponible(); ?>
 </body>

@@ -60,28 +60,44 @@ function agendaDisponible(){
     $mes = date("m");
     $buscarnMes = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_meses WHERE id_mes = '$mes'"));
     $nombreMes = $buscarnMes['nombre'];
-
-    
+        
     $semana = array (
         array ("dia" => date("d")),
         array ("dia" => date("d")+1),
         array ("dia" => date("d")+2),
+        array ("dia" => date("d")+3),
+        array ("dia" => date("d")+4),
     );
 
+    /*********** VALIDACION DE DATOS Y CONDICIONALES PARA CALCULAR DISPONIBILIDAD ***************/
+    
+    //Validar los dias de la semana
     foreach ($semana as $diasem) {
         $d = $diasem['dia'];
-        echo "$d de $nombreMes <br>";
+        echo "<div class='h5 alert-warning font-weight-bold text-center'>$d de $nombreMes </div>";
+        
         //Consulta horas del dia
         $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
+
+        //Consulta duracion del servicio escogido
+        $duracionServicio = $arrayTablaServ ['id_duracion'];
+
+
+        //Condicionales para presentar la disponibilidad        
         while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
             $hora = $arregloHorasDia['nombre'];
             //Consulta numero de citas programadas por fecha y hora
-            $consultaCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
-            $resultado = mysqli_fetch_assoc($consultaCitas);
-            if ($numEsteticistas['cantidad'] > $resultado['numCitas']) {
-                echo "$hora <br>";
+            $contarCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
+            $resultado = mysqli_fetch_assoc($contarCitas);  
+            $duracionCita = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'"));
+
+            if ($resultado['numCitas'] >= 1) {
+                echo "La cita comienza a las $hora y termina a las " . ($duracionCita['hora']+$duracionCita['duracion']) . "<br>";
+            }else{
+                echo $hora . "<br>";
             }
         }
+        
     }
     
 
