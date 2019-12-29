@@ -3,7 +3,9 @@
 
 <body>
     <?php include_once'navbar.php';?>
-
+    
+    
+    
     <?php
 
     $categoria = $_GET['cat'];
@@ -12,16 +14,22 @@
     $dia = $_GET['dia'];
     $mes = $_GET['mes'];
     ?>
-    <div class="text-center alert alert-primary">
-        <?php
-        echo "<p>Su servicio <b>$servicio</b> será Agendado para el dia <b>$dia de $mes a las $hora</b>.</p>";
-        echo "<p>Si la información es correcta por favor confirme su cita.</p>"
-        ?>
-    </div>
-    
-    <div class="text-center p-5">
-        <button type="button" class="btn btn-success">Confirmar</button>
-    </div>
-    
-
+        
+    <div class="container bg-md-primary">
+        <div class="card mx-auto alert alert-primary" style="width: 18rem;">
+            <img src="img/manicure.jpeg" height="176" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title font-weight-bold"><?php echo $servicio;?></h5>
+                <p class="card-text">Este es el detalle de la programación de su servicio, si los datos son correctos puede confirmar la agenda.</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Servicio: <?php echo $servicio;?></li>
+                <li class="list-group-item">Fecha: <?php echo $dia . " de " . $mes;?></li>
+                <li class="list-group-item">Hora: <?php echo $hora;?></li>
+            </ul>
+            <div class="card-body">
+                <a href="#" class="btn btn-success">Confirmar</a>
+            </div>
+        </div>
+    </div>    
 </body>
