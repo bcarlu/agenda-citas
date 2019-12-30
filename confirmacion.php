@@ -1,13 +1,14 @@
 <?php include_once'head.php';?>
 <?php include_once'php/funciones.php';?>
+<?php
+$usuario = $_SESSION['username'];
+if (isset($usuario)) {
+?>
 
 <body>
     <?php include_once'navbar.php';?>
-    
-    
-    
+    <?php include_once'navsesion.php';?>
     <?php
-
     $categoria = $_GET['cat'];
     $servicio = $_GET['serv'];
     $hora = $_GET['hora'];
@@ -31,5 +32,12 @@
                 <a href="#" class="btn btn-success">Confirmar</a>
             </div>
         </div>
-    </div>    
+    </div> 
+
+<?php
+//Cierre del if
+}else {
+    echo ":( no has ingresado tus datos, por favor <a href='index.php'>inicia sesión</a> :)";
+}
+?>   
 </body>
