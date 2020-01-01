@@ -121,7 +121,14 @@ function agendaDisponible(){
 
     //Calcula cuantos dias faltan para terminar el mes
     $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
-    echo "Faltan $lequedanAlMes dias para terminar el mes.";
+    echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
 
-    
+    for ($i=date("d"); $i <= $arregloDiasxMes['num_diasxmes']; $i++) { 
+        echo "Ciclo 1 - $i <br>";
+    }
+    if ($i > $arregloDiasxMes['num_diasxmes']) {
+        for ($i=1; $i<=5; $i++) { 
+            echo "Ciclo 2 - $i <br>";
+        }
+    }
 }

@@ -12,8 +12,8 @@ if (isset($_POST)) {
 
     if ($resultadoLogin['usuario'] > 0) {
         $_SESSION['username'] = $email;
-        header("location:../categorias.php");
+        header("location:../inicio.php");
     }else {
-        echo "No estas registrado, por favor Hazlo aqui.";
+        echo "No estas registrado, <a href='registro.php'>puedes hacerlo aqui, es gratis</a>";
     }
 }
