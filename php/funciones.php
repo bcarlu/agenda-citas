@@ -69,8 +69,6 @@ function agendaDisponible(){
         array ("dia" => date("d")+4),
     );
 
-    
-
     /*********** VALIDACION DE DATOS Y CONDICIONALES PARA CALCULAR DISPONIBILIDAD ***************/
     
     //Validar los dias de la semana
@@ -78,15 +76,12 @@ function agendaDisponible(){
         $d = $diasem['dia'];
         echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
 
-        
-        
-        //Consulta horas del dia
-        $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");
-
         //Consulta duracion del servicio escogido
         $duracionServicio = $arrayTablaServ ['id_duracion'];
-
-
+        
+        //Consulta horas del dia
+        $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");        
+        
         //Condicionales para presentar la disponibilidad        
         while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
             $hora = $arregloHorasDia['nombre'];
@@ -96,12 +91,7 @@ function agendaDisponible(){
             $duracionCita = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'"));
             
 
-            /*if ($resultado['numCitas'] >= 1) {
-                echo "La cita comienza a las $hora y termina a las " . ($duracionCita['hora']+$duracionCita['duracion']) . "<br>";
-            }else{
-                echo $hora . "<br>";
-            }*/
-
+           
             if ($duracionServicio < 2) {
                 if ($resultado['numCitas'] < $numEsteticistas['cantidad']) {
                     echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$hora&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 rounded-circle' style='height: 75px;width:75px;'><span class='text-center align-middle'>$hora</span></a>";
@@ -110,8 +100,6 @@ function agendaDisponible(){
         }
         
     }
-    
-
     
     //Consulta numero de dias que tiene el mes actual
     $idDiasxMes = date("Ym");
@@ -123,12 +111,5 @@ function agendaDisponible(){
     $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
     echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
 
-    for ($i=date("d"); $i <= $arregloDiasxMes['num_diasxmes']; $i++) { 
-        echo "Ciclo 1 - $i <br>";
-    }
-    if ($i > $arregloDiasxMes['num_diasxmes']) {
-        for ($i=1; $i<=5; $i++) { 
-            echo "Ciclo 2 - $i <br>";
-        }
-    }
+    
 }

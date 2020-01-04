@@ -12,7 +12,7 @@ if (isset($_POST)) {
 
     if ($resultadoLogin['usuario'] > 0) {
         $_SESSION['username'] = $email;
-        header("location:../inicio.php");
+        header("location:../inicio");
     }else {
         echo "No estas registrado, <a href='registro.php'>puedes hacerlo aqui, es gratis</a>";
     }

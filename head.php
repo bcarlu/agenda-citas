@@ -1,10 +1,3 @@
-
-<?php 
-/*ESTE HEAD ES PARA LAS PAGINAS DE CLIENTES REGISTRADOS, 
-POR LO CUAL SE INCLUYE LA FUNCION DE SESION.*/
-session_start(); 
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

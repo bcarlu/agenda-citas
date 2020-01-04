@@ -1,5 +1,7 @@
+<?php session_start();?>
 <?php include_once'head.php';?>
 <?php include_once'php/funciones.php';?>
+
 <?php
 $usuario = $_SESSION['username'];
 if (isset($usuario)) {
