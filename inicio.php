@@ -35,7 +35,7 @@ if (isset($usuario)) {
 <?php
 //Cierre del if
 }else {
-    echo ":( no has ingresado tus datos, por favor <a href='index.php'>inicia sesión</a> :)";
+    echo ":( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)";
 }
 ?>
 </body>

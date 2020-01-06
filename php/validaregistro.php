@@ -13,13 +13,13 @@ if (isset($_POST)) {
     $resultadoReg = mysqli_fetch_assoc($consultaReg);
 
     if ($resultadoReg['correo'] > 0) {
-        echo "El email ya está registrado, puede <a href='../index.php'>iniciar sesion</a> o <a href='../registro.php'>ingresar un nuevo email.</a>";
+        echo "El email ya está registrado, puede <a href='../'>iniciar sesion</a> o <a href='../registro'>ingresar un nuevo email.</a>";
     }else {
         $registrar = "INSERT INTO t_clientes (nombre,apellidos,email,celular,clave) VALUES ('$nombre','$apellidos','$email','$celular','$clave')";
         mysqli_query($conexion,$registrar);
-        echo "Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../index.php'>ingresar</a>";
+        echo "Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../'>ingresar</a>";
     }
 
 }else {
-    echo "Sin datos, puede <a href='../index.php'>iniciar sesion</a> o <a href='../registro.php'>registrarse.</a>";
+    echo "Sin datos, puede <a href='../'>iniciar sesion</a> o <a href='../registro'>registrarse.</a>";
 }

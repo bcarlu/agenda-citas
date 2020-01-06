@@ -15,8 +15,8 @@ function listaServicios(){
     
     //Se recorre la tabla de servicios y se listan los que pertenezcan a la cat
     while($arrayTablaServ = mysqli_fetch_array($queryTablaServ)){
-        echo ' <a href="agenda.php?serv=' . $arrayTablaServ['nombre'] . '"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded-circle">'
-        . $arrayTablaServ['nombre'] . "<br>" . '</a>';
+        echo ' <a href="agenda.php?serv=' . $arrayTablaServ['nombre'] . '"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded"><br>'
+        . $arrayTablaServ['nombre'] . " $:" . $arrayTablaServ['precio'] . "<br>" . '</a>';
     }
 
 }
@@ -89,12 +89,10 @@ function agendaDisponible(){
             $contarCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
             $resultado = mysqli_fetch_assoc($contarCitas);  
             $duracionCita = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'"));
-            
-
-           
+         
             if ($duracionServicio < 2) {
                 if ($resultado['numCitas'] < $numEsteticistas['cantidad']) {
-                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$hora&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 rounded-circle' style='height: 75px;width:75px;'><span class='text-center align-middle'>$hora</span></a>";
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$hora&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 mr-3 rounded' style='height: 75px;width:75px;'><span class='text-center align-middle'>dispo: $hora</span></a>";
                 }
             }
         }

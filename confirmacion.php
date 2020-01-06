@@ -30,7 +30,7 @@ if (isset($usuario)) {
                 <li class="list-group-item">Hora: <?php echo $hora;?></li>
             </ul>
             <div class="card-body">
-                <a href="#" class="btn btn-success">Confirmar</a>
+                <a href="php/confirmAgenda.php" class="btn btn-success">Confirmar</a>
             </div>
         </div>
     </div> 
