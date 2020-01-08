@@ -111,3 +111,13 @@ function agendaDisponible(){
 
     
 }
+
+function citasUsuario(){
+    require_once'conexion.php';
+    $usuario = $_SESSION['username'];
+    $consultaCitasUsuario = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
+    
+    while ($resultadoCitasUsuario = mysqli_fetch_array($consultaCitasUsuario)){
+        echo $resultadoCitasUsuario['id_serv'] . "<br>";
+    }
+}

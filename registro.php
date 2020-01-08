@@ -2,7 +2,7 @@
 <body>
     <div class="container">
     <h2 class="text-center py-5">Registro</h2>
-    <form action="php/validaregistro.php" method="post">
+    <form action="php/validaregistro" method="post">
         <div class="form-group mx-auto col-7">
             <label for="nom-ape">Nombre</label>
             <input type="text" class="form-control" id="nombre-reg" name="nombre-reg" aria-describedby="nombreAyuda" placeholder="Escriba su nombre" required>
