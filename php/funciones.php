@@ -43,24 +43,27 @@ function listaEsteticistas(){
 function agendaDisponible(){
     require_once'conexion.php';
     
-    /*********** CANTIDAD ESTETICISTAS ***************/
-    //Se consulta la tabla de servicios y se buscan los registros que coincidan con el nombre recibido
+    
+    //Selecciona la categoria del servicio
     $nombreServ = $_GET['serv'];
     $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
-    $arrayTablaServ = mysqli_fetch_array($queryTablaServ);
-
-    /*Se almacena el id de categoria, se busca y se cuenta el numero de empleadas 
-    en la tabla esteticistas para esa categoria*/
+    $arrayTablaServ = mysqli_fetch_array($queryTablaServ);    
     $idCat = $arrayTablaServ ['id_cat'];
+
+
+    //Calcula numero de esteticistas
     $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
     $numEsteticistas = mysqli_fetch_assoc($queryTablaEstet);
+    
 
-    /*********** CITAS AGENDADAS ***************/
+    //Valida mes
     $anio = date("Y");
     $mes = date("m");
     $buscarnMes = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_meses WHERE id_mes = '$mes'"));
     $nombreMes = $buscarnMes['nombre'];
-        
+    
+
+    //Arreglo de dias
     $semana = array (
         array ("dia" => date("d")),
         array ("dia" => date("d")+1),
@@ -68,11 +71,74 @@ function agendaDisponible(){
         array ("dia" => date("d")+3),
         array ("dia" => date("d")+4),
     );
-
-    /*********** VALIDACION DE DATOS Y CONDICIONALES PARA CALCULAR DISPONIBILIDAD ***************/
     
-    //Validar los dias de la semana
-    foreach ($semana as $diasem) {
+    //Recorre arreglo y selecciona dias
+    foreach ($semana as $sem) {
+        $d = $sem['dia'];
+
+        //Selecciona esteticista
+        $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
+        while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
+            $esteticistaN = $resultadoEsteticista['id_estet'];
+            $esteticistaX = $resultadoEsteticista['nombre'];
+
+            //Selecciona citas de esteticista
+            $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaN'");
+            while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
+                //echo "Dia $d de $mes Esteticista: $esteticistaX Hora: {$resultadoCitasxE['hora']} Duracion: {$resultadoCitasxE['duracion']}" . "<br>";
+                
+                //Genera horas dia
+                $arregloHoras = array(
+                    array("hora" => 7, "estado" => "disponible"),
+                    array("hora" => 8, "estado" => "disponible"),
+                    array("hora" => 9, "estado" => "disponible"),
+                    array("hora" => 10, "estado" => "disponible"),
+                    array("hora" => 11, "estado" => "disponible"),
+                    array("hora" => 12, "estado" => "disponible"),
+                    array("hora" => 13, "estado" => "disponible"),
+                    array("hora" => 14, "estado" => "disponible"),
+                    array("hora" => 15, "estado" => "disponible"),
+                    array("hora" => 16, "estado" => "disponible"),
+                    array("hora" => 17, "estado" => "disponible"),
+                    array("hora" => 18, "estado" => "disponible"),
+                );
+                
+                //Recorre arreglo horas
+                foreach ($arregloHoras as $horaDia) {
+                    $h = $horaDia['hora'];
+                    $e = $horaDia['estado'];
+                    
+                    $hantes = $resultadoCitasxE['hora'];
+                    $hdespues = $resultadoCitasxE['horafin'];
+
+                    if ($h < $hantes) {
+                        echo "OK $h <br>";
+                    }
+                    if ($h >= $hdespues) {
+                        echo "OK $h <br>";
+                    }
+                    
+                //Fin foreach
+                }
+                
+
+            //Fin while
+            }
+
+        //Fin while
+        }
+
+        
+
+    //Fin foreach
+    }
+
+
+    /*### Validacion de datos ###*/
+
+
+    //Recorre el arreglo dias
+    /*foreach ($semana as $diasem) {
         $d = $diasem['dia'];
         echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
 
@@ -95,19 +161,20 @@ function agendaDisponible(){
                     echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$hora&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 mr-3 rounded' style='height: 75px;width:75px;'><span class='text-center align-middle'>dispo: $hora</span></a>";
                 }
             }
+        //Fin while    
         }
-        
-    }
+    //Fin foreach    
+    }*/
     
     //Consulta numero de dias que tiene el mes actual
     $idDiasxMes = date("Ym");
     $consultaDiasxMes = mysqli_query($conexion,"SELECT * FROM t_diasxmes WHERE id_diasxmes ='$idDiasxMes'");
     $arregloDiasxMes = mysqli_fetch_array($consultaDiasxMes);
-    echo "Este mes es de: " . $arregloDiasxMes['num_diasxmes'] . " dias. <br>";
+    //echo "Este mes es de: " . $arregloDiasxMes['num_diasxmes'] . " dias. <br>";
 
     //Calcula cuantos dias faltan para terminar el mes
     $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
-    echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
+    //echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
 
     
 }
@@ -115,9 +182,14 @@ function agendaDisponible(){
 function citasUsuario(){
     require_once'conexion.php';
     $usuario = $_SESSION['username'];
-    $consultaCitasUsuario = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
+    $consultaIdServicio = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
+    $resultadoIdServicio = mysqli_fetch_array($consultaIdServicio);
+    $idServicio = $resultadoIdServicio['id_serv'];
     
-    while ($resultadoCitasUsuario = mysqli_fetch_array($consultaCitasUsuario)){
-        echo $resultadoCitasUsuario['id_serv'] . "<br>";
-    }
+
+    $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
+    $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
+    $nomServicio = $resultadoNombreServ['nombre'];
+    
+
 }

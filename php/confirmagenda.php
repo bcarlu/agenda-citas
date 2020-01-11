@@ -10,7 +10,7 @@ if (isset($usuario)) {
 ?>
 <!--Nombre del usuario actual y boton para cerrar sesion-->
 <div class="container">
-  <a href="../inicio" class="btn btn-warning"><img class="rounded float-left" src="img/volver-flecha.png" alt="" style="height:45px; width:45px;"></a>
+  <a href="../inicio" class="btn btn-warning"><img class="rounded float-left" src="../img/icono-home.png" alt="" style="height:45px; width:45px;"></a>
   <div class="btn btn-primary text-wrap" style="width:150px;">
     <small><b>Bienvenido - <?php echo $_SESSION['username']; ?></b></small> 
   </div>
