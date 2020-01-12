@@ -75,62 +75,64 @@ function agendaDisponible(){
     //Recorre arreglo y selecciona dias
     foreach ($semana as $sem) {
         $d = $sem['dia'];
-
+        echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
+        
+        
         //Selecciona esteticista
         $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
         while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
-            $esteticistaN = $resultadoEsteticista['id_estet'];
-            $esteticistaX = $resultadoEsteticista['nombre'];
-
-            //Selecciona citas de esteticista
-            $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaN'");
-            while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
-                //echo "Dia $d de $mes Esteticista: $esteticistaX Hora: {$resultadoCitasxE['hora']} Duracion: {$resultadoCitasxE['duracion']}" . "<br>";
+            $esteticistaId = $resultadoEsteticista['id_estet'];
+            $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
+            echo $esteticistaNom . "<br>";            
                 
-                //Genera horas dia
-                $arregloHoras = array(
-                    array("hora" => 7, "estado" => "disponible"),
-                    array("hora" => 8, "estado" => "disponible"),
-                    array("hora" => 9, "estado" => "disponible"),
-                    array("hora" => 10, "estado" => "disponible"),
-                    array("hora" => 11, "estado" => "disponible"),
-                    array("hora" => 12, "estado" => "disponible"),
-                    array("hora" => 13, "estado" => "disponible"),
-                    array("hora" => 14, "estado" => "disponible"),
-                    array("hora" => 15, "estado" => "disponible"),
-                    array("hora" => 16, "estado" => "disponible"),
-                    array("hora" => 17, "estado" => "disponible"),
-                    array("hora" => 18, "estado" => "disponible"),
-                );
+            //Genera horas dia
+            $arregloHoras = array(
+                array("hora" => 7, "estado" => "disponible"),
+                array("hora" => 8, "estado" => "disponible"),
+                array("hora" => 9, "estado" => "disponible"),
+                array("hora" => 10, "estado" => "disponible"),
+                array("hora" => 11, "estado" => "disponible"),
+                array("hora" => 12, "estado" => "disponible"),
+                array("hora" => 13, "estado" => "disponible"),
+                array("hora" => 14, "estado" => "disponible"),
+                array("hora" => 15, "estado" => "disponible"),
+                array("hora" => 16, "estado" => "disponible"),
+                array("hora" => 17, "estado" => "disponible"),
+                array("hora" => 18, "estado" => "disponible"),
+            );
                 
-                //Recorre arreglo horas
-                foreach ($arregloHoras as $horaDia) {
-                    $h = $horaDia['hora'];
-                    $e = $horaDia['estado'];
-                    
-                    $hantes = $resultadoCitasxE['hora'];
-                    $hdespues = $resultadoCitasxE['horafin'];
+                
+            //Ciclo horas
+            foreach ($arregloHoras as $horaDia) {
+                $h = $horaDia['hora'];
+                $e = $horaDia['estado'];
+                
+                //Selecciona citas de esteticista
+                $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
+                $resultadoCitasxE = mysqli_fetch_array($consultaCitasxE);
 
-                    if ($h < $hantes) {
-                        echo "OK $h <br>";
-                    }
-                    if ($h >= $hdespues) {
-                        echo "OK $h <br>";
-                    }
+                $hinicio = $resultadoCitasxE['hora'];
+                $hfin = $resultadoCitasxE['horafin'];
                     
-                //Fin foreach
+                if ($h < $hinicio) {
+                        echo "OK $h <br>";
+                }    
+                if ($h >= $hfin) {
+                    echo "OK $h <br>";
                 }
-                
+                        
+                        
+                                           
+                    
+                //Fin ciclo horas
+                }                        
 
-            //Fin while
-            }
+            
 
-        //Fin while
-        }
+        //Fin while esteticista
+        }        
 
-        
-
-    //Fin foreach
+    //Fin foreach dias
     }
 
 
