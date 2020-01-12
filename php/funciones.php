@@ -77,95 +77,69 @@ function agendaDisponible(){
         $d = $sem['dia'];
         echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
         
-        //Genera horas dia
-        $arregloHoras = array(
-            array("hora" => 7, "estado" => "disponible"),
-            array("hora" => 8, "estado" => "disponible"),
-            array("hora" => 9, "estado" => "disponible"),
-            array("hora" => 10, "estado" => "disponible"),
-            array("hora" => 11, "estado" => "disponible"),
-            array("hora" => 12, "estado" => "disponible"),
-            array("hora" => 13, "estado" => "disponible"),
-            array("hora" => 14, "estado" => "disponible"),
-            array("hora" => 15, "estado" => "disponible"),
-            array("hora" => 16, "estado" => "disponible"),
-            array("hora" => 17, "estado" => "disponible"),
-            array("hora" => 18, "estado" => "disponible"),
-        );
-
-        //Ciclo horas
-        foreach ($arregloHoras as $horaDia) {
-            $h = $horaDia['hora'];
-            $e = $horaDia['estado'];
-            
-            //Selecciona esteticista
-            $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
-            $resultadoEsteticista = mysqli_fetch_array($consultaEsteticista);
+        //Selecciona esteticista
+        $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
+        while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
             $esteticistaId = $resultadoEsteticista['id_estet'];
             $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
+            echo $esteticistaNom . "<br>";
             
+            //Genera horas dia
+            $arregloHoras = array(
+                array("hora" => 7, "estado" => "disponible"),
+                array("hora" => 8, "estado" => "disponible"),
+                array("hora" => 9, "estado" => "disponible"),
+                array("hora" => 10, "estado" => "disponible"),
+                array("hora" => 11, "estado" => "disponible"),
+                array("hora" => 12, "estado" => "disponible"),
+                array("hora" => 13, "estado" => "disponible"),
+                array("hora" => 14, "estado" => "disponible"),
+                array("hora" => 15, "estado" => "disponible"),
+                array("hora" => 16, "estado" => "disponible"),
+                array("hora" => 17, "estado" => "disponible"),
+                array("hora" => 18, "estado" => "disponible"),
+            );
 
-            //Selecciona citas de esteticista
-            $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
-            while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
-                $hinicio = $resultadoCitasxE['hora'];
-                $hfin = $resultadoCitasxE['horafin'];
+            //Ciclo horas
+            foreach ($arregloHoras as $horaDia) {
+                $h = $horaDia['hora'];
+                $e = $horaDia['estado'];
+                
+                
+                
 
-                if ($h == $hinicio) {
-                    $e = "ocupado";
+                //Selecciona citas de esteticista
+                $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
+                while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
+                    $hinicio = $resultadoCitasxE['hora'];
+                    $hfin = $resultadoCitasxE['horafin'];
+
+                    //Valida horas ocupado
+                    if ($h == $hinicio) {
+                        $e = "ocupado";
+                    }
+
+                    if ($h > $hinicio and $h < $hfin) {
+                        $e = "ocupado";
+                    }
+
+                //Fin while citas
+                }                       
+                
+                //Muestra horas disponibles
+                if ($e == "disponible") {
+                    echo "Dispo a las $h <br>";
                 }
-                if ($h > $hinicio and $h < $hfin) {
-                    $e = "ocupado";
-                }
-            }                       
-            
-            if ($e == "disponible") {
-                echo "Dispo a las $h <br>";
-            }
 
-        //Fin ciclo horas
-        } 
-
+            //Fin foreach horas
+            } 
         
-            
-
-               
+        //Fin while esteticistas
+        }               
 
     //Fin foreach dias
     }
-
-
-    /*### Validacion de datos ###*/
-
-
-    //Recorre el arreglo dias
-    /*foreach ($semana as $diasem) {
-        $d = $diasem['dia'];
-        echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
-
-        //Consulta duracion del servicio escogido
-        $duracionServicio = $arrayTablaServ ['id_duracion'];
-        
-        //Consulta horas del dia
-        $consultaHorasDia = mysqli_query($conexion,"SELECT * FROM t_horas_dia");        
-        
-        //Condicionales para presentar la disponibilidad        
-        while ($arregloHorasDia = mysqli_fetch_array($consultaHorasDia)) {
-            $hora = $arregloHorasDia['nombre'];
-            //Consulta numero de citas programadas por fecha y hora
-            $contarCitas = mysqli_query($conexion,"SELECT COUNT(id_cita) AS numCitas FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'");
-            $resultado = mysqli_fetch_assoc($contarCitas);  
-            $duracionCita = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND hora ='$hora' AND id_cat ='$idCat'"));
-         
-            if ($duracionServicio < 2) {
-                if ($resultado['numCitas'] < $numEsteticistas['cantidad']) {
-                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$hora&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 mr-3 rounded' style='height: 75px;width:75px;'><span class='text-center align-middle'>dispo: $hora</span></a>";
-                }
-            }
-        //Fin while    
-        }
-    //Fin foreach    
-    }*/
+    
     
     //Consulta numero de dias que tiene el mes actual
     $idDiasxMes = date("Ym");
