@@ -77,60 +77,59 @@ function agendaDisponible(){
         $d = $sem['dia'];
         echo "<div class='h5 alert-warning font-weight-bold text-center'> $d de $nombreMes </div>";
         
-        
-        //Selecciona esteticista
-        $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
-        while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
+        //Genera horas dia
+        $arregloHoras = array(
+            array("hora" => 7, "estado" => "disponible"),
+            array("hora" => 8, "estado" => "disponible"),
+            array("hora" => 9, "estado" => "disponible"),
+            array("hora" => 10, "estado" => "disponible"),
+            array("hora" => 11, "estado" => "disponible"),
+            array("hora" => 12, "estado" => "disponible"),
+            array("hora" => 13, "estado" => "disponible"),
+            array("hora" => 14, "estado" => "disponible"),
+            array("hora" => 15, "estado" => "disponible"),
+            array("hora" => 16, "estado" => "disponible"),
+            array("hora" => 17, "estado" => "disponible"),
+            array("hora" => 18, "estado" => "disponible"),
+        );
+
+        //Ciclo horas
+        foreach ($arregloHoras as $horaDia) {
+            $h = $horaDia['hora'];
+            $e = $horaDia['estado'];
+            
+            //Selecciona esteticista
+            $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
+            $resultadoEsteticista = mysqli_fetch_array($consultaEsteticista);
             $esteticistaId = $resultadoEsteticista['id_estet'];
             $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
-            echo $esteticistaNom . "<br>";            
-                
-            //Genera horas dia
-            $arregloHoras = array(
-                array("hora" => 7, "estado" => "disponible"),
-                array("hora" => 8, "estado" => "disponible"),
-                array("hora" => 9, "estado" => "disponible"),
-                array("hora" => 10, "estado" => "disponible"),
-                array("hora" => 11, "estado" => "disponible"),
-                array("hora" => 12, "estado" => "disponible"),
-                array("hora" => 13, "estado" => "disponible"),
-                array("hora" => 14, "estado" => "disponible"),
-                array("hora" => 15, "estado" => "disponible"),
-                array("hora" => 16, "estado" => "disponible"),
-                array("hora" => 17, "estado" => "disponible"),
-                array("hora" => 18, "estado" => "disponible"),
-            );
-                
-                
-            //Ciclo horas
-            foreach ($arregloHoras as $horaDia) {
-                $h = $horaDia['hora'];
-                $e = $horaDia['estado'];
-                
-                //Selecciona citas de esteticista
-                $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
-                $resultadoCitasxE = mysqli_fetch_array($consultaCitasxE);
-
-                $hinicio = $resultadoCitasxE['hora'];
-                $hfin = $resultadoCitasxE['horafin'];
-                    
-                if ($h < $hinicio) {
-                        echo "OK $h <br>";
-                }    
-                if ($h >= $hfin) {
-                    echo "OK $h <br>";
-                }
-                        
-                        
-                                           
-                    
-                //Fin ciclo horas
-                }                        
-
             
 
-        //Fin while esteticista
-        }        
+            //Selecciona citas de esteticista
+            $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
+            while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
+                $hinicio = $resultadoCitasxE['hora'];
+                $hfin = $resultadoCitasxE['horafin'];
+
+                if ($h == $hinicio) {
+                    $e = "ocupado";
+                }
+                if ($h > $hinicio and $h < $hfin) {
+                    $e = "ocupado";
+                }
+            }                       
+            
+            if ($e == "disponible") {
+                echo "Dispo a las $h <br>";
+            }
+
+        //Fin ciclo horas
+        } 
+
+        
+            
+
+               
 
     //Fin foreach dias
     }
