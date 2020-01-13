@@ -128,7 +128,7 @@ function agendaDisponible(){
                 
                 //Muestra horas disponibles
                 if ($e == "disponible") {
-                    echo "Dispo a las $h <br>";
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&hora=$h&dia=$d&mes=$nombreMes' type='button' class='btn btn-primary shadow p-3 mb-5 mr-3 rounded' style='height: 75px;width:75px;'><span class='text-center align-middle'>$h</span></a>";
                 }
 
             //Fin foreach horas
@@ -141,13 +141,13 @@ function agendaDisponible(){
     }
     
     
-    //Consulta numero de dias que tiene el mes actual
+    //Consulta # dias del mes
     $idDiasxMes = date("Ym");
     $consultaDiasxMes = mysqli_query($conexion,"SELECT * FROM t_diasxmes WHERE id_diasxmes ='$idDiasxMes'");
     $arregloDiasxMes = mysqli_fetch_array($consultaDiasxMes);
     //echo "Este mes es de: " . $arregloDiasxMes['num_diasxmes'] . " dias. <br>";
 
-    //Calcula cuantos dias faltan para terminar el mes
+    //Calcula dias para fin mes
     $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
     //echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
 
