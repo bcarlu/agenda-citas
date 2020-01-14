@@ -15,6 +15,7 @@ if (isset($usuario)) {
     $hora = $_GET['hora'];
     $dia = $_GET['dia'];
     $mes = $_GET['mes'];
+    $esteticista = $_GET['est'];
     ?>
         
     <div class="container bg-md-primary">
@@ -28,9 +29,10 @@ if (isset($usuario)) {
                 <li class="list-group-item">Servicio: <?php echo $servicio;?></li>
                 <li class="list-group-item">Fecha: <?php echo $dia . " de " . $mes;?></li>
                 <li class="list-group-item">Hora: <?php echo $hora;?></li>
+                <li class="list-group-item">Esteticista: <?php echo $esteticista;?></li>
             </ul>
             <div class="card-body">
-                <a href="php/confirmagenda.php?serv=<?php echo $servicio;?>&anio=<?php echo date('Y');?>&mes=<?php echo $mes;?>&dia=<?php echo $dia;?>&hora=<?php echo $hora;?>" class="btn btn-success">Confirmar</a>
+                <a href="php/confirmagenda.php?serv=<?php echo $servicio;?>&est=<?php echo $esteticista;?>&anio=<?php echo date('Y');?>&mes=<?php echo $mes;?>&dia=<?php echo $dia;?>&hora=<?php echo $hora;?>" class="btn btn-success">Confirmar</a>
             </div>
         </div>
     </div> 

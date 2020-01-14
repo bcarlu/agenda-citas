@@ -13,7 +13,7 @@ if (isset($usuario)) {
         
         <div class="row">
             <div class="col text-center py-5">
-                <h3 class="hcate">Categorias</h3>
+                <h3>Categorias</h3>
             </div>
         </div>
         <div class="row text-center">

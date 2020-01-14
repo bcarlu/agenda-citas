@@ -10,6 +10,7 @@ if (isset($usuario)) {
 <body>
 <?php include_once'navbar.php';?>
 <?php include_once'navsesion.php';?>
+<div class="container">
     <div class="row">
         <div class="col-4 pr-2">
             <img src="img/avatar-usuario.png" alt="..." class="rounded-circle">
@@ -60,12 +61,14 @@ if (isset($usuario)) {
     </div> 
      
     <!--Boton agendar-->
-    <div class="d-block p-2"><a href="categorias" class="float-right">
-        <img class="d-block" src="img/icono-plus.png" alt="">
+   
+        <a href="categorias" class="float-right btn btn-success rounded p-2">
+        <span class="d-block display-4">+</span>
         <small class="d-block">Agendar</small></a>
-    </div>
+  
 
-
+<!--Fin container-->
+</div>
 
 <?php
 //Cierre del if

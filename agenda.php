@@ -9,7 +9,10 @@ if (isset($usuario)) {
     <?php include_once'navbar.php';?>  
     <?php include_once'navsesion.php';?>
 
-    <div class="text-center h4 alert-primary">Agenda disponible para <?php echo "<b>{$_GET['serv']}</b>"; ?></div>  
+    <div class="text-center h3 alert-primary">
+        <span>Agenda disponible para</span>  
+        <span><?php echo "<b>{$_GET['serv']}</b>"; ?></span>
+    </div>  
     
     <?php agendaDisponible(); ?>
 

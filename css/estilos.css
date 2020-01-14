@@ -4,19 +4,11 @@
 
 
 /***********************************************************
-*******************ESTILOS PARA INDEX.PHP*******************
+*******************Pagina index*******************
 ***********************************************************/
-body.categorias{
-    min-height: 100vh;
-    background-color: #81ecec;
-}
 
-h3.hcate{
-    font-weight: 700;
-}
 
-/*Estilos de la pagina de Login*/
-body.fondo-login {
+body.index {
     min-height: 100vh;
     background-image: linear-gradient(120deg,#ffb2c2,#ff97b9);
 }
@@ -30,4 +22,12 @@ body.fondo-login {
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
+}
+
+
+/* Pagina categorias */
+
+ body.categorias{
+    min-height: 100vh;
+    background-color: #81ecec;
 }

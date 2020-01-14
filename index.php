@@ -1,7 +1,7 @@
 <?php include_once'head.php';?>
 
-<body class="fondo-login">
-    <div class="container">
+<body class="index">
+    <div class="container contenedor-app">
                 
         <!--Formulario de Login-->
         <form class="login-form shadow p-3 mb-5" action="php/validalogin.php" method="post">
