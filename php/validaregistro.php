@@ -1,13 +1,15 @@
 <?php
-include_once'conexion.php';
 
-$nombre = $_POST['nombre-reg'];
-$apellidos = $_POST['apellidos-reg'];
-$email = $_POST['email-reg'];
-$celular = $_POST['celular-reg'];
-$clave = $_POST['clave-reg'];
 
-if (isset($_POST)) {
+if (isset($_POST['email-reg'])) {
+    $titulo = "Confirmacion registro";
+    include_once'../head.php';
+    include_once'conexion.php';
+    $nombre = $_POST['nombre-reg'];
+    $apellidos = $_POST['apellidos-reg'];
+    $email = $_POST['email-reg'];
+    $celular = $_POST['celular-reg'];
+    $clave = $_POST['clave-reg'];
     //Valida si el usuario esta registrado
     $consultaReg = mysqli_query($conexion,"SELECT COUNT(*) AS correo FROM t_clientes WHERE email='$email'");
     $resultadoReg = mysqli_fetch_assoc($consultaReg);
@@ -20,6 +22,9 @@ if (isset($_POST)) {
         echo "Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../'>ingresar</a>";
     }
 
-}else {
+}
+else {
+    $titulo = "Sin datos";
+    include_once'../head.php';
     echo "Sin datos, puede <a href='../'>iniciar sesion</a> o <a href='../registro'>registrarse.</a>";
 }

@@ -1,3 +1,4 @@
+<?php $titulo = "Registro";?>
 <?php include_once'head.php';?>
 <body>
     <div class="container">
@@ -17,7 +18,7 @@
         </div>
         <div class="form-group mx-auto col-7">
             <label>Celular</label>
-            <input type="tel" class="form-control" id="celular-reg" name="celular-reg" aria-describedby="celularAyuda" placeholder="Escriba su numero celular" pattern="[0-9]{3}" required>
+            <input type="tel" class="form-control" id="celular-reg" name="celular-reg" aria-describedby="celularAyuda" placeholder="Escriba su numero celular" pattern="[0-9]{10}" required>
         </div>
         <div class="form-group mx-auto col-7">
             <label>Clave</label>

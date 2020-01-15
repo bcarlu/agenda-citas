@@ -1,6 +1,7 @@
 <?php
 session_start();
-include_once'head.php';
+$titulo = "Exito";
+include_once'../head.php';
 
 $usuario = $_SESSION['username'];
 
@@ -14,7 +15,7 @@ if (isset($usuario)) {
     <div class="alert alert-success" role="alert">
     Cita programada con EXITO!
     </div>
-    
+
 <?php
 }else {
     echo ":( no has ingresado tus datos, por favor <a href='../'>inicia sesión</a> :)";

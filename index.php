@@ -1,4 +1,6 @@
+<?php $titulo = "Ingreso";?>
 <?php include_once'head.php';?>
+
 
 <body class="index">
     <div class="container contenedor-app">

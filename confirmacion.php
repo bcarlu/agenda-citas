@@ -1,4 +1,5 @@
 <?php session_start();?>
+<?php $titulo = "Confirmacion";?>
 <?php include_once'head.php';?>
 <?php include_once'php/funciones.php';?>
 <?php

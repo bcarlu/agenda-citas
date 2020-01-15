@@ -1,4 +1,5 @@
 <?php session_start();?>
+<?php $titulo = "Categorias";?>
 <?php include_once'head.php';?>
 
 <?php
