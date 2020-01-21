@@ -7,27 +7,3 @@
 *******************Pagina index*******************
 ***********************************************************/
 
-
-body.index {
-    min-height: 100vh;
-    background-image: linear-gradient(120deg,#ffb2c2,#ff97b9);
-}
-.login-form {
-    width: 360px;
-    background: #f1f1f1;
-    height: 580px;
-    padding: 80px 40px;
-    border-radius: 10px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-}
-
-
-/* Pagina categorias */
-
- body.categorias{
-    min-height: 100vh;
-    background-color: #81ecec;
-}

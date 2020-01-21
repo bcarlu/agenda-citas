@@ -15,7 +15,10 @@ if (isset($usuario)) {
         <span><?php echo "<b>{$_GET['serv']}</b>"; ?></span>
     </div>  
     
-    <?php agendaDisponible(); ?>
+    <div>
+        <?php agendaDisponible(); ?>
+    </div>
+    
 
 <?php
 //Cierre del if

@@ -32,9 +32,9 @@ if (isset($usuario)) {
         mysqli_query($conexion,"INSERT INTO t_citas (id_serv,id_cat,id_esteticista,email_cliente,anio,mes,dia,hora,duracion,horafin) 
         VALUES ('$idServicio','$categoria','$esteticista','$usuario','$anio','$mes','$dia','$hora','$duracion','$horafin')");
         
-        //Se destruye variable GET y se rediracciona.
+        //Se destruye variable GET y se redirecciona.
         unset($_GET['serv']);
-        header('location: citaexito.php');
+        header('location: ../inicio.php?agenda=exito');
     }
     
 

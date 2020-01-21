@@ -63,7 +63,7 @@ function agendaDisponible(){
     require_once'conexion.php';
     
     
-    //Selecciona la categoria y duracion del servicio
+    //Selecciona la categoria y duracion del servicio escogido
     $nombreServ = $_GET['serv'];
     $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
     $arrayTablaServ = mysqli_fetch_array($queryTablaServ);    
@@ -92,13 +92,16 @@ function agendaDisponible(){
         array ("dia" => date("d")+4),
     );
     
+    //HTML
+    //Abro Container para los estilos
+    echo "<div class='container'>";
+    
     //Recorre arreglo y selecciona dias
     foreach ($semana as $sem) {
         $d = $sem['dia'];
         
-        //HTML
-        //Abro Container para los estilos
-        echo "<div class='container'>";
+        
+        
 
         echo "<div class='h3 font-weight-bold text-warning'> $d de $nombreMes </div>";
         
@@ -111,55 +114,75 @@ function agendaDisponible(){
             
             //Genera horas dia
             $arregloHoras = array(
-                array("hora" => 7, "estado" => "disponible"),
-                array("hora" => 8, "estado" => "disponible"),
-                array("hora" => 9, "estado" => "disponible"),
-                array("hora" => 10, "estado" => "disponible"),
-                array("hora" => 11, "estado" => "disponible"),
-                array("hora" => 12, "estado" => "disponible"),
-                array("hora" => 13, "estado" => "disponible"),
-                array("hora" => 14, "estado" => "disponible"),
-                array("hora" => 15, "estado" => "disponible"),
-                array("hora" => 16, "estado" => "disponible"),
-                array("hora" => 17, "estado" => "disponible"),
-                array("hora" => 18, "estado" => "disponible"),
+                array("hora" => 7, "estado" => "disponible", "ampm" => "7:00 AM", "finampm1" => "8:00 AM", "finampm2" => "9:00 AM"),
+                array("hora" => 8, "estado" => "disponible", "ampm" => "8:00 AM", "finampm1" => "9:00 AM", "finampm2" => "10:00 AM"),
+                array("hora" => 9, "estado" => "disponible", "ampm" => "9:00 AM", "finampm1" => "10:00 AM", "finampm2" => "11:00 AM"),
+                array("hora" => 10, "estado" => "disponible", "ampm" => "10:00 AM", "finampm1" => "11:00 AM", "finampm2" => "12:00 PM"),
+                array("hora" => 11, "estado" => "disponible", "ampm" => "11:00 AM", "finampm1" => "12:00 PM", "finampm2" => "1:00 PM"),
+                array("hora" => 12, "estado" => "disponible", "ampm" => "12:00 PM", "finampm1" => "1:00 PM", "finampm2" => "2:00 PM"),
+                array("hora" => 13, "estado" => "disponible", "ampm" => "1:00 PM", "finampm1" => "2:00 PM", "finampm2" => "3:00 PM"),
+                array("hora" => 14, "estado" => "disponible", "ampm" => "2:00 PM", "finampm1" => "3:00 PM", "finampm2" => "4:00 PM"),
+                array("hora" => 15, "estado" => "disponible", "ampm" => "3:00 PM", "finampm1" => "4:00 PM", "finampm2" => "6:00 PM"),
+                array("hora" => 16, "estado" => "disponible", "ampm" => "4:00 PM", "finampm1" => "5:00 PM"),
+                array("hora" => 17, "estado" => "disponible", "ampm" => "5:00 PM", "finampm1" => "6:00 PM"),
+                array("hora" => 18, "estado" => "disponible", "ampm" => "6:00 PM"),
             );
 
             //Ciclo horas
             foreach ($arregloHoras as $horaDia) {
                 $h = $horaDia['hora'];
                 $e = $horaDia['estado'];
-                
+                $ampm = $horaDia['ampm'];
+                $citaFin1 = $horaDia['finampm1'];
+                $citaFin2 = $horaDia['finampm2'];
 
                 //Selecciona citas de esteticista
                 $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
                 while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
                     $hinicio = $resultadoCitasxE['hora'];
-                    $hfin = $resultadoCitasxE['horafin'];
+                    $hfin = $resultadoCitasxE['horafin'];                    
 
-                    //Define horas ocupado
+                    //Define estado ocupado
+                    //General
                     if ($h == $hinicio) {
                         $e = "ocupado";
-                    }
-
-                    //Define horas ocupado
+                    }                    
                     if ($h > $hinicio and $h < $hfin) {
                         $e = "ocupado";
-                    }
-
-                    //Define horas ocupado
-                    if ($duracionSerEsco == 2) {
+                    }                    
+                    
+                    //Para citas de 2 hora
+                    if ($duracionSerEsco == 2) {                        
                         if ($h+1 == $hinicio) {
                             $e = "ocupado";
-                        }
-                    }
-                    
+                        }                    
+                    }                    
                 //Fin while citas de esteticista
+                }
+
+                //Para citas de 1 hora
+                if ($duracionSerEsco == 1) {
+                    if ($h == 18) {
+                        $e = "ocupado";
+                    }
+                }
+
+                //Para citas de 2 hora
+                if ($duracionSerEsco == 2) {                        
+                    if ($h == 17) {
+                        $e = "ocupado";
+                    }
+                    if ($h == 18) {
+                        $e = "ocupado";
+                    }                    
                 }
                 
                 //Muestra horas disponibles
-                if ($e == "disponible") {
-                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-primary shadow p-3 mb-5 mr-3 rounded' style='height: 75px;width:75px;'><span class='text-center align-middle'>".$h. ":00</span></a>";
+                if ($e == "disponible" && $duracionSerEsco == 1) {
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-primary shadow mb-2 mr-1 rounded btn-sm'><span class='text-center align-middle'>$ampm - $citaFin1</span></a>";
+                }
+                if ($e == "disponible" && $duracionSerEsco == 2) {
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-primary shadow mb-2 mr-1 rounded btn-sm';'><span class='text-center align-middle'>$ampm - $citaFin2</span></a>";
                 }
 
             //Fin foreach horas
@@ -196,18 +219,60 @@ function agendaDisponible(){
 /*#########################################*/
 /*####INICIO FUNCION CITAS USUARIO#########*/
 /*#########################################*/
-function citasUsuario(){
-    require_once'conexion.php';
+function citasxCliente(){
+    require_once'conexion.php';  
     $usuario = $_SESSION['username'];
-    $consultaIdServicio = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
-    $resultadoIdServicio = mysqli_fetch_array($consultaIdServicio);
-    $idServicio = $resultadoIdServicio['id_serv'];
+
+    //Genera horas dia
+    $arregloHoras = array(
+        array("hora" => 7, "ampm" => "7:00 AM"),
+        array("hora" => 8, "ampm" => "8:00 AM"),
+        array("hora" => 9, "ampm" => "9:00 AM"),
+        array("hora" => 10, "ampm" => "10:00 AM"),
+        array("hora" => 11, "ampm" => "11:00 AM"),
+        array("hora" => 12, "ampm" => "12:00 PM"),
+        array("hora" => 13, "ampm" => "1:00 PM"),
+        array("hora" => 14, "ampm" => "2:00 PM"),
+        array("hora" => 15, "ampm" => "3:00 PM"),
+        array("hora" => 16, "ampm" => "4:00 PM"),
+        array("hora" => 17, "ampm" => "5:00 PM"),
+        array("hora" => 18, "ampm" => "6:00 PM"),
+    );
+
+    //While citas cliente
+    $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
+    while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
+
+
+        $idServicio = $resultadoCitasxCliente['id_serv'];
+        $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
+        $esteticista = $resultadoCitasxCliente['id_esteticista'];
+        $horaServicio = $resultadoCitasxCliente['hora'];
+        foreach ($arregloHoras as $ah) {
+            if ($horaServicio == $ah['hora']) {
+                $hCita = $ah['ampm'];
+            }
+        }    
+            
+        //Valida nombre del servicio
+        $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
+        $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
+        $nomServicio = $resultadoNombreServ['nombre'];
+
+        //Valida esteticista
+        $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
+        $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
+        $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];
+
+        echo "$nomServicio <br>".
+            "$fechaServicio <br>" .
+            "$hCita <br>" .
+            "$nomEsteticista <br><br>";
+
+    //Fin while citas cliente    
+    }
     
 
-    $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
-    $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
-    $nomServicio = $resultadoNombreServ['nombre'];
-    
 
 }
 /*#########################################*/
