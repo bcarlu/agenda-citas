@@ -21,7 +21,7 @@ if (isset($usuario)) {
     </div>
     <div class="row pt-5">
         <div class="col">
-            <h3>Mis citas</h3>
+            <h4>Mis citas</h4>
             <?php citasxCliente(); ?>
         <!--Fin col-->
         </div>
@@ -30,11 +30,14 @@ if (isset($usuario)) {
     </div> 
      
     <!--Boton agendar-->
-   <div class="row pb-5 float-right mr-2">
-        <a href="categorias" class=" btn btn-success rounded p-2">
-        <span class="d-block display-4">+</span>
-        <small class="d-block">Agendar</small></a>
-    </div>
+    <footer class="footer mt-auto py-2 fixed-bottom">
+        <div class="container text-right">
+            <a href="categorias" class=" btn btn-success rounded">
+            <span class="d-block">+</span>
+            <small class="d-block">Agendar</small></a>
+        </div>
+    </footer>
+   
         
   
 
@@ -49,7 +52,7 @@ if (isset($usuario)) {
 <?php
     //Fin if agenda
     }
-    
+
 //Cierre del if sesion
 }else {
     echo ":( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)";

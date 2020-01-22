@@ -9,16 +9,17 @@ if (isset($usuario)) {
 <body>
     <?php include_once'navbar.php';?>  
     <?php include_once'navsesion.php';?>
-
-    <div class="text-center h3 alert-primary">
-        <span>Agenda disponible para</span>  
-        <span><?php echo "<b>{$_GET['serv']}</b>"; ?></span>
-    </div>  
-    
-    <div>
-        <?php agendaDisponible(); ?>
-    </div>
-    
+    <div class="container">    
+        <div class="text-center h3 alert-primary">
+            <span>Agenda para <?php echo "<b>{$_GET['serv']}</b>"; ?></span>
+        </div>  
+        
+        <div class='row'>
+            <div class='col px-2 pb-2'>
+                <?php agendaDisponible(); ?>
+            </div>
+        </div>
+    </div> 
 
 <?php
 //Cierre del if

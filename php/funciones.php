@@ -18,8 +18,8 @@ function listaServicios(){
     
     //Se recorre la tabla de servicios y se listan los que pertenezcan a la cat
     while($arrayTablaServ = mysqli_fetch_array($queryTablaServ)){
-        echo ' <a href="agenda.php?serv=' . $arrayTablaServ['nombre'] . '"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded"><br>'
-        . $arrayTablaServ['nombre'] . " $:" . $arrayTablaServ['precio'] . "<br>" . '</a>';
+        echo '<div class="col py-2"><a href="agenda.php?serv=' . $arrayTablaServ['nombre'] . '"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded"><br>'
+        . $arrayTablaServ['nombre'] . "<br> $" . $arrayTablaServ['precio'] .'</a></div>';
     }
 
 }
@@ -95,37 +95,34 @@ function agendaDisponible(){
     //HTML
     //Abro Container para los estilos
     echo "<div class='container'>";
-    
+
     //Recorre arreglo y selecciona dias
     foreach ($semana as $sem) {
-        $d = $sem['dia'];
-        
-        
-        
+        $d = $sem['dia'];        
 
-        echo "<div class='h3 font-weight-bold text-warning'> $d de $nombreMes </div>";
+        echo "<div class='h3 font-weight-bold text-warning mt-5'> $d de $nombreMes </div>";
         
         //Selecciona esteticista
         $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
         while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
             $esteticistaId = $resultadoEsteticista['id_estet'];
             $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
-            echo "<p class='font-weight-bold'> $esteticistaNom </p><br>";
+            echo "<div class='font-weight-bold pt-3'> $esteticistaNom </div><br>";
             
             //Genera horas dia
             $arregloHoras = array(
-                array("hora" => 7, "estado" => "disponible", "ampm" => "7:00 AM", "finampm1" => "8:00 AM", "finampm2" => "9:00 AM"),
-                array("hora" => 8, "estado" => "disponible", "ampm" => "8:00 AM", "finampm1" => "9:00 AM", "finampm2" => "10:00 AM"),
-                array("hora" => 9, "estado" => "disponible", "ampm" => "9:00 AM", "finampm1" => "10:00 AM", "finampm2" => "11:00 AM"),
-                array("hora" => 10, "estado" => "disponible", "ampm" => "10:00 AM", "finampm1" => "11:00 AM", "finampm2" => "12:00 PM"),
-                array("hora" => 11, "estado" => "disponible", "ampm" => "11:00 AM", "finampm1" => "12:00 PM", "finampm2" => "1:00 PM"),
-                array("hora" => 12, "estado" => "disponible", "ampm" => "12:00 PM", "finampm1" => "1:00 PM", "finampm2" => "2:00 PM"),
-                array("hora" => 13, "estado" => "disponible", "ampm" => "1:00 PM", "finampm1" => "2:00 PM", "finampm2" => "3:00 PM"),
-                array("hora" => 14, "estado" => "disponible", "ampm" => "2:00 PM", "finampm1" => "3:00 PM", "finampm2" => "4:00 PM"),
-                array("hora" => 15, "estado" => "disponible", "ampm" => "3:00 PM", "finampm1" => "4:00 PM", "finampm2" => "6:00 PM"),
-                array("hora" => 16, "estado" => "disponible", "ampm" => "4:00 PM", "finampm1" => "5:00 PM"),
-                array("hora" => 17, "estado" => "disponible", "ampm" => "5:00 PM", "finampm1" => "6:00 PM"),
-                array("hora" => 18, "estado" => "disponible", "ampm" => "6:00 PM"),
+                array("hora" => 7, "estado" => "disponible", "ampm" => "7 AM", "finampm1" => "8 AM", "finampm2" => "9 AM"),
+                array("hora" => 8, "estado" => "disponible", "ampm" => "8 AM", "finampm1" => "9 AM", "finampm2" => "10 AM"),
+                array("hora" => 9, "estado" => "disponible", "ampm" => "9 AM", "finampm1" => "10 AM", "finampm2" => "11 AM"),
+                array("hora" => 10, "estado" => "disponible", "ampm" => "10 AM", "finampm1" => "11 AM", "finampm2" => "12 PM"),
+                array("hora" => 11, "estado" => "disponible", "ampm" => "11 AM", "finampm1" => "12 PM", "finampm2" => "1 PM"),
+                array("hora" => 12, "estado" => "disponible", "ampm" => "12 PM", "finampm1" => "1 PM", "finampm2" => "2 PM"),
+                array("hora" => 13, "estado" => "disponible", "ampm" => "1 PM", "finampm1" => "2 PM", "finampm2" => "3 PM"),
+                array("hora" => 14, "estado" => "disponible", "ampm" => "2 PM", "finampm1" => "3 PM", "finampm2" => "4 PM"),
+                array("hora" => 15, "estado" => "disponible", "ampm" => "3 PM", "finampm1" => "4 PM", "finampm2" => "6 PM"),
+                array("hora" => 16, "estado" => "disponible", "ampm" => "4 PM", "finampm1" => "5 PM"),
+                array("hora" => 17, "estado" => "disponible", "ampm" => "5 PM", "finampm1" => "6 PM"),
+                array("hora" => 18, "estado" => "disponible", "ampm" => "6 PM"),
             );
 
             //Ciclo horas
@@ -179,10 +176,10 @@ function agendaDisponible(){
                 
                 //Muestra horas disponibles
                 if ($e == "disponible" && $duracionSerEsco == 1) {
-                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-primary shadow mb-2 mr-1 rounded btn-sm'><span class='text-center align-middle'>$ampm - $citaFin1</span></a>";
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-info rounded btn-sm mr-1 mb-1'>$ampm - $citaFin1</a>";
                 }
                 if ($e == "disponible" && $duracionSerEsco == 2) {
-                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-primary shadow mb-2 mr-1 rounded btn-sm';'><span class='text-center align-middle'>$ampm - $citaFin2</span></a>";
+                    echo "<a href='confirmacion.php?cat=$idCat&serv=$nombreServ&est=$esteticistaId&hora=$h&dia=$d&mes=$mes' type='button' class='btn btn-info rounded btn-sm mr-1 mb-1'>$ampm - $citaFin2</a>";
                 }
 
             //Fin foreach horas
@@ -254,10 +251,11 @@ function citasxCliente(){
             }
         }    
             
-        //Valida nombre del servicio
+        //Valida nombre y precio del servicio
         $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
         $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
         $nomServicio = $resultadoNombreServ['nombre'];
+        $precioServicio = $resultadoNombreServ['precio'];
 
         //Valida esteticista
         $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
@@ -267,6 +265,7 @@ function citasxCliente(){
         echo "$nomServicio <br>".
             "$fechaServicio <br>" .
             "$hCita <br>" .
+            "$precioServicio <br>" .
             "$nomEsteticista <br><br>";
 
     //Fin while citas cliente    
@@ -278,3 +277,22 @@ function citasxCliente(){
 /*#########################################*/
 /*####FIN FUNCION CITAS USUARIO############*/
 /*#########################################*/
+
+function duracionServicioEscogido(){
+    require_once'conexion.php';
+
+    //Selecciona duracion del servicio escogido
+    $nombreServ = $_GET['serv'];
+    $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$nombreServ'");
+    $arrayTablaServ = mysqli_fetch_array($queryTablaServ);    
+    $duracionSerEsco = $arrayTablaServ ['id_duracion'];
+    
+    echo "<span>Agenda para <b>{$_GET['serv']}</b></span><br>";
+        
+        if ($duracionSerEsco == 1) {
+           echo "<span>$duracionSerEsco hora</span>";
+        }
+        elseif ($duracionSerEsco > 1) {
+            echo "<span>$duracionSerEsco horas</span>";
+        }
+}

@@ -19,16 +19,16 @@ if (isset($usuario)) {
     $esteticista = $_GET['est'];
     ?>
         
-    
-        <div class="card" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
+    <div class="container">
+        <div class="card text-center mx-auto" style="width: 18rem;">
+            <img src="img/card-nails.png" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title"><?php echo $servicio;?></h5>
                 <p class="card-text">Servicio: <?php echo $servicio;?> Fecha: <?php echo $dia . " de " . $mes;?> Hora: <?php echo $hora;?> Esteticista: <?php echo $esteticista;?></p>
                 <a href="php/confirmagenda.php?serv=<?php echo $servicio;?>&est=<?php echo $esteticista;?>&anio=<?php echo date('Y');?>&mes=<?php echo $mes;?>&dia=<?php echo $dia;?>&hora=<?php echo $hora;?>" class="btn btn-success">Confirmar</a>
             </div>            
         </div>
-    
+    </div>
 
 <?php
 //Cierre del if

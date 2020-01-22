@@ -1,11 +1,18 @@
 <?php $titulo = "Ingreso";?>
 <?php include_once'head.php';?>
 
-<body style="background-color: #cccccc;">
+<body>
     <div class="container contenedor-index">
-        <div class="row boton-index px-3" style="margin-top:320px;">
-            <a href="ingreso" type="button" class="btn btn-primary btn-block">INGRESAR</a>
-            <a href="registro" type="button" class="btn btn-secondary btn-block">REGISTRARME</a>
+        <div class="row" style="padding:80px 0px;">
+            <div class="col text-center">
+                <img src="img/logolujan.png" alt="logo Lujan Uñas Spa">
+            </div>            
+        </div>
+        <div class="row px-3 py-5">
+            <p class="text-center">Si ya tienes cuenta ingresa</p>
+            <a href="ingreso" type="button" class="btn btn-info btn-block boton-index">INGRESAR</a>
+            <p class="pt-3">sino tienes cuenta registrate!</p>
+            <a href="registro" type="button" class="btn btn-warning btn-block boton-index">REGISTRARME</a>
         </div>        
     </div>
 </body>
