@@ -1,9 +1,9 @@
 <?php
 
 
-/*#########################################*/
-/*####INICIO FUNCION LISTA SERVICIOS####*/
-/*#########################################*/
+
+/*####FUNCION LISTA SERVICIOS####*/
+
 function listaServicios(){
     require_once'conexion.php';
     
@@ -23,15 +23,12 @@ function listaServicios(){
     }
 
 }
-/*#########################################*/
-/*####FIN FUNCION LISTA SERVICIOS####*/
-/*#########################################*/
 
 
 
-/*#########################################*/
-/*####INICIO FUNCION LISTA ESTETICISTAS####*/
-/*#########################################*/
+
+/*####FUNCION LISTA ESTETICISTAS####*/
+
 function listaEsteticistas(){
     require_once'conexion.php';
     
@@ -50,15 +47,11 @@ function listaEsteticistas(){
         echo $arrayTablaEstet['nombre'] . "<br>";
     }
 }
-/*#########################################*/
-/*####FIN FUNCION LISTA ESTETICISTAS#######*/
-/*#########################################*/
 
 
 
-/*#########################################*/
 /*####INICIO FUNCION AGENDA ADISPONIBLE####*/
-/*#########################################*/
+
 function agendaDisponible(){
     require_once'conexion.php';
     
@@ -119,8 +112,8 @@ function agendaDisponible(){
                 array("hora" => 12, "estado" => "disponible", "ampm" => "12 PM", "finampm1" => "1 PM", "finampm2" => "2 PM"),
                 array("hora" => 13, "estado" => "disponible", "ampm" => "1 PM", "finampm1" => "2 PM", "finampm2" => "3 PM"),
                 array("hora" => 14, "estado" => "disponible", "ampm" => "2 PM", "finampm1" => "3 PM", "finampm2" => "4 PM"),
-                array("hora" => 15, "estado" => "disponible", "ampm" => "3 PM", "finampm1" => "4 PM", "finampm2" => "6 PM"),
-                array("hora" => 16, "estado" => "disponible", "ampm" => "4 PM", "finampm1" => "5 PM"),
+                array("hora" => 15, "estado" => "disponible", "ampm" => "3 PM", "finampm1" => "4 PM", "finampm2" => "5 PM"),
+                array("hora" => 16, "estado" => "disponible", "ampm" => "4 PM", "finampm1" => "5 PM", "finampm2" => "6 PM"),
                 array("hora" => 17, "estado" => "disponible", "ampm" => "5 PM", "finampm1" => "6 PM"),
                 array("hora" => 18, "estado" => "disponible", "ampm" => "6 PM"),
             );
@@ -207,15 +200,11 @@ function agendaDisponible(){
     echo "</div>";
     
 }
-/*#########################################*/
-/*####FIN FUNCION AGENDA ADISPONIBLE#######*/
-/*#########################################*/
 
 
 
-/*#########################################*/
-/*####INICIO FUNCION CITAS USUARIO#########*/
-/*#########################################*/
+/*####FUNCION CITAS USUARIO#########*/
+
 function citasxCliente(){
     require_once'conexion.php';  
     $usuario = $_SESSION['username'];
@@ -270,13 +259,12 @@ function citasxCliente(){
 
     //Fin while citas cliente    
     }
-    
-
-
 }
-/*#########################################*/
-/*####FIN FUNCION CITAS USUARIO############*/
-/*#########################################*/
+
+
+
+
+/*####DURACION SERVICIO ESCOGIDO############*/
 
 function duracionServicioEscogido(){
     require_once'conexion.php';
@@ -295,4 +283,108 @@ function duracionServicioEscogido(){
         elseif ($duracionSerEsco > 1) {
             echo "<span>$duracionSerEsco horas</span>";
         }
+}
+
+
+function nombreCliente($usuario){
+    require_once'conexion.php';
+
+    $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email = '$usuario'");
+    $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
+    $nombreCliente = $resultadoNomCli['nombre'] . " " . $resultadoNomCli['apellidos'];
+    return $nombreCliente;
+}
+
+
+
+/*####PANEL CITAS############*/
+
+function panelCitas(){
+    require_once'conexion.php';
+
+    //mes actual
+    $mes = date('m');
+
+    //Array semana
+    $semana = array (
+        array ("dia" => date("d")),
+        array ("dia" => date("d")+1),
+        array ("dia" => date("d")+2),
+        array ("dia" => date("d")+3),
+        array ("dia" => date("d")+4),
+    );
+    
+    //foreach dias
+    foreach ($semana as $dia) {
+        $d = $dia['dia'];
+
+        //dia y mes
+        echo "<h4 class='btn btn-warning mt-3'> $d de $mes </h4>";
+
+        //Selecciona esteticista
+        $consultaEst = "SELECT * FROM t_esteticistas";
+        $resultadoEst = $conn->query($consultaEst);
+        
+        //While Esteticista
+        while ($rowEst = $resultadoEst->fetch_assoc()) {
+            
+            //Nombre esteticista
+            $idEst = $rowEst['id_estet'];            
+
+            //echo "<h6 class='alert alert-primary'>". $rowEst['nombre']." ".$rowEst['apellidos'] . "</h6>";
+
+            //Inicio tabla citas
+             echo '<table class="table table-bordered">
+                  <thead>
+                    <tr class="table-primary">
+                        <th colspan="3">'.$rowEst['nombre']." ".$rowEst['apellidos'].'</th>
+                    </tr>
+                    <tr>
+                      <th scope="col">Hora</th>
+                      <th scope="col">Servicio</th>
+                      <th scope="col">Cliente</th>
+                    </tr>
+                  </thead>';
+
+            //Selecciona cita
+            $consultaCita = "SELECT * FROM t_citas WHERE mes='$mes' AND dia='$d' AND id_esteticista='$idEst'";
+            $resultadoCita = $conn->query($consultaCita);
+            
+
+            //While cita
+            while ($rowCita = $resultadoCita->fetch_assoc()) {
+                //Cliente
+                $idC = $rowCita['email_cliente'];
+                $consultaC = $conn->query("SELECT * FROM t_clientes WHERE email='$idC'");
+                $resultadoC = $consultaC->fetch_assoc();
+                $nomC = $resultadoC['nombre']. " " .$resultadoC['apellidos'];
+
+                //Servicio
+                $idSer = $rowCita['id_serv'];
+                $consultaSer = $conn->query("SELECT * FROM t_servicios WHERE id_serv='$idSer'");
+                $resultadoSer = $consultaSer->fetch_assoc();
+                $nomSer = $resultadoSer['nombre'];
+
+               
+                echo "<tbody>
+                        <tr>
+                          <th scope='row'>".$rowCita['hora']."</th>
+                          <td>" . $nomSer . "</td>
+                          <td>" . $nomC . "</td>
+                        </tr>
+                     </tbody>";
+
+            //Fin while cita
+            }
+
+            //Fin tabla
+            echo '</table>';
+
+        //Fin while Esteticista    
+        }
+    
+    //fin foreach dias    
+    }
+
+//Fin funcion panelCitas    
 }

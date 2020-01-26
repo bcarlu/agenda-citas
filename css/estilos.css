@@ -10,3 +10,16 @@
 .navsesion{
     padding-top: 70px;
 }
+
+
+/*******************Pagina inicio*******************/
+.botonplus{
+    font-size: 60px;
+    color: #00cec9;
+}
+
+
+
+.linkbtnplus:hover{
+    background-color: #81ecec;
+}
