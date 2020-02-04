@@ -43,13 +43,14 @@ if (isset($usuario)) {
 
 <?php 
     //if agenda
+    $agenda = "";
     if ($_GET['agenda'] == "exito") {
 ?>  
     <div class="modal" tabindex="-1" role="dialog" id="aviso">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Confirmacion</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -58,8 +59,7 @@ if (isset($usuario)) {
                 <p>Cita registrada con exito!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
             </div>
             </div>
         </div>
@@ -73,7 +73,7 @@ if (isset($usuario)) {
 
 //Cierre del if sesion
 }else {
-    echo ":( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)";
+    echo "<div class='container'><h3 class='alert alert-danger text-center mt-3'>:( no has ingresado, por favor <a href='./'>inicia sesión</a> :)</h3></div> ";
 }
 ?>
 </body>

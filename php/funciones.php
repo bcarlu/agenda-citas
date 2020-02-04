@@ -227,8 +227,14 @@ function citasxCliente(){
 
     //While citas cliente
     $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
-    while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
 
+    //Si no tiene citas programadas
+    if (mysqli_num_rows($consultaCitasxCliente) == 0) {
+        echo "Aun no tienes citas programadas!!";
+    }
+
+    //Si tiene citas programadas   
+    while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
 
         $idServicio = $resultadoCitasxCliente['id_serv'];
         $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
@@ -251,11 +257,8 @@ function citasxCliente(){
         $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
         $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];
 
-        echo "$nomServicio <br>".
-            "$fechaServicio <br>" .
-            "$hCita <br>" .
-            "$precioServicio <br>" .
-            "$nomEsteticista <br><br>";
+        //Muestra citas en pantalla
+        echo "<div class='bg-light mb-3 p-2'>$nomServicio $fechaServicio $hCita $precioServicio $nomEsteticista </div>";
 
     //Fin while citas cliente    
     }
@@ -286,6 +289,9 @@ function duracionServicioEscogido(){
 }
 
 
+
+/*#### NOMBRE CLIENTE ############*/
+
 function nombreCliente($usuario){
     require_once'conexion.php';
 
@@ -297,7 +303,7 @@ function nombreCliente($usuario){
 
 
 
-/*####PANEL CITAS############*/
+/*#### PANEL CITAS ############*/
 
 function panelCitas(){
     require_once'conexion.php';
@@ -318,8 +324,12 @@ function panelCitas(){
     foreach ($semana as $dia) {
         $d = $dia['dia'];
 
-        //dia y mes
-        echo "<h4 class='btn btn-warning mt-3'> $d de $mes </h4>";
+        //Muestra dia y mes
+        //setlocale(LC_TIME,'esp_esp'); //Para un servidor web sobre Windows
+        setlocale(LC_TIME, 'es_CO.utf8'); // Para un servidor web sobre Linux
+
+        echo "<h4 class='btn btn-warning mt-3'>". strftime("%a %e de %b de %Y", strtotime("$d-$mes-2020")) . "</h4>";
+
 
         //Selecciona esteticista
         $consultaEst = "SELECT * FROM t_esteticistas";
@@ -331,18 +341,17 @@ function panelCitas(){
             //Nombre esteticista
             $idEst = $rowEst['id_estet'];            
 
-            //echo "<h6 class='alert alert-primary'>". $rowEst['nombre']." ".$rowEst['apellidos'] . "</h6>";
-
             //Inicio tabla citas
              echo '<table class="table table-bordered">
                   <thead>
                     <tr class="table-primary">
-                        <th colspan="3">'.$rowEst['nombre']." ".$rowEst['apellidos'].'</th>
+                        <th colspan="4">'.$rowEst['nombre']." ".$rowEst['apellidos'].'</th>
                     </tr>
                     <tr>
                       <th scope="col">Hora</th>
                       <th scope="col">Servicio</th>
                       <th scope="col">Cliente</th>
+                      <th scope="col">Celular</th>
                     </tr>
                   </thead>';
 
@@ -358,6 +367,7 @@ function panelCitas(){
                 $consultaC = $conn->query("SELECT * FROM t_clientes WHERE email='$idC'");
                 $resultadoC = $consultaC->fetch_assoc();
                 $nomC = $resultadoC['nombre']. " " .$resultadoC['apellidos'];
+                $telC = $resultadoC['celular'];
 
                 //Servicio
                 $idSer = $rowCita['id_serv'];
@@ -371,6 +381,7 @@ function panelCitas(){
                           <th scope='row'>".$rowCita['hora']."</th>
                           <td>" . $nomSer . "</td>
                           <td>" . $nomC . "</td>
+                          <td>" . $telC . "</td>
                         </tr>
                      </tbody>";
 

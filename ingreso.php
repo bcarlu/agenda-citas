@@ -7,7 +7,7 @@
         
         <div class="row" style="padding:50px 0px;">
             <div class="col text-center">
-                <img src="img/logolujan.png" alt="logo Lujan Uñas Spa">
+                Logo
             </div>            
         </div>
         <!--Formulario de Login-->

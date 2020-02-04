@@ -5,7 +5,7 @@
     <div class="container contenedor-index">
         <div class="row" style="padding:80px 0px;">
             <div class="col text-center">
-                <img src="img/logolujan.png" alt="logo Lujan Uñas Spa">
+                Bienvenido
             </div>            
         </div>
         <div class="row px-3 py-5">

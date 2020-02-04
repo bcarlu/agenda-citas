@@ -19,12 +19,12 @@ if (isset($_POST['email-reg'])) {
     }else {
         $registrar = "INSERT INTO t_clientes (nombre,apellidos,email,celular,clave) VALUES ('$nombre','$apellidos','$email','$celular','$clave')";
         mysqli_query($conexion,$registrar);
-        echo "Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../'>ingresar</a>";
+        echo "<div class='container'><h3 class='alert alert-success text-center'>Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../ingreso'>ingresar</a></h3></div>";
     }
 
 }
 else {
     $titulo = "Sin datos";
     include_once'../head.php';
-    echo "Sin datos, puede <a href='../'>iniciar sesion</a> o <a href='../registro'>registrarse.</a>";
+    echo "<div class='container'><h3 class='alert alert-success text-center'>:( No haz ingresado, por favor <a href='../'>inicia sesion</a> o <a href='../registro'>registrate ;)</a></h3></div>";
 }

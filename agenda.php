@@ -24,7 +24,7 @@ if (isset($usuario)) {
 <?php
 //Cierre del if
 }else {
-    echo ":( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)";
+    echo "<div class='container'><h3 class='alert alert-danger text-center mt-3'>:( no has ingresado, por favor <a href='./'>inicia sesión</a> :)</h3></div> ";
 }
 ?>
 </body>
