@@ -15,13 +15,13 @@ if (isset($usuario)) {
     <div class="row">
         <div class="col text-center">
             <img src="img/avatar-usuario.png" alt="..." class="rounded-circle"><br>
-            <small><?php //echo nombreCliente($usuario);?></small>
+            <small><?php //nombreCliente($usuario); ?></small>
         </div>
           
     </div>
     <div class="row pt-5">
         <div class="col">
-            <h4>Mis citas</h4>
+            <h5>Mis citas</h5>
             <?php citasxCliente(); ?>
         <!--Fin col-->
         </div>

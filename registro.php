@@ -3,7 +3,7 @@
 <body>
     
     <div class="container">
-    <a class="btn btn-warning" href="/"><img class="rounded float-left" src="img/volver-flecha.png" alt="" style="height:35px; width:35px;"></button>
+    <a class="btn btn-warning" href="./"><img class="rounded float-left" src="img/volver-flecha.png" alt="" style="height:35px; width:35px;"></a>
     <h2 class="text-center py-5">Registro</h2>
     <form action="php/validaregistro" method="post">
         <div class="form-group">

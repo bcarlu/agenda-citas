@@ -34,7 +34,7 @@ if (isset($usuario)) {
         
         //Se destruye variable GET y se redirecciona.
         unset($_GET['serv']);
-        header('location: enviarcorreo.php');
+        header('location: enviarcorreo.php?serv=');
     }
     
 

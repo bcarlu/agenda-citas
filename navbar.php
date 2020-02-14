@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="inicio">Logo</a>
+    <a class="navbar-brand" href="inicio"><img src="img/user.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    <?php echo $usuario; ?></a>
     <span><?php 
 
     setlocale(LC_TIME,'es_CO.utf8'); 
-    echo strftime("%A %e de %b"); 
+    echo strftime("%a %e %b"); 
 
     ?></span>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

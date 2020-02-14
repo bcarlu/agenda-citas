@@ -26,7 +26,7 @@ if (isset($usuario)) {
 
 
 	//Direccion origen:
-	$mail->setFrom('info@yosoypc.com', 'Notificaciones - Ypc');
+	$mail->setFrom('info@yosoypc.com', 'AgendaT');
 
 	//Direccion de destino:
 	$mail->addAddress($usuario,'Cliente');

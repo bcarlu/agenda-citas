@@ -206,6 +206,8 @@ function agendaDisponible(){
 /*####FUNCION CITAS USUARIO#########*/
 
 function citasxCliente(){
+
+    //Incluye y abre conexion mysql
     require_once'conexion.php';  
     $usuario = $_SESSION['username'];
 
@@ -262,6 +264,8 @@ function citasxCliente(){
 
     //Fin while citas cliente    
     }
+    //Cierra conexion mysql
+    mysqli_close($conexion);
 }
 
 
@@ -293,12 +297,16 @@ function duracionServicioEscogido(){
 /*#### NOMBRE CLIENTE ############*/
 
 function nombreCliente($usuario){
+    //Incluye y abre conexion mysql
     require_once'conexion.php';
 
     $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email = '$usuario'");
     $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
     $nombreCliente = $resultadoNomCli['nombre'] . " " . $resultadoNomCli['apellidos'];
-    return $nombreCliente;
+    echo $nombreCliente;
+
+    //Cierra conexion mysql
+    mysqli_close($conexion);
 }
 
 
@@ -398,4 +406,23 @@ function panelCitas(){
     }
 
 //Fin funcion panelCitas    
+}
+
+/*#### IMAGEN SERVICIO ############*/
+
+function imagenServicio($categoria){
+
+    //Se establece imagen segun categoria del servicio
+    if ($categoria == 1) {
+        $categoria = "img/card-nails.png";
+        echo $categoria;
+    }
+    if ($categoria == 3) {
+        $categoria =  "img/cera.jpg";
+        echo $categoria;
+    }
+    if ($categoria == 2) {
+        $categoria = "img/spa.jpg";
+        echo $categoria;
+    }
 }
