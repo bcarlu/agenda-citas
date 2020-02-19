@@ -227,13 +227,8 @@ function citasxCliente(){
         array("hora" => 18, "ampm" => "6:00 PM"),
     );
 
-    //While citas cliente
-    $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");
-
-    //Si no tiene citas programadas
-    if (mysqli_num_rows($consultaCitasxCliente) == 0) {
-        echo "Aun no tienes citas programadas!!";
-    }
+    //Consulta citas cliente
+    $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");    
 
     //Si tiene citas programadas   
     while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
@@ -242,11 +237,19 @@ function citasxCliente(){
         $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
         $esteticista = $resultadoCitasxCliente['id_esteticista'];
         $horaServicio = $resultadoCitasxCliente['hora'];
+        $horaFinSer = $resultadoCitasxCliente['horafin'];
         foreach ($arregloHoras as $ah) {
             if ($horaServicio == $ah['hora']) {
                 $hCita = $ah['ampm'];
             }
-        }    
+            if ($horaFinSer == $ah['hora']) {
+                $hFinCita = $ah['ampm'];
+            }
+        }
+
+        //Convierte fecha en formato local
+        setlocale(LC_TIME,'es_CO.utf8'); 
+        $fechaser = strftime("%a %e %b",strtotime($fechaServicio)); 
             
         //Valida nombre y precio del servicio
         $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
@@ -254,16 +257,26 @@ function citasxCliente(){
         $nomServicio = $resultadoNombreServ['nombre'];
         $precioServicio = $resultadoNombreServ['precio'];
 
+        //Convierte precio en formato moneda
+        setlocale(LC_MONETARY, 'es_CO.utf8');
+        $precioPesos = money_format('%i', $precioServicio);
+
         //Valida esteticista
         $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
         $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
         $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];
 
         //Muestra citas en pantalla
-        echo "<div class='bg-light mb-3 p-2'>$nomServicio $fechaServicio $hCita $precioServicio $nomEsteticista </div>";
+        echo "<div class='bg-light mb-3 p-2'>$nomServicio para $fechaser de $hCita-$hFinCita valor: $precioPesos con $nomEsteticista </div>";
 
     //Fin while citas cliente    
     }
+
+    //Si no tiene citas programadas
+    if (mysqli_num_rows($consultaCitasxCliente) == 0) {
+        echo "Aun no tienes citas programadas!!";
+    }
+
     //Cierra conexion mysql
     mysqli_close($conexion);
 }
@@ -425,4 +438,6 @@ function imagenServicio($categoria){
         $categoria = "img/spa.jpg";
         echo $categoria;
     }
+    
+//Fin funcion imagenServicio
 }

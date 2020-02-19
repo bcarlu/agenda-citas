@@ -2,7 +2,7 @@
 <!--Funcion en Javascript para el boton volver a la pagina anterior y hacerlo automaticamente.-->
 <script>
 function goBack() {
-  window.history.back()
+  window.history.back();
 }
 </script>
 

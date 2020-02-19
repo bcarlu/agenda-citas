@@ -67,6 +67,7 @@ if (isset($usuario)) {
     <script> 
         $('#aviso').modal('show'); 
     </script>
+    
 <?php
     //Fin if agenda
     }

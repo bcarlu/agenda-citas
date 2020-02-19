@@ -22,7 +22,38 @@ if (isset($usuario)) {
     </div> 
 
 <?php
-//Cierre del if
+
+    //Si la peticion viene de la pagina confirmagenda y ya esta agendada la cita
+    //if modal
+    if ($_GET['agendado'] == "si") {
+?>  
+    <div class="modal" tabindex="-1" role="dialog" id="avisoAgendado">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alerta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Oh Oh! Lo sentimos alguien acaba de tomar esta cita, pero no te preocupes puedes escoger otra disponible ;)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script> 
+        $('#avisoAgendado').modal('show'); 
+    </script>
+    
+<?php
+    //Cierre if modal
+    }
+
+//Cierre del if sesion
 }else {
     echo "<div class='container'><h3 class='alert alert-danger text-center mt-3'>:( no has ingresado, por favor <a href='./'>inicia sesión</a> :)</h3></div> ";
 }

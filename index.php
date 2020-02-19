@@ -22,12 +22,12 @@
                 <input type="password" class="form-control" id="clave" name="clave" placeholder="Escriba su clave">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block mt-5 btn-inicia-sesion">INICIAR SESION</button>
+                <button type="submit" class="btn btn-success btn-block mt-5 btn-inicia-sesion">INGRESAR</button>
             </div>
         </form>
         
-        <p class="pt-3 text-center">si no tienes cuenta registrate!</p>
-        <a href="registro" type="button" class="btn btn-info btn-block boton-index">REGISTRARME</a>
+        <p class="pt-3 text-center">si no te haz registrado crea una cuenta!</p>
+        <a href="registro" type="button" class="btn btn-info btn-block boton-index">CREAR CUENTA</a>
         <div class="row px-3 py-5">
             
             
