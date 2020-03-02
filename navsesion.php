@@ -6,8 +6,11 @@ function goBack() {
 }
 </script>
 
-<div class="container pb-2 navsesion">
-<!--Nombre del usuario actual y boton para cerrar sesion-->
-  <button class="btn btn-warning" onclick="goBack()"><img class="rounded float-left" src="img/volver-flecha.png" alt="" style="height:35px; width:35px;"></button>
-  <a class="btn btn-danger float-right" href="php/cerrarSesion.php"><small><b>Cerrar sesion</b></small></a>
-</div>
+
+<!-- Image and text -->
+<nav class="navbar navbar-light bg-light navsesion">
+  <a class="navbar-brand" href="#" onclick="goBack()">
+    <i class="fas fa-angle-left fa-lg align-middle"></i>
+    <small> Volver</small>
+  </a>
+</nav>

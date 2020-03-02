@@ -1,31 +1,58 @@
+/*******************Estilos generales*******************/
 * {
-    font-family: 'Noto Serif', serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 
 /*******************Pagina index*******************/
 
+button.bt-crear-cuenta, a.bt-crear-cuenta{
+	background-color: #fd79a8;
+	font-weight: bold;
+	color: #fff;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	border: 2px solid #fd79a8;
+	box-sizing: border-box;
+}
+
+button.bt-ingresar, a.bt-ingresar{	
+	font-weight: bold;
+	color: #fd79a8;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	border: 2px solid #fd79a8;
+	box-sizing: border-box;
+}
 
 /*******************Barra sesion*******************/
 .navsesion{
-    padding-top: 70px;
+    margin-top: 70px;
 }
 
 
 /*******************Pagina inicio*******************/
-.botonplus{
-    font-size: 60px;
-    color: #00cec9;
+i.botonplus{
+    color: #fd79a8;
+    background-color: #fd79a8;
+
 }
-
-
-
-.linkbtnplus:hover{
-    background-color: #81ecec;
-}
-
 
 .boton-inisesion{
 	background-color: #55efc4;
 	color: #fff;
+}
+
+/*CATEGORIAS*/
+
+.cat-unas{
+	background-color: #f4aaad;
+}
+
+.cat-cera{
+	background-color: #f4b894;
+}
+
+.cat-spa{
+	background-color: #f5abe2;
 }

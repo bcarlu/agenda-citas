@@ -17,26 +17,76 @@ if (isset($usuario)) {
                 <h3>Categorias</h3>
             </div>
         </div>
-        <div class="row text-center">
+
+        <!--CAT UÑAS-->
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=unas">
+        <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
+
+            <!--Imagen-->
             <div class="col">
-            <a href="servicios.php?cat=unas"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded-circle">
-            Uñas</a>
+                <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
             </div>
-            <div class="col">
-            <a href="servicios.php?cat=cera"><img src="img/circlee74c3c.png" width="75" height="75" alt="..." class="rounded-circle">
-            Cera</a>
+
+            <!--Descripcion-->
+            <div class="col text-center">
+            <p class="h2 text-decoration-none" href="servicios.php?cat=unas">Uñas</p>
             </div>
+
+            <!--Icono-->
+            <div class="col text-right">
+                <i class="fas fa-angle-right fa-lg"></i>
+            </div>            
+        </div>
+        </a>
+        
+        <!--CAT CERA-->
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=cera">
+        <div class="row cat-cera mb-2 py-2 d-flex align-items-center justify-content-between">
+
+            <!--Imagen-->
             <div class="col">
-            <a href="servicios.php?cat=spa"><img src="img/circle9b59b6.png" width="75" height="75" alt="..." class="rounded-circle">
-            Spa</a>
+                <img src="img/cat-cera.png" alt="" class="img-fluid" height="70" width="70">
+            </div>
+
+            <!--Descripcion-->
+            <div class="col text-center">
+            <p class="h2 text-decoration-none" href="servicios.php?cat=cera">Cera</p>
+            </div>
+
+            <!--Icono-->
+            <div class="col text-right">
+                <i class="fas fa-angle-right fa-lg"></i>
+            </div>            
+        </div>
+        </a>
+        
+        <!--CAT SPA-->
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=spa">
+        <div class="row cat-spa mb-2 py-2 d-flex align-items-center justify-content-between">
+
+            <!--Imagen-->
+            <div class="col">
+                <img src="img/cat-spa.png" alt="" class="img-fluid" height="70" width="70">
+            </div>
+
+            <!--Descripcion-->
+            <div class="col text-center">
+            <p class="h2 text-decoration-none" href="servicios.php?cat=spa">Spa</p>
+            </div>
+
+            <!--Icono-->
+            <div class="col text-right">
+                <i class="fas fa-angle-right fa-lg"></i>
             </div>
         </div>
+        </a>
+
     </div>
 
 <?php
 //Cierre del if
 }else {
-    echo ":( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)";
+    echo "<div class='container'><h3 class='alert alert-danger text-center'>:( no has ingresado tus datos, por favor <a href='./'>inicia sesión</a> :)</h3></div>";
 }
 ?>
 </body>

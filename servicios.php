@@ -18,9 +18,9 @@ if (isset($usuario)) {
         </div>
     </div>
 
-    <div class="row text-center">
+    
             <?php listaServicios();?>
-    </div>
+   
     </div> 
 <?php
 //Cierre del if

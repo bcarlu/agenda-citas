@@ -10,8 +10,8 @@ if (isset($usuario)) {
 	$servicio = $_GET['serv'];
 	$dia = $_GET['dia'];
 	$mes = $_GET['mes'];
-	$hora = $_GET['hora'].":00"; // Se adiciona los dos ceros para que strftime lo interprete correctamente.
-	$horafin = $_GET['horafin'].":00"; // Se adiciona los dos ceros para que strftime lo interprete correctamente.
+	$hora = $_GET['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+	$horafin = $_GET['horafin'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
 	$esteticista = $_GET['est'];
 	$precio = $_GET['precio'];
 	$anio = date('Y');
@@ -46,7 +46,7 @@ if (isset($usuario)) {
     
     //Datos del correo
     $from = " Unas y Spa <info@yosoypc.com>";
-    $to = "briancardona87@live.com";
+    $to = "$usuario";
     $subject = "Confirmacion - $servicio  $fecha a las $horai";
     $message = "Hola $nomCli tu cita ha sido agendada con exito :) Recuerda, $servicio $fecha de $horai a $horaf con $nomEst Te esperamos pronto.";
     $headers = "From:" . $from;

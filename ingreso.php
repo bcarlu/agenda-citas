@@ -1,10 +1,10 @@
 <?php $titulo = "Ingreso";?>
 <?php include_once'head.php';?>
 
-
 <body>
-    <div class="container">
-        
+
+    <?php include_once'navloginreg.php';?>
+    <div class="container">        
         <div class="row" style="padding:50px 0px;">
             <div class="col text-center">
                 Logo
@@ -22,7 +22,7 @@
                 <input type="password" class="form-control" id="clave" name="clave" placeholder="Escriba su clave">
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-info btn-block mt-5">Ingresar</button>
+                <button type="submit" class="btn bt-ingresar btn-block mt-5">Ingresar</button>
             </div>
         </form>
         

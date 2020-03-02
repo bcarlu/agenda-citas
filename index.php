@@ -3,36 +3,27 @@
 
 <body>
     <div class="container contenedor-index">
-        <div class="row" style="padding:80px 0px;">
-            <div class="col text-center">
-                Bienvenido
+        <div class="row py-5">
+            <div class="col-sm-12">
+                <img src="img/logocalendar.png" class="mx-auto d-block pb-3" alt="Logo calendario">
+            </div>            
+            <div class="col-sm-12 text-center font-weight-bold">
+                Bienvenido a Calendario
             </div>            
         </div>
 
-        <p class="text-center">Si ya tienes cuenta ingresa</p>
-        <!--Formulario de Login-->
-        <form class="login-form" action="php/validalogin.php" method="post">
-            
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Escriba su email">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 mb-2">
+                <p class="pt-3 text-center text-muted">Eres nuevo?</p>
+                <a href="registro" type="button" class="btn btn-block bt-crear-cuenta">Crear una cuenta</a>
             </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Clave</label>
-                <input type="password" class="form-control" id="clave" name="clave" placeholder="Escriba su clave">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block mt-5 btn-inicia-sesion">INGRESAR</button>
-            </div>
-        </form>
-        
-        <p class="pt-3 text-center">si no te haz registrado crea una cuenta!</p>
-        <a href="registro" type="button" class="btn btn-info btn-block boton-index">CREAR CUENTA</a>
-        <div class="row px-3 py-5">
             
-            
-            <!--<a href="ingreso" type="button" class="btn btn-info btn-block boton-index">INGRESAR</a>-->
-            
-        </div>        
+            <div class="col-sm-12 col-md-6">
+                <p class="pt-3 text-center text-muted">Ya tienes cuenta?</p>
+                <a href="ingreso" type="button" class="btn btn-block bt-ingresar">Ingresar</a>
+            </div>            
+        </div>
+                  
+ 
     </div>
 </body>

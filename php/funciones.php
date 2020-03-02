@@ -76,27 +76,38 @@ function agendaDisponible(){
     $nombreMes = $buscarnMes['nombre'];
     
 
-    //Arreglo de dias
+    //Arreglo cantidad de dias a mostrar 
     $semana = array (
-        array ("dia" => date("d")),
-        array ("dia" => date("d")+1),
-        array ("dia" => date("d")+2),
-        array ("dia" => date("d")+3),
-        array ("dia" => date("d")+4),
+        array ("dia" => ""),
+        array ("dia" => 1),
+        array ("dia" => 2),
+        array ("dia" => 3),
+        array ("dia" => 4),
     );
+
     
     //HTML
     //Abro Container para los estilos
     echo "<div class='container'>";
 
-    //Recorre arreglo y selecciona dias
+    //Recorre arreglo dias
     foreach ($semana as $sem) {
-        $d = $sem['dia'];        
+        $numdia = $sem['dia'];
 
-        echo "<div class='h3 font-weight-bold text-warning mt-5'> $d de $nombreMes </div>";
+        //Se convierte el numero de dia para ser interpretado por strftime como fecha correctamente     
+        $formatodia = mktime(0, 0, 0, date("m")  , date("d")+$numdia, date("Y"));
+        $diacal = strftime("%a %d %b",$formatodia);
+
+        //Se recoge el dia de la fecha para enviarlo por get a la pag de confirmacion
+        $d = strftime("%d",$formatodia);
+
+        //Se imprime los dias del arreglo iniciando desde hoy
+        echo "<div class='h3 font-weight-bold text-warning mt-5'> $diacal </div>";
         
         //Selecciona esteticista
         $consultaEsteticista = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_cat = '$idCat'");
+        
+        //Mientras hallan esteticistas
         while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
             $esteticistaId = $resultadoEsteticista['id_estet'];
             $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
@@ -118,16 +129,18 @@ function agendaDisponible(){
                 array("hora" => 18, "estado" => "disponible", "ampm" => "6 PM"),
             );
 
-            //Ciclo horas
+            //Recorre arreglo horas
             foreach ($arregloHoras as $horaDia) {
                 $h = $horaDia['hora'];
-                $e = $horaDia['estado'];
+                $e = $horaDia['estado'];                
                 $ampm = $horaDia['ampm'];
                 $citaFin1 = $horaDia['finampm1'];
                 $citaFin2 = $horaDia['finampm2'];
 
                 //Selecciona citas de esteticista
                 $consultaCitasxE = mysqli_query($conexion,"SELECT * FROM t_citas WHERE anio ='$anio' AND mes ='$mes' AND dia='$d' AND id_cat ='$idCat' AND id_esteticista='$esteticistaId'");
+
+                //Mientras hallan citas
                 while($resultadoCitasxE = mysqli_fetch_array($consultaCitasxE)){
                     $hinicio = $resultadoCitasxE['hora'];
                     $hfin = $resultadoCitasxE['horafin'];                    
@@ -211,22 +224,6 @@ function citasxCliente(){
     require_once'conexion.php';  
     $usuario = $_SESSION['username'];
 
-    //Genera horas dia
-    $arregloHoras = array(
-        array("hora" => 7, "ampm" => "7:00 AM"),
-        array("hora" => 8, "ampm" => "8:00 AM"),
-        array("hora" => 9, "ampm" => "9:00 AM"),
-        array("hora" => 10, "ampm" => "10:00 AM"),
-        array("hora" => 11, "ampm" => "11:00 AM"),
-        array("hora" => 12, "ampm" => "12:00 PM"),
-        array("hora" => 13, "ampm" => "1:00 PM"),
-        array("hora" => 14, "ampm" => "2:00 PM"),
-        array("hora" => 15, "ampm" => "3:00 PM"),
-        array("hora" => 16, "ampm" => "4:00 PM"),
-        array("hora" => 17, "ampm" => "5:00 PM"),
-        array("hora" => 18, "ampm" => "6:00 PM"),
-    );
-
     //Consulta citas cliente
     $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");    
 
@@ -236,16 +233,13 @@ function citasxCliente(){
         $idServicio = $resultadoCitasxCliente['id_serv'];
         $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
         $esteticista = $resultadoCitasxCliente['id_esteticista'];
-        $horaServicio = $resultadoCitasxCliente['hora'];
-        $horaFinSer = $resultadoCitasxCliente['horafin'];
-        foreach ($arregloHoras as $ah) {
-            if ($horaServicio == $ah['hora']) {
-                $hCita = $ah['ampm'];
-            }
-            if ($horaFinSer == $ah['hora']) {
-                $hFinCita = $ah['ampm'];
-            }
-        }
+        $horaServicio = $resultadoCitasxCliente['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+        $horaFinSer = $resultadoCitasxCliente['horafin'].":00";// Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+        
+        //Se convierte fecha y hora en formato local con am-pm
+        setlocale(LC_TIME, 'es_CO.utf8');
+        $horai = strftime("%l:%M%P", strtotime($horaServicio));
+        $horaf = strftime("%l:%M%P", strtotime($horaFinSer));
 
         //Convierte fecha en formato local
         setlocale(LC_TIME,'es_CO.utf8'); 
@@ -259,15 +253,20 @@ function citasxCliente(){
 
         //Convierte precio en formato moneda
         setlocale(LC_MONETARY, 'es_CO.utf8');
-        $precioPesos = money_format('%i', $precioServicio);
+        $precioPesos = money_format('%.0i', $precioServicio);
 
         //Valida esteticista
         $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
         $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
-        $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];
+        $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];       
 
-        //Muestra citas en pantalla
-        echo "<div class='bg-light mb-3 p-2'>$nomServicio para $fechaser de $hCita-$hFinCita valor: $precioPesos con $nomEsteticista </div>";
+        //Muestra citas en pantalla      shadow-sm  
+        echo "<div class='mb-3 p-2 shadow-sm rounded bg-citas'>
+            <b>$nomServicio</b><br>
+            $fechaser de $horai-$horaf <br>
+            Con $nomEsteticista <br>
+            $precioPesos 
+            </div>";
 
     //Fin while citas cliente    
     }
@@ -315,8 +314,8 @@ function nombreCliente($usuario){
 
     $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email = '$usuario'");
     $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
-    $nombreCliente = $resultadoNomCli['nombre'] . " " . $resultadoNomCli['apellidos'];
-    echo $nombreCliente;
+    $nombreCliente = $resultadoNomCli['nombre'];
+    return $nombreCliente;
 
     //Cierra conexion mysql
     mysqli_close($conexion);

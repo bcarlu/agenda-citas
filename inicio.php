@@ -1,3 +1,8 @@
+<?php 
+//Mostrar errores en tiempo de ejecucion
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1'); ?>
+
 <?php session_start();?>
 <?php $titulo = "Inicio";?>
 <?php include_once'head.php';?>
@@ -10,31 +15,23 @@ if (isset($usuario)) {
 
 <body class="bodyinicio">
 <?php include_once'navbar.php';?>
-<?php include_once'navsesion.php';?>
 <div class="container">
-    <div class="row">
-        <div class="col text-center">
-            <img src="img/avatar-usuario.png" alt="..." class="rounded-circle"><br>
-            <small><?php //nombreCliente($usuario); ?></small>
-        </div>
-          
-    </div>
-    <div class="row pt-5">
+    <div class="row pt-5 mt-5">
         <div class="col">
             <h5>Mis citas</h5>
+            <!--Se llama funcion para mostrar citas-->
             <?php citasxCliente(); ?>
         <!--Fin col-->
-        </div>
-        
+        </div>        
     <!--Fin row-->
     </div> 
      
     <!--Boton agendar-->
     <footer class="footer mt-auto py-2 fixed-bottom">
         <div class="container text-right">            
-            <a href="categorias" class="btn rounded linkbtnplus">
-            <i class="fas fa-plus d-block botonplus"></i>
-            <small class="d-block font-weight-bold">Agendar</small></a>
+            <a href="categorias" class="btn rounded botonplus">
+            <i class="fas fa-plus d-block fa-2x"></i>
+            <small class="d-block font-weight-bold text-muted">Agendar</small></a>
         </div>
     </footer>
 
