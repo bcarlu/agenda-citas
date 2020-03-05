@@ -6,20 +6,19 @@
     <?php include_once'navloginreg.php';?>
     <div class="container">        
         <div class="row" style="padding:50px 0px;">
-            <div class="col text-center">
-                Logo
+            <div class="col">
+                <h2>Bienvenido!</h2>
             </div>            
         </div>
         <!--Formulario de Login-->
         <form class="login-form" action="php/validalogin.php" method="post">
-            <h2 class="text-center mb-3">Ingreso</h2>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email" placeholder="Escriba su email">
+            <div class="form-group mb-5">
+                Email
+                <input type="email" class="form-control campo-input" id="email" aria-describedby="emailHelp" name="email">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Clave</label>
-                <input type="password" class="form-control" id="clave" name="clave" placeholder="Escriba su clave">
+                Clave
+                <input type="password" class="form-control campo-input" id="clave" name="clave">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn bt-ingresar btn-block mt-5">Ingresar</button>

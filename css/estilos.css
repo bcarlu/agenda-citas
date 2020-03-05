@@ -56,3 +56,15 @@ i.botonplus{
 .cat-spa{
 	background-color: #f5abe2;
 }
+
+/*FORMULARIOS*/
+
+input.campo-input{
+	border-style: none;
+	border-bottom: 2px solid #b3b3b3;
+	border-radius: 0;
+}
+
+input.campo-input:focus{
+	border: 3px solid #555;
+}

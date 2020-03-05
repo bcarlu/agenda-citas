@@ -29,7 +29,7 @@ if (isset($usuario)) {
 
             <!--Descripcion-->
             <div class="col text-center">
-            <p class="h2 text-decoration-none" href="servicios.php?cat=unas">Uñas</p>
+            <p class="h2 text-decoration-none">Uñas</p>
             </div>
 
             <!--Icono-->
@@ -50,7 +50,7 @@ if (isset($usuario)) {
 
             <!--Descripcion-->
             <div class="col text-center">
-            <p class="h2 text-decoration-none" href="servicios.php?cat=cera">Cera</p>
+            <p class="h2 text-decoration-none">Cera</p>
             </div>
 
             <!--Icono-->
@@ -71,7 +71,7 @@ if (isset($usuario)) {
 
             <!--Descripcion-->
             <div class="col text-center">
-            <p class="h2 text-decoration-none" href="servicios.php?cat=spa">Spa</p>
+            <p class="h2 text-decoration-none">Spa</p>
             </div>
 
             <!--Icono-->

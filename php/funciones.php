@@ -12,14 +12,35 @@ function listaServicios(){
     $queryTablaCat = mysqli_query($conexion,"SELECT * FROM t_categorias WHERE nombre = '$nombreCat'");
     $arrayTablaCat = mysqli_fetch_array($queryTablaCat);
 
-    //Se almacena el id de categoria y se busca en la tabla servicios los que coincidan con id cat
+    //Se guarda el id de categoria
     $idCat = $arrayTablaCat['id_cat'];
+
+    //Se buscan los datos del servicio escogido
     $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_cat = '$idCat'");
     
-    //Se recorre la tabla de servicios y se listan los que pertenezcan a la cat
+    //Se listan los servicios de la categoria
     while($arrayTablaServ = mysqli_fetch_array($queryTablaServ)){
-        echo '<div class="col py-2"><a href="agenda.php?serv=' . $arrayTablaServ['nombre'] . '"><img src="img/circle3498db.png" width="75" height="75" alt="..." class="rounded"><br>'
-        . $arrayTablaServ['nombre'] . "<br> $" . $arrayTablaServ['precio'] .'</a></div>';
+        $nomServ = $arrayTablaServ['nombre'];
+        $precServ = $arrayTablaServ['precio'];
+        $durServ = $arrayTablaServ['duracion'];
+
+        echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$nomServ.'">
+                <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
+                    
+                <div class="col">
+                    <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
+                </div>
+                
+                <div class="col text-center">
+                <p class="h2 text-decoration-none">'.$nomServ.'</p>
+                </div>
+
+                
+                <div class="col text-right">
+                    <i class="fas fa-angle-right fa-lg"></i>
+                </div> 
+                </div>
+            </a>';
     }
 
 }
