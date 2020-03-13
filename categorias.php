@@ -1,6 +1,7 @@
 <?php session_start();?>
 <?php $titulo = "Categorias";?>
 <?php include_once'head.php';?>
+<?php include_once'php/funciones.php';?>
 
 <?php
 $usuario = $_SESSION['username'];
@@ -8,8 +9,8 @@ if (isset($usuario)) {
 ?>
 
 <body class="categorias">
-    <?php include_once'navbar.php';?>
-    <?php include_once'navsesion.php';?>
+    <?php include 'navbar.php';?>
+    <?php include 'navsesion.php';?>
     <div class="container">
         
         <div class="row">

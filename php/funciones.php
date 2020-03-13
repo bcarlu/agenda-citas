@@ -5,7 +5,7 @@
 /*####FUNCION LISTA SERVICIOS####*/
 
 function listaServicios(){
-    require_once'conexion.php';
+    include 'conexion.php';
     
     //Se consulta la tabla de categorias y se buscan los registros que coincidan con el nombre recibido
     $nombreCat = $_GET['cat'];
@@ -22,7 +22,7 @@ function listaServicios(){
     while($arrayTablaServ = mysqli_fetch_array($queryTablaServ)){
         $nomServ = $arrayTablaServ['nombre'];
         $precServ = $arrayTablaServ['precio'];
-        $durServ = $arrayTablaServ['duracion'];
+        $durServ = $arrayTablaServ['id_duracion'];
 
         echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$nomServ.'">
                 <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
@@ -51,7 +51,7 @@ function listaServicios(){
 /*####FUNCION LISTA ESTETICISTAS####*/
 
 function listaEsteticistas(){
-    require_once'conexion.php';
+    include 'conexion.php';
     
     //Se consulta la tabla de servicios y se buscan los registros que coincidan con el nombre recibido
     $nombreServ = $_GET['serv'];
@@ -74,7 +74,7 @@ function listaEsteticistas(){
 /*####INICIO FUNCION AGENDA ADISPONIBLE####*/
 
 function agendaDisponible(){
-    require_once'conexion.php';
+    include 'conexion.php';
     
     
     //Selecciona la categoria y duracion del servicio escogido
@@ -99,7 +99,7 @@ function agendaDisponible(){
 
     //Arreglo cantidad de dias a mostrar 
     $semana = array (
-        array ("dia" => ""),
+        array ("dia" => 0),
         array ("dia" => 1),
         array ("dia" => 2),
         array ("dia" => 3),
@@ -146,8 +146,7 @@ function agendaDisponible(){
                 array("hora" => 14, "estado" => "disponible", "ampm" => "2 PM", "finampm1" => "3 PM", "finampm2" => "4 PM"),
                 array("hora" => 15, "estado" => "disponible", "ampm" => "3 PM", "finampm1" => "4 PM", "finampm2" => "5 PM"),
                 array("hora" => 16, "estado" => "disponible", "ampm" => "4 PM", "finampm1" => "5 PM", "finampm2" => "6 PM"),
-                array("hora" => 17, "estado" => "disponible", "ampm" => "5 PM", "finampm1" => "6 PM"),
-                array("hora" => 18, "estado" => "disponible", "ampm" => "6 PM"),
+                array("hora" => 17, "estado" => "disponible", "ampm" => "5 PM", "finampm1" => "6 PM", "finampm2" => ""),
             );
 
             //Recorre arreglo horas
@@ -195,9 +194,6 @@ function agendaDisponible(){
                 if ($duracionSerEsco == 2) {                        
                     if ($h == 17) {
                         $e = "ocupado";
-                    }
-                    if ($h == 18) {
-                        $e = "ocupado";
                     }                    
                 }
                 
@@ -216,19 +212,8 @@ function agendaDisponible(){
         }               
 
     //Fin foreach dias
-    }
+    }    
     
-    
-    //Consulta # dias del mes
-    $idDiasxMes = date("Ym");
-    $consultaDiasxMes = mysqli_query($conexion,"SELECT * FROM t_diasxmes WHERE id_diasxmes ='$idDiasxMes'");
-    $arregloDiasxMes = mysqli_fetch_array($consultaDiasxMes);
-    //echo "Este mes es de: " . $arregloDiasxMes['num_diasxmes'] . " dias. <br>";
-
-    //Calcula dias para fin mes
-    $lequedanAlMes = $arregloDiasxMes['num_diasxmes'] - date("d");
-    //echo "Faltan $lequedanAlMes dias para terminar el mes.<br>";
-
     //HTML
     //Cierro container para los estilos
     echo "</div>";
@@ -242,7 +227,7 @@ function agendaDisponible(){
 function citasxCliente(){
 
     //Incluye y abre conexion mysql
-    require_once'conexion.php';  
+    include 'conexion.php';  
     $usuario = $_SESSION['username'];
 
     //Consulta citas cliente
@@ -307,7 +292,7 @@ function citasxCliente(){
 /*####DURACION SERVICIO ESCOGIDO############*/
 
 function duracionServicioEscogido(){
-    require_once'conexion.php';
+    include 'conexion.php';
 
     //Selecciona duracion del servicio escogido
     $nombreServ = $_GET['serv'];
@@ -331,12 +316,12 @@ function duracionServicioEscogido(){
 
 function nombreCliente($usuario){
     //Incluye y abre conexion mysql
-    require_once'conexion.php';
+    include 'conexion.php';
 
     $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email = '$usuario'");
     $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
     $nombreCliente = $resultadoNomCli['nombre'];
-    return $nombreCliente;
+    echo $nombreCliente;
 
     //Cierra conexion mysql
     mysqli_close($conexion);
@@ -347,7 +332,7 @@ function nombreCliente($usuario){
 /*#### PANEL CITAS ############*/
 
 function panelCitas(){
-    require_once'conexion.php';
+    include 'conexion.php';
 
     //mes actual
     $mes = date('m');

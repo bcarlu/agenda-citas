@@ -7,8 +7,8 @@ $usuario = $_SESSION['username'];
 if (isset($usuario)) {
 ?>
 <body>
-    <?php include_once'navbar.php';?>  
-    <?php include_once'navsesion.php';?>
+    <?php include 'navbar.php';?>  
+    <?php include 'navsesion.php';?>
     <div class="container">    
         <div class="text-center h3 alert-primary">
             <span>Agenda para <?php echo "<b>{$_GET['serv']}</b>"; ?></span>
@@ -23,38 +23,42 @@ if (isset($usuario)) {
 
 <?php
 
-    //Si la peticion viene de la pagina confirmagenda y ya esta agendada la cita
-    //if modal
-    if ($_GET['agendado'] == "si") {
+    //Si la peticion de la pagina viene desde confirmagenda y ya esta agendada la cita
+    //if de control
+    if (isset($_GET['agendado'])) {
+        
+        //if para mostrar el mensaje   
+        if ($_GET['agendado'] == "si") {
 ?>  
-    <div class="modal" tabindex="-1" role="dialog" id="avisoAgendado">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Alerta</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Oh Oh! Lo sentimos alguien acaba de tomar esta cita, pero no te preocupes puedes escoger otra disponible ;)</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-            </div>
+        <div class="modal" tabindex="-1" role="dialog" id="avisoAgendado">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Alerta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Oh Oh! Lo sentimos alguien acaba de tomar esta cita, pero no te preocupes puedes escoger otra disponible ;)</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+                </div>
             </div>
         </div>
-    </div>
-    <script> 
-        $('#avisoAgendado').modal('show'); 
-    </script>
+        <script> 
+            $('#avisoAgendado').modal('show'); 
+        </script>
     
 <?php
-    //Cierre if modal
+        //Cierre if modal
+        }
+    //Cierre if de control
     }
-
 //Cierre del if sesion
-}else {
+} else {
     echo "<div class='container'><h3 class='alert alert-danger text-center mt-3'>:( no has ingresado, por favor <a href='./'>inicia sesión</a> :)</h3></div> ";
 }
 ?>
