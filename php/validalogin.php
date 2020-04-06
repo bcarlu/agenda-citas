@@ -6,17 +6,19 @@ $email = $_POST['email'];
 $clave = $_POST['clave'];
 
 if (isset($_POST)) {
-    //Valida si el usuario esta registrado
+    //Valida si el email de usuario esta registrado
     $consultaLogin = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email='$email'");
     $resultadoLogin = mysqli_fetch_assoc($consultaLogin);
     $passwCliente = $resultadoLogin['clave'];
 
     if (mysqli_num_rows($consultaLogin) > 0) {
-    	
+        
+        //Valida la contraseña
     	if (password_verify($clave,$passwCliente)) {
+            //Se almacena el email del usuario para la sesion y se redirige a la pagina de inicio
     		$_SESSION['username'] = $email;
-        	header("location:../inicio");
-    	}else{
+            header("location:../inicio");  
+    	} else{
     		$titulo = "Datos incorrectos";
     		include_once'../head.php';
     		echo "<div class='container'><h3 class='alert alert-danger text-center'>:( La contraseña es incorrecta. <a href='../ingreso.php'>Volver a intentarlo.</a></h3></div>";

@@ -1,19 +1,13 @@
-<?php 
-//Mostrar errores en tiempo de ejecucion
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1'); ?>
-
 <?php session_start();?>
 <?php $titulo = "Inicio";?>
 <?php include_once'head.php';?>
 <?php include_once'php/funciones.php';?>
 
 <?php
-//If de control sesion
+//Valida si la variable global del usuario esta definida
 if (isset($_SESSION['username'])) {
     $usuario = $_SESSION['username'];
-    if (isset($usuario)) {
-    ?>
+?>
 
     <body class="bodyinicio">
     <?php include 'navbar.php';?>
@@ -68,12 +62,10 @@ if (isset($_SESSION['username'])) {
                 $('#aviso').modal('show'); 
             </script>            
     <?php
-                //Fin if de agenda
-                }
-            //Fin if de control var agenda
+            //Fin if de agenda
             }
-        //Fin if de sesion
-        }
+        //Fin if de control var agenda
+        }        
     //Fin if de control sesion
     }
     else {

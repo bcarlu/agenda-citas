@@ -9,7 +9,11 @@
             </div>            
             <div class="col-sm-12 text-center font-weight-bold">
                 Bienvenido a Calendario
-            </div>            
+            </div>
+            <div class="col-sm-12 text-center">
+                <p>Agenda tus citas de una forma facil y rapida con nuestra aplicacion.</p>           
+            </div>
+            
         </div>
 
         <div class="row">

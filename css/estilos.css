@@ -7,21 +7,21 @@
 /*******************Pagina index*******************/
 
 button.bt-crear-cuenta, a.bt-crear-cuenta{
-	background-color: #fd79a8;
+	background-color: #636e72;
 	font-weight: bold;
 	color: #fff;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
-	border: 2px solid #fd79a8;
+	border: 2px solid #636e72;
 	box-sizing: border-box;
 }
 
 button.bt-ingresar, a.bt-ingresar{	
 	font-weight: bold;
-	color: #fd79a8;
+	color: #636e72;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
-	border: 2px solid #fd79a8;
+	border: 2px solid #636e72;
 	box-sizing: border-box;
 }
 
@@ -32,9 +32,9 @@ button.bt-ingresar, a.bt-ingresar{
 
 
 /*******************Pagina inicio*******************/
-i.botonplus{
+a.botonplus{
     color: #fd79a8;
-    background-color: #fd79a8;
+    background-color: #2d3436;
 
 }
 
@@ -46,25 +46,22 @@ i.botonplus{
 /*CATEGORIAS*/
 
 .cat-unas{
-	background-color: #f4aaad;
+	border: 2px solid #f4aaad;
+	color: #f4aaad;
 }
 
 .cat-cera{
-	background-color: #f4b894;
+	border: 2px solid #f4b894;
+	color: #f4b894;
 }
 
 .cat-spa{
-	background-color: #f5abe2;
+	border: 2px solid #f5abe2;
+	color: #f5abe2;
 }
 
 /*FORMULARIOS*/
 
-input.campo-input{
-	border-style: none;
-	border-bottom: 2px solid #b3b3b3;
-	border-radius: 0;
-}
-
 input.campo-input:focus{
-	border: 3px solid #555;
+	background-color: #dfe6e9;
 }
