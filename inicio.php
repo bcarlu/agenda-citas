@@ -21,11 +21,10 @@ if (isset($_SESSION['username'])) {
             </div>        
         <!--Fin row-->
         </div> 
-        
         <!--Boton agendar-->
         <footer class="footer mt-auto py-2 fixed-bottom">
             <div class="container text-right">            
-                <a href="categorias" class="btn rounded botonplus">
+                <a href="categorias.php" class="btn rounded botonplus">
                 <i class="fas fa-plus d-block fa-2x"></i>
                 <small class="d-block font-weight-bold text-muted">Agendar</small></a>
             </div>

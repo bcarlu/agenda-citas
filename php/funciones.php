@@ -6,43 +6,45 @@
 
 function listaServicios(){
     include 'conexion.php';
+
+    try {
+      //Se consulta la tabla de categorias y se buscan los registros que coincidan con el nombre recibido
+      $nombreCat = $_GET['cat'];
+      $queryTablaCat = mysqli_query($conexion,"SELECT * FROM t_categorias WHERE nombre = '$nombreCat'");
+      $arrayTablaCat = mysqli_fetch_array($queryTablaCat);
+
+      error_log("Categorias: " . $arrayTablaCat['nombre']);
+      //Se guarda el id de categoria
+      $idCat = $arrayTablaCat['id'];
+
+      //Se buscan los datos del servicio escogido
+      $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_cat = '$idCat'");
+      
+      error_log("Servicios: " . mysqli_fetch_array($queryTablaServ)['nombre']);
     
-    //Se consulta la tabla de categorias y se buscan los registros que coincidan con el nombre recibido
-    $nombreCat = $_GET['cat'];
-    $queryTablaCat = mysqli_query($conexion,"SELECT * FROM t_categorias WHERE nombre = '$nombreCat'");
-    $arrayTablaCat = mysqli_fetch_array($queryTablaCat);
+      //Se listan los servicios de la categoria
+      foreach ($queryTablaServ as $servicio) {
+        echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$servicio["nombre"].'">
+                  <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
+                      
+                  <div class="col">
+                      <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
+                  </div>
+                  
+                  <div class="col text-center">
+                  <p class="h2 text-decoration-none">'.$servicio["nombre"].'</p>
+                  </div>
 
-    //Se guarda el id de categoria
-    $idCat = $arrayTablaCat['id_cat'];
-
-    //Se buscan los datos del servicio escogido
-    $queryTablaServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_cat = '$idCat'");
-    
-    //Se listan los servicios de la categoria
-    while($arrayTablaServ = mysqli_fetch_array($queryTablaServ)){
-        $nomServ = $arrayTablaServ['nombre'];
-        $precServ = $arrayTablaServ['precio'];
-        $durServ = $arrayTablaServ['id_duracion'];
-
-        echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$nomServ.'">
-                <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
-                    
-                <div class="col">
-                    <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
-                </div>
-                
-                <div class="col text-center">
-                <p class="h2 text-decoration-none">'.$nomServ.'</p>
-                </div>
-
-                
-                <div class="col text-right">
-                    <i class="fas fa-angle-right fa-lg"></i>
-                </div> 
-                </div>
-            </a>';
+                  
+                  <div class="col text-right">
+                      <i class="fas fa-angle-right fa-lg"></i>
+                  </div> 
+                  </div>
+              </a>';
+      } 
+    } catch (\Throwable $th) {
+      echo "Error al obtener servicios: " . $th;
     }
-
 }
 
 
@@ -86,16 +88,32 @@ function agendaDisponible(){
 
 
     //Calcula numero de esteticistas
-    $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
+    $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'");
+    /* $queryTablaEstet = mysqli_query($conexion,"SELECT COUNT(id_estet) AS cantidad FROM t_esteticistas WHERE id_cat = '$idCat'"); */
     $numEsteticistas = mysqli_fetch_assoc($queryTablaEstet);
     
+
+    //Arreglo meses del año 
+    $nombreMeses = array (
+        array ("id" => 0, "nombre" => "Enero"),
+        array ("id" => 1, "nombre" => "Febrero"),
+        array ("id" => 2, "nombre" => "Marzo"),
+        array ("id" => 3, "nombre" => "Abril"),
+        array ("id" => 4, "nombre" => "Mayo"),
+        array ("id" => 5, "nombre" => "Junio"),
+        array ("id" => 6, "nombre" => "Julio"),
+        array ("id" => 7, "nombre" => "Agosto"),
+        array ("id" => 8, "nombre" => "Septiembre"),
+        array ("id" => 9, "nombre" => "Octubre"),
+        array ("id" => 10, "nombre" => "Noviembre"),
+        array ("id" => 11, "nombre" => "Diciembre")
+    );
 
     //Valida mes
     $anio = date("Y");
     $mes = date("m");
-    $buscarnMes = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_meses WHERE id_mes = '$mes'"));
-    $nombreMes = $buscarnMes['nombre'];
-    
+    //$buscarnMes = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM t_meses WHERE id_mes = '$mes'"));
+    //$nombreMes = $buscarnMes['nombre'];
 
     //Arreglo cantidad de dias a mostrar 
     $semana = array (
@@ -130,8 +148,10 @@ function agendaDisponible(){
         
         //Mientras hallan esteticistas
         while($resultadoEsteticista = mysqli_fetch_array($consultaEsteticista)){
-            $esteticistaId = $resultadoEsteticista['id_estet'];
-            $esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
+            //$esteticistaId = $resultadoEsteticista['id_estet'];
+            $esteticistaId = $resultadoEsteticista['id'];
+            //$esteticistaNom = $resultadoEsteticista['nombre'] . " " . $resultadoEsteticista['apellidos'];
+            $esteticistaNom = $resultadoEsteticista['nombre'];
             echo "<div class='font-weight-bold pt-3'> $esteticistaNom </div><br>";
             
             //Genera horas dia
@@ -229,61 +249,68 @@ function citasxCliente(){
     //Incluye y abre conexion mysql
     include 'conexion.php';  
     $usuario = $_SESSION['username'];
+  
+    try {
+      //Consulta citas cliente
+      $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");    
 
-    //Consulta citas cliente
-    $consultaCitasxCliente = mysqli_query($conexion,"SELECT * FROM t_citas WHERE email_cliente='$usuario'");    
+      //Si tiene citas programadas   
+      while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
 
-    //Si tiene citas programadas   
-    while ($resultadoCitasxCliente = mysqli_fetch_array($consultaCitasxCliente)){
+          $idServicio = $resultadoCitasxCliente['id_serv'];
+          $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
+          $esteticista = $resultadoCitasxCliente['id_esteticista'];
+          $horaServicio = $resultadoCitasxCliente['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+          $horaFinSer = $resultadoCitasxCliente['horafin'].":00";// Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+          
+          //Se convierte fecha y hora en formato local con am-pm
+          setlocale(LC_TIME, 'es_CO.utf8');
+          $horai = strftime("%l:%M%P", strtotime($horaServicio));
+          $horaf = strftime("%l:%M%P", strtotime($horaFinSer));
 
-        $idServicio = $resultadoCitasxCliente['id_serv'];
-        $fechaServicio = $resultadoCitasxCliente['dia']."-".$resultadoCitasxCliente['mes']."-".$resultadoCitasxCliente['anio'];
-        $esteticista = $resultadoCitasxCliente['id_esteticista'];
-        $horaServicio = $resultadoCitasxCliente['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
-        $horaFinSer = $resultadoCitasxCliente['horafin'].":00";// Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
-        
-        //Se convierte fecha y hora en formato local con am-pm
-        setlocale(LC_TIME, 'es_CO.utf8');
-        $horai = strftime("%l:%M%P", strtotime($horaServicio));
-        $horaf = strftime("%l:%M%P", strtotime($horaFinSer));
+          //Convierte fecha en formato local
+          setlocale(LC_TIME,'es_CO.utf8'); 
+          $fechaser = strftime("%a %e %b",strtotime($fechaServicio)); 
+              
+          //Valida nombre y precio del servicio
+          //$consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
+          $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id='$idServicio'");
+          $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
+          $nomServicio = $resultadoNombreServ['nombre'];
+          $precioServicio = $resultadoNombreServ['precio'];
 
-        //Convierte fecha en formato local
-        setlocale(LC_TIME,'es_CO.utf8'); 
-        $fechaser = strftime("%a %e %b",strtotime($fechaServicio)); 
-            
-        //Valida nombre y precio del servicio
-        $consultaNombreServ = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE id_serv='$idServicio'");
-        $resultadoNombreServ = mysqli_fetch_array($consultaNombreServ);
-        $nomServicio = $resultadoNombreServ['nombre'];
-        $precioServicio = $resultadoNombreServ['precio'];
+          //Convierte precio en formato moneda se debe tener soporte para 
+          setlocale(LC_MONETARY, 'es_CO.utf8');
+          //$precioPesos = money_format('%.0i', $precioServicio);
+          $precioPesos = number_format($precioServicio, 0, ',', '.');
 
-        //Convierte precio en formato moneda
-        setlocale(LC_MONETARY, 'es_CO.utf8');
-        $precioPesos = money_format('%.0i', $precioServicio);
+          //Valida esteticista
+          //$esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
+          $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id='$esteticista'");
+          $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
+          $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];       
 
-        //Valida esteticista
-        $esteticistaServ = mysqli_query($conexion,"SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'");
-        $resultadoEsteticistaServ = mysqli_fetch_array($esteticistaServ);
-        $nomEsteticista = $resultadoEsteticistaServ['nombre']." ".$resultadoEsteticistaServ['apellidos'];       
+          //Muestra citas en pantalla      shadow-sm  
+          echo "<div class='mb-3 p-2 shadow-sm rounded bg-citas'>
+              <b>$nomServicio</b><br>
+              $fechaser de $horai-$horaf <br>
+              Con $nomEsteticista <br>
+              $precioPesos 
+              </div>";
 
-        //Muestra citas en pantalla      shadow-sm  
-        echo "<div class='mb-3 p-2 shadow-sm rounded bg-citas'>
-            <b>$nomServicio</b><br>
-            $fechaser de $horai-$horaf <br>
-            Con $nomEsteticista <br>
-            $precioPesos 
-            </div>";
+      //Fin while citas cliente    
+      }
 
-    //Fin while citas cliente    
+      //Si no tiene citas programadas
+      if (mysqli_num_rows($consultaCitasxCliente) == 0) {
+          echo "Aun no tienes citas programadas!!";
+      }
+
+      //Cierra conexion mysql
+      mysqli_close($conexion);
+    } catch (\Throwable $th) {
+      echo "Hubo un error al obtener citas $th";
     }
-
-    //Si no tiene citas programadas
-    if (mysqli_num_rows($consultaCitasxCliente) == 0) {
-        echo "Aun no tienes citas programadas!!";
-    }
-
-    //Cierra conexion mysql
-    mysqli_close($conexion);
 }
 
 
@@ -365,13 +392,14 @@ function panelCitas(){
         while ($rowEst = $resultadoEst->fetch_assoc()) {
             
             //Nombre esteticista
-            $idEst = $rowEst['id_estet'];            
+            //$idEst = $rowEst['id_estet'];            
+            $idEst = $rowEst['id'];            
 
             //Inicio tabla citas
              echo '<table class="table table-bordered">
                   <thead>
                     <tr class="table-primary">
-                        <th colspan="4">'.$rowEst['nombre']." ".$rowEst['apellidos'].'</th>
+                        <th colspan="4">'.$rowEst['nombre'].'</th>
                     </tr>
                     <tr>
                       <th scope="col">Hora</th>
@@ -397,7 +425,8 @@ function panelCitas(){
 
                 //Servicio
                 $idSer = $rowCita['id_serv'];
-                $consultaSer = $conn->query("SELECT * FROM t_servicios WHERE id_serv='$idSer'");
+                //$consultaSer = $conn->query("SELECT * FROM t_servicios WHERE id_serv='$idSer'");
+                $consultaSer = $conn->query("SELECT * FROM t_servicios WHERE id='$idSer'");
                 $resultadoSer = $consultaSer->fetch_assoc();
                 $nomSer = $resultadoSer['nombre'];
 

@@ -20,14 +20,16 @@ if (isset($usuario)) {
     //Se define el id, categoria, precio y duracion del servicio escogido 
     $consultaServicio = mysqli_query($conexion,"SELECT * FROM t_servicios WHERE nombre = '$servicioEscogido'");
     $arregloServicio = mysqli_fetch_array($consultaServicio);
-    $idServicio = $arregloServicio['id_serv'];
+    //$idServicio = $arregloServicio['id_serv'];
+    $idServicio = $arregloServicio['id'];
     $categoria = $arregloServicio['id_cat'];
     $precio = $arregloServicio['precio'];
     $duracion = $arregloServicio['id_duracion'];
     $horafin = $hora + $duracion;
 
     //Antes de registrar la cita se busca que no la hallan reservado ya y asi evitar agendas duplicadas.
-    $sqlRegistroCita = "SELECT id_cita FROM t_citas WHERE id_esteticista='$esteticista' AND anio='$anio' AND mes='$mes' AND dia='$dia' AND hora='$hora' AND horafin='$horafin'";
+    //$sqlRegistroCita = "SELECT id_cita FROM t_citas WHERE id_esteticista='$esteticista' AND anio='$anio' AND mes='$mes' AND dia='$dia' AND hora='$hora' AND horafin='$horafin'";
+    $sqlRegistroCita = "SELECT id FROM t_citas WHERE id_esteticista='$esteticista' AND anio='$anio' AND mes='$mes' AND dia='$dia' AND hora='$hora' AND horafin='$horafin'";
     $resultRegistroCita = $conn->query($sqlRegistroCita);
     $estadoRegCita = $resultRegistroCita->fetch_assoc();
 
@@ -43,8 +45,10 @@ if (isset($usuario)) {
     VALUES ('$idServicio','$categoria','$esteticista','$usuario','$anio','$mes','$dia','$hora','$duracion','$horafin')");
     
     /*Se redirecciona a la pagina de enviar correo y debido a que se envian datos por GET con variables se utilizan comillas dobles*/
-    header("location: enviarcorreo.php?serv=$servicioEscogido&est=$esteticista&dia=$dia&mes=$mes&hora=$hora&horafin=$horafin&precio=$precio");
-    
+    //header("location: enviarcorreo.php?serv=$servicioEscogido&est=$esteticista&dia=$dia&mes=$mes&hora=$hora&horafin=$horafin&precio=$precio");
+
+    // Por el momento se comenta la redireccion a la pagina de envio de correo para simplificar el proceso, y se redirige directamente a la pagina de inicio del usuario.
+    header('location: ../inicio.php?agenda=exito');
     }
 
 }

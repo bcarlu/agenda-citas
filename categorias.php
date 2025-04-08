@@ -41,7 +41,7 @@ if (isset($usuario)) {
         </a>
         
         <!--CAT CERA-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=cera">
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=Cera">
         <div class="row cat-cera mb-2 py-2 d-flex align-items-center justify-content-between">
 
             <!--Imagen-->

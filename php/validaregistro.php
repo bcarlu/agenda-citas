@@ -10,7 +10,10 @@ if (isset($_POST['email-reg'])) {
     $email = $_POST['email-reg'];
     $celular = $_POST['celular-reg'];
     $clave = $_POST['clave-reg'];
-
+    
+    /*echo "la clave enviada por el usuario es $clave";*/
+    error_log("la clave enviada por el usuario es $clave");
+    
     //Variable para encriptar la clave que el usuario ingresa.
     $clavenc = password_hash($clave, PASSWORD_BCRYPT);
     
@@ -24,7 +27,7 @@ if (isset($_POST['email-reg'])) {
     }else {
         $registrar = "INSERT INTO t_clientes (nombre,apellidos,email,celular,clave) VALUES ('$nombre','$apellidos','$email','$celular','$clavenc')";
         mysqli_query($conexion,$registrar);
-        echo "<div class='container'><h3 class='alert alert-success text-center'>Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='../'>ingresar</a></h3></div>";
+        echo "<div class='container'><h3 class='alert alert-success text-center'>Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='/ingreso.php'>ingresar</a></h3></div>";
     }
 
 }

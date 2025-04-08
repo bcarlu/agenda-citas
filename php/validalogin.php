@@ -15,9 +15,10 @@ if (isset($_POST)) {
         
         //Valida la contraseña
     	if (password_verify($clave,$passwCliente)) {
-            //Se almacena el email del usuario para la sesion y se redirige a la pagina de inicio
+        $claveVerificada = password_verify($clave,$passwCliente);
+        //Se almacena el email del usuario para la sesion y se redirige a la pagina de inicio
     		$_SESSION['username'] = $email;
-            header("location:../inicio");  
+            header("location:../inicio.php");  
     	} else{
     		$titulo = "Datos incorrectos";
     		include_once'../head.php';

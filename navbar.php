@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="inicio"><img src="img/user.png" width="30" height="30" class="d-inline-block align-top" alt=""><small class="pl-2"><?php nombreCliente($usuario); ?></small></a>
+    <a class="navbar-brand" href="inicio.php"><img src="img/user.png" width="30" height="30" class="d-inline-block align-top" alt=""><small class="pl-2"><?php nombreCliente($usuario); ?></small></a>
     
     <span>
     <?php setlocale(LC_TIME,'es_CO.utf8'); 

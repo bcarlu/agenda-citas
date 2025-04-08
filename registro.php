@@ -10,7 +10,7 @@
                 <h2>Crea una cuenta gratis y agenda tus citas rapida y facilmente!</h2>
             </div>            
         </div>
-        <form action="php/validaregistro" method="post">
+        <form action="php/validaregistro.php" method="post">
             <div class="form-group">
                 Nombre
                 <input type="text" class="form-control campo-input" id="nombre-reg" name="nombre-reg" aria-describedby="nombreAyuda" placeholder="Escriba su nombre" required>
@@ -29,7 +29,7 @@
             </div>
             <div class="form-group">
                 Contraseña
-                <input type="password" class="form-control campo-input" id="passwd-reg" name="passwd-reg" placeholder="Escriba una contraseña para su cuenta" required>
+                <input type="password" class="form-control campo-input" id="clave-reg" name="clave-reg" placeholder="Escriba una contraseña para su cuenta" required>
             </div>
             <div class="custom-control custom-checkbox mb-3">
                 <input type="checkbox" class="custom-control-input" id="customCheck1" onclick="mostrarContrasena()">

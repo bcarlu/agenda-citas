@@ -16,7 +16,8 @@ if (isset($usuario)) {
     $idesteticista = $_GET['est'];
     
     //Se busca el nombre de esteticista
-    $sqlNomEst = "SELECT * FROM t_esteticistas WHERE id_estet = '$idesteticista'";
+    //$sqlNomEst = "SELECT * FROM t_esteticistas WHERE id_estet = '$idesteticista'";
+    $sqlNomEst = "SELECT * FROM t_esteticistas WHERE id = '$idesteticista'";
     $resultNomEst = $conn->query($sqlNomEst);
     $nomEst =  $resultNomEst->fetch_assoc();
     $nomEst = $nomEst['nombre'] . " " . $nomEst['apellidos'];
