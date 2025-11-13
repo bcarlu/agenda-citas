@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "rector/rector": "^2.2"
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
