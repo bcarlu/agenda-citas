@@ -4,9 +4,9 @@ USE agenda_citas;
 CREATE TABLE IF NOT EXISTS t_clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    apellidos VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    celular VARCHAR(20) NOT NULL,
+    celular VARCHAR(20) NULL,
     clave VARCHAR(255) NOT NULL
 );
 
