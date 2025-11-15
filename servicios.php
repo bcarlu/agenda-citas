@@ -17,10 +17,8 @@ if (isset($usuario)) {
             <h3 class="hcate">Servicios</h3>
         </div>
     </div>
-
-    
-            <?php listaServicios();?>
-   
+        <!--Se listan los servicios de la categoria-->
+        <?php listaServiciosPG();?>
     </div> 
 <?php
 //Cierre del if

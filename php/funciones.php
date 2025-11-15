@@ -47,7 +47,58 @@ function listaServicios(){
     }
 }
 
+function listaServiciosPG(){
 
+    $idCat = isset($_GET['cat_id']) && !empty($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
+
+    if ($idCat === null) {
+        echo "Categoría no especificada.";
+        return;
+    }
+
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+        
+        // Obtener servicios de la categoría especificada
+        $stmt = $pdo->prepare("SELECT * FROM t_servicios WHERE id_cat = :id_cat");
+        $stmt->bindValue("id_cat", $idCat, PDO::PARAM_INT);
+        $stmt->execute();
+        $servicios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron servicios
+        if (!$servicios) {
+            echo "No se encontraron servicios para la categoría especificada.";
+            return;
+        }
+    
+        //Se listan los servicios de la categoria
+        foreach ($servicios as $servicio) {
+            echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$servicio["nombre"].'">
+                  <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
+                      
+                  <div class="col">
+                      <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
+                  </div>
+                  
+                  <div class="col text-center">
+                  <p class="h2 text-decoration-none">'.$servicio["nombre"].'</p>
+                  </div>
+
+                  
+                  <div class="col text-right">
+                      <i class="fas fa-angle-right fa-lg"></i>
+                  </div> 
+                  </div>
+              </a>';
+        } 
+    } catch (\Throwable $th) {
+        error_log("Error al obtener servicios: " . $th->getMessage());
+        echo "Error interno del servidor: ";
+    }
+}
 
 
 /*####FUNCION LISTA ESTETICISTAS####*/
