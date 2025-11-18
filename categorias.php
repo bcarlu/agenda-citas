@@ -20,7 +20,7 @@ if (isset($usuario)) {
         </div>
 
         <!--CAT UÑAS-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=unas">
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=unas&cat_id=1">
         <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
 
             <!--Imagen-->
@@ -41,7 +41,7 @@ if (isset($usuario)) {
         </a>
         
         <!--CAT CERA-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=Cera">
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=Cera&cat_id=2">
         <div class="row cat-cera mb-2 py-2 d-flex align-items-center justify-content-between">
 
             <!--Imagen-->
@@ -62,7 +62,7 @@ if (isset($usuario)) {
         </a>
         
         <!--CAT SPA-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=spa">
+        <a class="text-decoration-none text-dark" href="servicios.php?cat=spa&cat_id=3">
         <div class="row cat-spa mb-2 py-2 d-flex align-items-center justify-content-between">
 
             <!--Imagen-->

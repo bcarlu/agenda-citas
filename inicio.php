@@ -16,7 +16,7 @@ if (isset($_SESSION['username'])) {
             <div class="col">
                 <h5>Mis citas</h5>
                 <!--Se llama funcion para mostrar citas-->
-                <?php citasxCliente(); ?>
+                <?php citasxClientePG($usuario); ?>
             <!--Fin col-->
             </div>        
         <!--Fin row-->

@@ -8,20 +8,16 @@
 $usuario = $_SESSION['username'];
 if (isset($usuario)) {
 
-    $categoria = $_GET['cat'];
-    $servicio = $_GET['serv'];
+    $categoria = $_GET['cat']; // id categoria
+    $servicio = $_GET['serv']; // nombre servicio
     $hora = $_GET['hora'];
     $dia = $_GET['dia'];
     $mes = $_GET['mes'];
+    $anio = $_GET['anio'];
     $idesteticista = $_GET['est'];
-    
-    //Se busca el nombre de esteticista
-    //$sqlNomEst = "SELECT * FROM t_esteticistas WHERE id_estet = '$idesteticista'";
-    $sqlNomEst = "SELECT * FROM t_esteticistas WHERE id = '$idesteticista'";
-    $resultNomEst = $conn->query($sqlNomEst);
-    $nomEst =  $resultNomEst->fetch_assoc();
-    $nomEst = $nomEst['nombre'] . " " . $nomEst['apellidos'];
-    $conn->close;
+    $nomEst = $_GET['nomEst']; // Nombre de la esteticista
+    $idServicio = $_GET['id_serv'];
+    $duracionServicio = $_GET['duracion'];
 ?>
      
 
@@ -37,7 +33,8 @@ if (isset($usuario)) {
             <div class="card-body">
                 <h5 class="card-title"><?php echo $servicio;?></h5>
                 <p class="card-text">Servicio: <?php echo $servicio;?> Fecha: <?php echo $dia . " de " . $mes;?> Hora: <?php echo $hora;?> Esteticista: <?php echo $nomEst;?></p>
-                <a href="php/confirmagenda.php?serv=<?php echo $servicio;?>&est=<?php echo $idesteticista;?>&anio=<?php echo date('Y');?>&mes=<?php echo $mes;?>&dia=<?php echo $dia;?>&hora=<?php echo $hora;?>" class="btn btn-success">Confirmar</a>
+                <a href="php/confirmagendapg.php?id_serv=<?php echo $idServicio;?>&serv=<?php echo $servicio;?>&est=<?php echo $idesteticista;?>&cat=<?php echo $categoria;?>&anio=<?php echo $anio;?>&mes=<?php echo $mes;?>&dia=<?php echo $dia;?>&hora=<?php echo $hora;?>&duracion=<?php echo $duracionServicio;?>" class="btn btn-success">Confirmar
+                </a>
             </div>            
         </div>
     </div>

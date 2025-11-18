@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS t_servicios (
     nombre VARCHAR(100) NOT NULL,
     id_cat INT NOT NULL,
     precio INT NOT NULL,
-    id_duracion INT NOT NULL,
+    duracion INT NOT NULL, -- Duracion en horas
     FOREIGN KEY (id_cat) REFERENCES t_categorias(id) ON DELETE CASCADE
 );
 

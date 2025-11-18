@@ -16,7 +16,7 @@ if (isset($usuario)) {
         
         <div class='row'>
             <div class='col px-2 pb-2'>
-                <?php agendaDisponible(); ?>
+                <?php agendaDisponiblePG(); ?>
             </div>
         </div>
     </div> 

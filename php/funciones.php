@@ -76,7 +76,7 @@ function listaServiciosPG(){
     
         //Se listan los servicios de la categoria
         foreach ($servicios as $servicio) {
-            echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$servicio["nombre"].'">
+            echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$servicio["nombre"].'&serv_id='.$servicio["id"].'">
                   <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
                       
                   <div class="col">
@@ -291,6 +291,176 @@ function agendaDisponible(){
     
 }
 
+function agendaDisponiblePG(){
+
+    // Definir id del servicio
+    $idServicio = isset($_GET['serv_id']) && !empty($_GET['serv_id']) ? (int)$_GET['serv_id'] : null;
+
+    // Se valida que el id del servicio no sea nulo
+    if ($idServicio === null) {
+        echo "Servicio no especificado.";
+        return;
+    }
+
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar(); 
+
+        // Obtener detalles del servicio
+        $stmtServ = $pdo->prepare("SELECT * FROM t_servicios WHERE id = :id_servicio");
+        $stmtServ->bindValue("id_servicio", $idServicio, PDO::PARAM_INT);
+        $stmtServ->execute();
+        $servicio = $stmtServ->fetch(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron servicios
+        if (!$servicio) {
+            echo "No se encontraron servicios para la categoría especificada.";
+            return;
+        }
+
+        // Definir categoria y duracion del servicio
+        $idCategoria = (int)$servicio["id_cat"];
+        $duracionServicio = $servicio["duracion"]; // Duracion en horas
+        $nombreServicio = $servicio["nombre"];        
+
+        // Obtener esteticistas que atienden la categoria
+        $stmtEstet = $pdo->prepare("SELECT id, nombre, id_cat FROM t_esteticistas WHERE id_cat = :id_categoria");
+        $stmtEstet->bindValue("id_categoria", $idCategoria, PDO::PARAM_INT);
+        $stmtEstet->execute();
+        $esteticistas = $stmtEstet->fetchAll(PDO::FETCH_ASSOC);
+
+        //Cantidad de dias a partir de hoy en los que se buscara disponibilidad
+        $semana = array (
+            array ("dia" => 0),
+            array ("dia" => 1),
+        );
+
+    
+        //HTML
+        //Abro Container para los estilos
+        echo "<div class='container'>";
+
+        //Recorre arreglo dias
+        foreach ($semana as $sem) {
+            $numdia = $sem['dia'];
+
+            //Se convierte el numero de dia para ser interpretado por strftime como fecha correctamente     
+            $formatodia = mktime(0, 0, 0, date("m")  , date("d")+$numdia, date("Y"));
+            $diacal = strftime("%a %d %b",$formatodia); // TODO: Cambiar todos los strftime a date para evitar problemas de compatibilidad.
+
+            // Definir año y mes del dia 
+            $anio = (int)date("Y", $formatodia); 
+            $mes = (int)date("m", $formatodia);
+
+            //Se recoge el dia de la fecha para enviarlo por get a la pag de confirmacion
+            $d = (int)date("d", $formatodia);
+
+            //Se imprime los dias del arreglo iniciando desde hoy
+            echo "<div class='h3 font-weight-bold text-warning mt-5'> $diacal </div>";
+                        
+            //Mientras hallan esteticistas
+            foreach($esteticistas as $esteticista){
+                $esteticistaId = $esteticista['id'];
+                $esteticistaNom = $esteticista['nombre'];
+
+                echo "<div class='font-weight-bold pt-3'> $esteticistaNom </div><br>";
+                
+                //Genera horas dia
+                $arregloHoras = array(
+                    array("hora" => 7, "estado" => "disponible", "ampm" => "7 AM", "finampm1" => "8 AM", "finampm2" => "9 AM"),
+                    array("hora" => 8, "estado" => "disponible", "ampm" => "8 AM", "finampm1" => "9 AM", "finampm2" => "10 AM"),
+                    array("hora" => 9, "estado" => "disponible", "ampm" => "9 AM", "finampm1" => "10 AM", "finampm2" => "11 AM"),
+                    array("hora" => 10, "estado" => "disponible", "ampm" => "10 AM", "finampm1" => "11 AM", "finampm2" => "12 PM"),
+                    array("hora" => 11, "estado" => "disponible", "ampm" => "11 AM", "finampm1" => "12 PM", "finampm2" => "1 PM"),
+                    array("hora" => 12, "estado" => "disponible", "ampm" => "12 PM", "finampm1" => "1 PM", "finampm2" => "2 PM"),
+                    array("hora" => 13, "estado" => "disponible", "ampm" => "1 PM", "finampm1" => "2 PM", "finampm2" => "3 PM"),
+                    array("hora" => 14, "estado" => "disponible", "ampm" => "2 PM", "finampm1" => "3 PM", "finampm2" => "4 PM"),
+                    array("hora" => 15, "estado" => "disponible", "ampm" => "3 PM", "finampm1" => "4 PM", "finampm2" => "5 PM"),
+                    array("hora" => 16, "estado" => "disponible", "ampm" => "4 PM", "finampm1" => "5 PM", "finampm2" => "6 PM"),
+                    array("hora" => 17, "estado" => "disponible", "ampm" => "5 PM", "finampm1" => "6 PM", "finampm2" => ""),
+                );
+
+                //Recorre arreglo horas
+                foreach ($arregloHoras as $horaDia) {
+                    $h = $horaDia['hora'];
+                    $e = $horaDia['estado'];                
+                    $ampm = $horaDia['ampm'];
+                    $citaFin1 = $horaDia['finampm1'];
+                    $citaFin2 = $horaDia['finampm2'];
+
+                    //Obtener citas de la esteticista
+                    $stmtCitas = $pdo->prepare("SELECT hora, horafin FROM t_citas WHERE anio =:anio AND mes =:mes AND dia=:d AND id_cat =:id_categoria AND id_esteticista=:id_esteticista");
+                    $stmtCitas->bindValue("anio", (int)$anio, PDO::PARAM_INT);
+                    $stmtCitas->bindValue("mes", $mes, PDO::PARAM_INT);
+                    $stmtCitas->bindValue("d", $d, PDO::PARAM_INT);
+                    $stmtCitas->bindValue("id_categoria", $idCategoria, PDO::PARAM_INT);
+                    $stmtCitas->bindValue("id_esteticista", $esteticistaId, PDO::PARAM_INT);
+                    $stmtCitas->execute();
+                    $citas = $stmtCitas->fetchAll(PDO::FETCH_ASSOC);
+
+                    //Foreach citas de esteticista
+                    foreach($citas as $cita){                    
+                        $hinicio = $cita['hora'];
+                        $hfin = $cita['horafin'];                    
+
+                        //Define estado ocupado
+                        //General
+                        if ($h == $hinicio) {
+                            $e = "ocupado";
+                        }                    
+                        if ($h > $hinicio and $h < $hfin) {
+                            $e = "ocupado";
+                        }                    
+                        
+                        //Para citas de 2 hora
+                        if ($duracionServicio == 2) {                        
+                            if ($h+1 == $hinicio) {
+                                $e = "ocupado";
+                            }                    
+                        }                    
+                    //Fin foreach citas de esteticista
+                    }
+
+                    //Para citas de 1 hora
+                    if ($duracionServicio == 1) {
+                        if ($h == 18) {
+                            $e = "ocupado";
+                        }
+                    }
+
+                    //Para citas de 2 hora
+                    if ($duracionServicio == 2) {                        
+                        if ($h == 17) {
+                            $e = "ocupado";
+                        }                    
+                    }
+                    
+                    //Muestra horas disponibles
+                    if ($e == "disponible" && $duracionServicio == 1) {
+                        echo "<a href='confirmacion.php?cat=$idCategoria&id_serv=$idServicio&serv=$nombreServicio&est=$esteticistaId&nomEst=$esteticistaNom&hora=$h&dia=$d&mes=$mes&anio=$anio&duracion=$duracionServicio' type='button' class='btn btn-info rounded btn-sm mr-1 mb-1'>$ampm - $citaFin1</a>";
+                    }
+                    if ($e == "disponible" && $duracionServicio == 2) {
+                        echo "<a href='confirmacion.php?cat=$idCategoria&id_serv=$idServicio&serv=$nombreServicio&est=$esteticistaId&nomEst=$esteticistaNom&hora=$h&dia=$d&mes=$mes&anio=$anio&duracion=$duracionServicio' type='button' class='btn btn-info rounded btn-sm mr-1 mb-1'>$ampm - $citaFin2</a>";
+                    }
+
+                //Fin foreach horas
+                }
+            //Fin while esteticistas
+            }
+        //Fin foreach dias
+        }
+        //HTML
+        //Cierro container para los estilos
+        echo "</div>";
+
+    } catch (\Throwable $th) {
+        error_log("Error al obtener servicio: " . $th->getMessage() . " en linea " . $th->getLine() . " en archivo " . $th->getFile());
+        echo "Error interno del servidor.";
+    }    
+}
+
 
 
 /*####FUNCION CITAS USUARIO#########*/
@@ -364,6 +534,70 @@ function citasxCliente(){
     }
 }
 
+function citasxClientePG($emailUsuario){  
+    try {
+        //Incluye y abre conexion mysql
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+        // Definir usuario
+        $usuario = $emailUsuario ?? $_SESSION['username'];
+      
+        //Consulta citas del cliente + datos de servicio y esteticista
+        $sql = "SELECT c.dia, c.mes, c.anio, c.hora, c.horafin, 
+                    e.nombre AS nombre_est, 
+                    s.nombre AS nombre_serv, s.precio
+                FROM t_citas c
+                LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
+                LEFT JOIN t_servicios s ON c.id_serv = s.id
+                WHERE c.email_cliente = :usuario
+                ORDER BY c.dia, c.mes, c.anio, c.hora;";
+        $stmtCitasCliente = $pdo->prepare($sql);
+        $stmtCitasCliente->bindValue("usuario", $usuario, PDO::PARAM_STR);
+        $stmtCitasCliente->execute();
+        $citasCliente = $stmtCitasCliente->fetchAll(PDO::FETCH_ASSOC);
+        
+        //Si no tiene citas programadas
+        if (!$citasCliente) {
+            echo "Aun no tienes citas programadas!!";
+        }
+
+        //Si tiene citas programadas
+        foreach ($citasCliente as $citas){            
+            $fechaServicio = $citas['dia']."-".$citas['mes']."-".$citas['anio'];
+            $horaServicio = $citas['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+            $horaFinSer = $citas['horafin'].":00";// Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+            $nomServicio = $citas['nombre_serv'];
+            $precioServicio = $citas['precio'];
+            $nomEsteticista = $citas['nombre_est'];
+
+            //Se convierte fecha y hora en formato local con am-pm
+            setlocale(LC_TIME, 'es_CO.utf8');
+            $horai = strftime("%l:%M%P", strtotime($horaServicio));
+            $horaf = strftime("%l:%M%P", strtotime($horaFinSer));
+
+            //Convierte fecha en formato local
+            setlocale(LC_TIME,'es_CO.utf8'); 
+            $fechaser = strftime("%a %e %b",strtotime($fechaServicio));            
+
+            //Convierte precio en formato moneda se debe tener soporte para 
+            setlocale(LC_MONETARY, 'es_CO.utf8');
+            //$precioPesos = money_format('%.0i', $precioServicio);
+            $precioPesos = number_format($precioServicio, 0, ',', '.');
+
+            //Muestra citas en pantalla      shadow-sm  
+            echo "<div class='mb-3 p-2 shadow-sm rounded bg-citas'>
+                <b>$nomServicio</b><br>
+                $fechaser de $horai-$horaf <br>
+                Con $nomEsteticista <br>
+                $precioPesos 
+                </div>";   
+        }
+    } catch (\Throwable $th) {
+        error_log("Error al obtener citas: " . $th->getMessage() . "en la linea: "  . $th->getLine() . "en el archivo: " . $th->getFile());
+        echo "Error interno del servidor al obtener citas del cliente.";
+    }
+}
 
 
 
