@@ -760,3 +760,50 @@ function imagenServicio($categoria){
     
 //Fin funcion imagenServicio
 }
+
+/** Lista las categorias de servicios
+ * @return string Componente html con el listado de categorias, o mensaje de error en caso de algun problema
+ */
+function listaCategorias(){
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+        
+        // Obtener todas las categorias
+        $stmt = $pdo->prepare("SELECT * FROM t_categorias");
+        $stmt->execute();
+        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron categorias
+        if (!$categorias) {
+            echo "No se encontraron categorias.";
+            return;
+        }
+    
+        //Se listan las categorias
+        foreach ($categorias as $categoria) {
+            echo '<a class="text-decoration-none text-dark" href="servicios.php?cat='.$categoria["nombre"].'&cat_id='.$categoria["id"].'">
+                <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
+                    <!--Imagen-->   
+                    <div class="col">
+                      <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
+                    </div>
+                    <!--Descripcion-->
+                    <div class="col text-center">
+                        <p class="h2 text-decoration-none">'.$categoria["nombre"].'</p>
+                    </div>
+
+                    <!--Icono-->
+                    <div class="col text-right">
+                        <i class="fas fa-angle-right fa-lg"></i>
+                    </div> 
+                </div>
+            </a>';
+        } 
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage());
+        echo "Error interno del servidor.";
+    }
+}

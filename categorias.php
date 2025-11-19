@@ -19,68 +19,8 @@ if (isset($usuario)) {
             </div>
         </div>
 
-        <!--CAT UÑAS-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=unas&cat_id=1">
-        <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
-
-            <!--Imagen-->
-            <div class="col">
-                <img src="img/cat-unas.png" alt="" class="img-fluid" height="70" width="70">
-            </div>
-
-            <!--Descripcion-->
-            <div class="col text-center">
-            <p class="h2 text-decoration-none">Uñas</p>
-            </div>
-
-            <!--Icono-->
-            <div class="col text-right">
-                <i class="fas fa-angle-right fa-lg"></i>
-            </div>            
-        </div>
-        </a>
-        
-        <!--CAT CERA-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=Cera&cat_id=2">
-        <div class="row cat-cera mb-2 py-2 d-flex align-items-center justify-content-between">
-
-            <!--Imagen-->
-            <div class="col">
-                <img src="img/cat-cera.png" alt="" class="img-fluid" height="70" width="70">
-            </div>
-
-            <!--Descripcion-->
-            <div class="col text-center">
-            <p class="h2 text-decoration-none">Cera</p>
-            </div>
-
-            <!--Icono-->
-            <div class="col text-right">
-                <i class="fas fa-angle-right fa-lg"></i>
-            </div>            
-        </div>
-        </a>
-        
-        <!--CAT SPA-->
-        <a class="text-decoration-none text-dark" href="servicios.php?cat=spa&cat_id=3">
-        <div class="row cat-spa mb-2 py-2 d-flex align-items-center justify-content-between">
-
-            <!--Imagen-->
-            <div class="col">
-                <img src="img/cat-spa.png" alt="" class="img-fluid" height="70" width="70">
-            </div>
-
-            <!--Descripcion-->
-            <div class="col text-center">
-            <p class="h2 text-decoration-none">Spa</p>
-            </div>
-
-            <!--Icono-->
-            <div class="col text-right">
-                <i class="fas fa-angle-right fa-lg"></i>
-            </div>
-        </div>
-        </a>
+        <!--Se listan los servicios de la categoria-->
+        <?php listaCategorias();?>
 
     </div>
 
