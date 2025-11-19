@@ -1,8 +1,9 @@
 # agenda-citas
 
 ## Requisitos
-- PHP >= 7
-- Base de datos en Mysql o Mariadb >= 8
+- PHP = 8.4
+- Base de datos:
+-- PostgreSQL = 17.5
 
 ## Caracteristicas
 
@@ -16,6 +17,6 @@ Esta es una aplicación web creada con PHP y Mysql para el back-end, y HTML5 CSS
 
 ## Configuracion
 
-Para configurar el entorno se debe tener php instalado al igual que el motor de bases de datos y se debe crear la base de datos con la estructura relacionada en el archivo bd.sql. Modificar el archivo conexion.php con los datos de la base de datos creada. 
+Para configurar el entorno se debe tener php instalado al igual que el motor de bases de datos y se debe crear la base de datos con la estructura relacionada en el archivo bd-psql.sql. Modificar el archivo conexionpg.php con las variables de entorno de la base de datos creada. 
 
 Aun no esta finalizada, esta en fase de desarrollo.
