@@ -10,6 +10,31 @@
                 <h2 class="h4">Crea una cuenta gratis y agenda tus citas rapida y facilmente!</h2>
             </div>
             <div class="col-12 col-md-5">
+                <?php
+                // Alerta de error
+                if (isset($_GET['error'])) { // Valida si se recibe la variable
+                    if ($_GET['error'] == "email_ya_registrado") { // Error 1
+                ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Email ya registrado!</strong> Inicia sesion o intenta con otro correo.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+                    } // Cierre if error 1
+                    if ($_GET['error'] == "error_al_crear_usuario" || $_GET['error'] == "error_interno") { // Error 2
+                ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error al registrar usuario!</strong> Por favor intentalo de nuevo.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <?php
+                    } // Cierre if error 2                
+                } //Cierre if de control
+                ?>
                 <form action="php/validaregistro_pg.php" method="post">
                     <div class="form-group">
                         Nombre

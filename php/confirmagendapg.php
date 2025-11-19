@@ -23,7 +23,8 @@ if (isset($usuario)) {
         $duracionServicio = $_GET['duracion'];
         $horafin = $hora + $duracionServicio;
 
-        // Definir nombre servicio para enviar en caso de que la cita este duplicada
+        // Definir nombre servicio para enviar a la pag agenda en caso de redireccionar
+        $nombreServ = $_GET['serv'];
 
         // Validar citas duplicadas
         $stmtCitas = $pdo->prepare("SELECT id FROM t_citas WHERE id_esteticista=:idEsteticista AND anio=:anio AND mes=:mes AND dia=:dia AND hora=:hora AND horafin=:horafin");
@@ -37,8 +38,7 @@ if (isset($usuario)) {
         $citas = $stmtCitas->fetch(PDO::FETCH_ASSOC);
 
         // Si el esteticista ya tiene cita en la fecha solicitada se regresa a la pagina de agenda para que escoja otra
-        if ($citas) {
-            $nombreServ = $_GET['serv'];
+        if ($citas) {            
             header("location: ../agenda.php?serv_id=$idServicio&serv=$nombreServ&agendado=si");
         }
         //Si no se registra normalmente
@@ -57,14 +57,14 @@ if (isset($usuario)) {
                 // Por el momento se comenta la redireccion a la pagina de envio de correo para simplificar el proceso, y se redirige directamente a la pagina de inicio del usuario.
                 header('location: ../inicio.php?agenda=exito');
             } else {
-                echo "Error al registrar la cita, por favor intenta de nuevo. <a href='../agenda.php?serv_id=$idServicio'>Volver</a>";
+                echo "Error al registrar la cita, por favor intenta de nuevo. <a href='../agenda.php?serv_id=$idServicio&serv=$nombreServ'>Volver</a>";
             }
             
             
         }
     } catch (\Throwable $th) {
         error_log("Error al registrar cita: " . $th->getMessage() . " en linea " . $th->getLine() . " en archivo " . $th->getFile());
-        echo "Error interno del servidor.";
+        echo "Error interno del servidor. por favor intenta de nuevo. <a href='../agenda.php?serv_id=$idServicio&serv=$nombreServ'>Volver</a> o informa al administrador.";
     }
 }
 //Si no ha iniciado sesion
