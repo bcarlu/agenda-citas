@@ -29,13 +29,15 @@ try {
     $stmt = $pdo->prepare('SELECT * FROM t_usuarios WHERE email=:email LIMIT 1');
     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
-    $esUsuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($esUsuario && count($esUsuario) > 0) {
+    if ($usuario && count($usuario) > 0) {
         // Verificar que la contraseña sea correcta
-        if (password_verify($clave, $esUsuario["clave"])) {
+        if (password_verify($clave, $usuario["clave"])) {
             //Se almacena el email del usuario para la sesion y se redirige a la pagina de inicio
-            $_SESSION['username'] = $email;
+            $_SESSION['username'] = $usuario["email"];
+            $_SESSION['id_usuario'] = $usuario["id"];
+            $_SESSION['nombre_usuario'] = $usuario["nombre"] ?? "";
             header("location:../inicio.php");
             exit;
         } else {

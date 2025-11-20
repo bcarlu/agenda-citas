@@ -623,24 +623,6 @@ function duracionServicioEscogido(){
 }
 
 
-
-/*#### NOMBRE CLIENTE ############*/
-
-function nombreCliente($usuario){
-    //Incluye y abre conexion mysql
-    include 'conexion.php';
-
-    $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_usuarios WHERE email = '$usuario'");
-    $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
-    $nombreCliente = $resultadoNomCli['nombre'];
-    echo $nombreCliente;
-
-    //Cierra conexion mysql
-    mysqli_close($conexion);
-}
-
-
-
 /*#### PANEL CITAS ############*/
 
 function panelCitas(){
