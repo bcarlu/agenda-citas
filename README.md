@@ -7,9 +7,9 @@
 
 ## Caracteristicas
 
-Esta es una aplicación web creada con PHP y Mysql para el back-end, y HTML5 CSS con Bootstrap y Javascript para el front-end. Entre sus caracteristicas estan:
+Esta es una aplicación web para agendamiento de citas en salones de belleza. Entre sus caracteristicas estan:
 
-- Se ha configurado la creacion de cuentas con contraseña encriptada, inicio de sesion y validacion de usuarios.
+- Se ha configurado la creacion de cuentas de usuario con contraseña encriptada, inicio de sesion y validacion de usuarios.
 
 - Se implementa la navegacion por paginas segun categoria y servicios, se presenta dinamicamente los servicios, tambien las fechas y horas disponibles para cada empleado.
 
@@ -19,4 +19,4 @@ Esta es una aplicación web creada con PHP y Mysql para el back-end, y HTML5 CSS
 
 Para configurar el entorno se debe tener php instalado al igual que el motor de bases de datos y se debe crear la base de datos con la estructura relacionada en el archivo bd-psql.sql. Modificar el archivo conexionpg.php con las variables de entorno de la base de datos creada. 
 
-Aun no esta finalizada, esta en fase de desarrollo.
+Aun no esta finalizada, esta en fase de desarrollo pero el funcional para la parte del cliente. Esta pendiente desarrollar el modulo de administracion, por el momento se debe crear manualmente en la base de datos los servicios, categorias y esteticistas.
