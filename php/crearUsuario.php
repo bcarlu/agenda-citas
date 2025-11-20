@@ -9,7 +9,7 @@ function crearUsuario(string $nombre, ?string $apellidos, string $email, ?string
         $pdo = $db->conectar();
 
         // Registrar nuevo usuario
-        $stmt = $pdo->prepare('INSERT INTO t_clientes (nombre,apellidos,email,celular,clave) VALUES (:nombre,:apellidos,:email,:celular,:clavenc)');
+        $stmt = $pdo->prepare('INSERT INTO t_usuarios (nombre,apellidos,email,celular,clave) VALUES (:nombre,:apellidos,:email,:celular,:clavenc)');
         $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
         $stmt->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);

@@ -32,7 +32,7 @@ try {
     $pdo = $db->conectar();
 
     // Verificar si el email ya está registrado
-    $stmt = $pdo->prepare('SELECT COUNT(email) FROM t_clientes WHERE email=:email');
+    $stmt = $pdo->prepare('SELECT COUNT(email) FROM t_usuarios WHERE email=:email');
     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $registrado = $stmt->fetch();

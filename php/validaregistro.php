@@ -19,13 +19,13 @@ if (isset($_POST['email-reg'])) {
     
 
     //Valida si el usuario esta registrado
-    $consultaReg = mysqli_query($conexion,"SELECT COUNT(*) AS correo FROM t_clientes WHERE email='$email'");
+    $consultaReg = mysqli_query($conexion,"SELECT COUNT(*) AS correo FROM t_usuarios WHERE email='$email'");
     $resultadoReg = mysqli_fetch_assoc($consultaReg);
 
     if ($resultadoReg['correo'] > 0) {
         echo "El email ya está registrado, puede <a href='../'>iniciar sesion</a> o <a href='../registro'>ingresar un nuevo email.</a>";
     }else {
-        $registrar = "INSERT INTO t_clientes (nombre,apellidos,email,celular,clave) VALUES ('$nombre','$apellidos','$email','$celular','$clavenc')";
+        $registrar = "INSERT INTO t_usuarios (nombre,apellidos,email,celular,clave) VALUES ('$nombre','$apellidos','$email','$celular','$clavenc')";
         mysqli_query($conexion,$registrar);
         echo "<div class='container'><h3 class='alert alert-success text-center'>Felicidades $nombre!! te haz registrado con exito. Ahora puedes <a href='/ingreso.php'>ingresar</a></h3></div>";
     }

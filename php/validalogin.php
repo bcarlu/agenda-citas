@@ -7,7 +7,7 @@ $clave = $_POST['clave'];
 
 if (isset($_POST)) {
     //Valida si el email de usuario esta registrado
-    $consultaLogin = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email='$email'");
+    $consultaLogin = mysqli_query($conexion,"SELECT * FROM t_usuarios WHERE email='$email'");
     $resultadoLogin = mysqli_fetch_assoc($consultaLogin);
     $passwCliente = $resultadoLogin['clave'];
 

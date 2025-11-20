@@ -1,7 +1,7 @@
 CREATE DATABASE agenda_citas;
 USE agenda_citas;
 
-CREATE TABLE IF NOT EXISTS t_clientes (
+CREATE TABLE IF NOT EXISTS t_usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NULL,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS t_citas (
     FOREIGN KEY (id_serv) REFERENCES t_servicios(id) ON DELETE CASCADE,
     FOREIGN KEY (id_cat) REFERENCES t_categorias(id) ON DELETE CASCADE,
     FOREIGN KEY (id_esteticista) REFERENCES t_esteticistas(id) ON DELETE CASCADE,
-    FOREIGN KEY (email_cliente) REFERENCES t_clientes(email) ON DELETE CASCADE
+    FOREIGN KEY (email_cliente) REFERENCES t_usuarios(email) ON DELETE CASCADE
 );
 
 -- Insertar categorías

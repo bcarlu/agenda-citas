@@ -23,9 +23,9 @@ if (isset($usuario)) {
 	$horaf = strftime("%l%P", strtotime($horafin));
 
 
-    //Se consulta t_clientes y se define nombre cliente
+    //Se consulta t_usuarios y se define nombre cliente
     include_once'conexion.php';
-    $sqlCli = "SELECT * FROM t_clientes WHERE email='$usuario'";
+    $sqlCli = "SELECT * FROM t_usuarios WHERE email='$usuario'";
     $resultCli = $conn->query($sqlCli);
     $nomCli = $resultCli->fetch_assoc();
     $nomCli = $nomCli['nombre'];

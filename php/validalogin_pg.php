@@ -26,7 +26,7 @@ try {
     $pdo = $db->conectar();
 
     // Verificar si el usuario existe
-    $stmt = $pdo->prepare('SELECT * FROM t_clientes WHERE email=:email LIMIT 1');
+    $stmt = $pdo->prepare('SELECT * FROM t_usuarios WHERE email=:email LIMIT 1');
     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $esUsuario = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -630,7 +630,7 @@ function nombreCliente($usuario){
     //Incluye y abre conexion mysql
     include 'conexion.php';
 
-    $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_clientes WHERE email = '$usuario'");
+    $consultaNombreCliente = mysqli_query($conexion,"SELECT * FROM t_usuarios WHERE email = '$usuario'");
     $resultadoNomCli = mysqli_fetch_array($consultaNombreCliente);
     $nombreCliente = $resultadoNomCli['nombre'];
     echo $nombreCliente;
@@ -703,7 +703,7 @@ function panelCitas(){
             while ($rowCita = $resultadoCita->fetch_assoc()) {
                 //Cliente
                 $idC = $rowCita['email_cliente'];
-                $consultaC = $conn->query("SELECT * FROM t_clientes WHERE email='$idC'");
+                $consultaC = $conn->query("SELECT * FROM t_usuarios WHERE email='$idC'");
                 $resultadoC = $consultaC->fetch_assoc();
                 $nomC = $resultadoC['nombre']. " " .$resultadoC['apellidos'];
                 $telC = $resultadoC['celular'];
