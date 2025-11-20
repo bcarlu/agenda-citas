@@ -4,6 +4,20 @@ CREATE DATABASE agenda_citas;
 -- Conectarse a la base de datos (en psql)
 \c agenda_citas;
 
+-- Tabla de roles
+CREATE TABLE IF NOT EXISTS t_roles (
+    id SERIAL PRIMARY KEY,
+    nombre_rol VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT NULL
+);
+
+-- Tabla de cuentas
+CREATE TABLE IF NOT EXISTS t_cuentas (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR NOT NULL,
+    nit_rut VARCHAR NOT NULL -- NIT o RUT de la empresa o usuario que crea la cuenta
+);
+
 -- Tabla de clientes
 CREATE TABLE IF NOT EXISTS t_clientes (
     id SERIAL PRIMARY KEY,
@@ -11,7 +25,11 @@ CREATE TABLE IF NOT EXISTS t_clientes (
     apellidos VARCHAR(100) NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     celular VARCHAR(20) NULL,
-    clave VARCHAR(255) NOT NULL
+    clave VARCHAR(255) NOT NULL,
+    id_rol INT NOT NULL,
+    id_cuenta INT NOT NULL,
+    FOREIGN KEY (id_rol) REFERENCES t_roles(id) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Tabla de categorías
