@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS t_roles (
 -- Tabla de cuentas
 CREATE TABLE IF NOT EXISTS t_cuentas (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR NOT NULL,
+    nombre_empresa VARCHAR NOT NULL,
     nit_rut VARCHAR NOT NULL -- NIT o RUT de la empresa o usuario que crea la cuenta
 );
 
