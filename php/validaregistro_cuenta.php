@@ -56,7 +56,7 @@ try {
         $idCuenta = $cuentaCreada; // Id de la cuenta que se acaba de crear.
         $creado = crearUsuario($nombre, $apellidos, $email, $celular, $passwordEnc, $idRol, $idCuenta);
         if ($creado) {
-            header("location:../ingreso.php?registro=exitoso?nombre=$nombre");
+            header("location:../ingreso.php?registro=exitoso&nombre=$nombre");
         } else {
             $cuentaEliminada = eliminarCuenta($cuentaCreada); // En caso de error al crear el usuario se elimina la cuenta creada para evitar registros duplicados o huerfanos.
             if (!$cuentaEliminada) {
