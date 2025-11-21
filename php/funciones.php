@@ -825,3 +825,51 @@ function crearUsuario(string $nombre, ?string $apellidos, string $email, ?string
         return false;
     }
 }
+
+/** Crea cuenta en la base de datos
+ * @param $nombreEmpresa Nombre de la empresa
+ * @param $nitEmpresa Nit o RUT de la empresa
+ * @return int|array Id de la cuenta creada o false.
+ */
+function crearCuenta(?string $nombreEmpresa, ?string $nitEmpresa): int|false {
+    try {
+        // Importar conexion a la db
+        include_once 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+
+        // Crear nueva cuenta
+        $stmt = $pdo->prepare('INSERT INTO t_cuentas (nombre_empresa,nit_rut) VALUES (:nombre,:nit)');
+        $stmt->bindValue(':nombre', $nombreEmpresa, PDO::PARAM_STR);
+        $stmt->bindValue(':nit', $nitEmpresa, PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            return (int)$pdo->lastInsertId();
+        }
+        return false;
+    } catch (PDOException $e) {
+        error_log("Error al crear el cuenta: " . $e->getMessage(), (int)$e->getCode());
+        return false;
+    }
+}
+
+function eliminarCuenta(int $idCuenta): bool {
+    try {
+        // Importar conexion a la db
+        include_once 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+
+        // Crear nueva cuenta
+        $stmt = $pdo->prepare('DELETE FROM t_cuentas WHERE id = :id');
+        $stmt->bindValue(':id', $idCuenta, PDO::PARAM_INT);        
+        
+        $cuentaEliminada = $stmt->execute();
+        if ($cuentaEliminada) {
+            return true;
+        }
+        return false;
+    } catch (PDOException $e) {
+        error_log("Error al eliminar la cuenta: " . $e->getMessage(), (int)$e->getCode());
+        return false;
+    }
+}

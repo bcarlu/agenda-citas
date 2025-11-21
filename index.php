@@ -11,7 +11,7 @@
                 Bienvenido a Calendario
             </div>
             <div class="col-sm-12 text-center">
-                <p>Agenda tus citas de una forma facil y rapida con nuestra aplicacion.</p>           
+                <p>Agenda las citas de tu empresa de una forma facil y rapida.</p>           
             </div>
             
         </div>
@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-6 mb-2">
                 <p class="pt-3 text-center text-muted">Eres nuevo?</p>
-                <a href="registro.php" type="button" class="btn btn-block bt-crear-cuenta">Crear una cuenta</a>
+                <a href="registro_cuenta.php" type="button" class="btn btn-block bt-crear-cuenta">Crear una cuenta</a>
             </div>
             
             <div class="col-sm-12 col-md-6">
