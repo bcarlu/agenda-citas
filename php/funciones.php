@@ -789,3 +789,39 @@ function listaCategorias(){
         echo "Error interno del servidor.";
     }
 }
+
+/** Crea usuario en la base de datos
+ * @param $nombre
+ * @param $apellidos (opcional)
+ * @param $email Email del usuario
+ * @param $celular (opcional)
+ * @param $clavenc Password encriptado
+ * @param $idRol Id del rol (Administrador, Cliente)
+ * @param $idCuenta
+ * @return int|array Id del usuario creado o false.
+ */
+function crearUsuario(string $nombre, ?string $apellidos, string $email, ?string $celular, string $clavenc, int $idRol, int $idCuenta): int|false {
+    try {
+        // Importar conexion a la db
+        include_once'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+
+        // Registrar nuevo usuario
+        $stmt = $pdo->prepare('INSERT INTO t_usuarios (nombre,apellidos,email,celular,clave,id_rol,id_cuenta) VALUES (:nombre,:apellidos,:email,:celular,:clavenc,:id_rol,:id_cuenta)');
+        $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
+        $stmt->bindValue(':apellidos', $apellidos, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':celular', $celular, PDO::PARAM_STR);
+        $stmt->bindValue(':clavenc', $clavenc, PDO::PARAM_STR);
+        $stmt->bindValue(':id_rol', $idRol, PDO::PARAM_INT);
+        $stmt->bindValue(':id_cuenta', $idCuenta, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return (int)$pdo->lastInsertId();
+        }
+        return false;
+    } catch (PDOException $e) {
+        error_log("Error al crear el usuario: " . $e->getMessage(), (int)$e->getCode());
+        return false;
+    }
+}

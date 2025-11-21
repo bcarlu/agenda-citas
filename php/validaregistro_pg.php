@@ -27,7 +27,7 @@ try {
 
     // Importar conexion a la db
     include_once'conexionpg.php';
-    include_once'crearUsuario.php';
+    include_once'funciones.php';
     $db = ConectorPG::obtenerInstancia();
     $pdo = $db->conectar();
 
@@ -43,7 +43,9 @@ try {
         header("location:../registro.php?error=email_ya_registrado");
     } else {
         // Registrar nuevo usuario y redirigir a la pagina de login
-        $creado =crearUsuario($nombre, $apellidos, $email, $celular, $clavenc);
+        $idRol = 2; // Cliente
+        $idCuenta = 1; // Id de la cuenta en la que el cliente se registra. Por el momento se deja estatico para pruebas. TODO:Pendiente definir el id de la cuenta a partir de una url especifica para cada cuenta.
+        $creado =crearUsuario($nombre, $apellidos, $email, $celular, $clavenc, $idRol, $idCuenta);
         if ($creado) {
             header("location:../ingreso.php?registro=exitoso?nombre=$nombre");
         } else {
