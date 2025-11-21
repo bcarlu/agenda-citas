@@ -54,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         Contraseña
-                        <input type="password" class="form-control campo-input" id="clave-reg" name="clave-reg" placeholder="Escriba una contraseña para su cuenta" required>
+                        <input type="password" class="form-control campo-input" id="clave-reg" name="clave-reg" placeholder="Escriba una contraseña para su cuenta" required data-tipoInput='password'>
                     </div>
                     <div class="custom-control custom-checkbox mb-3">
                         <input type="checkbox" class="custom-control-input" id="customCheck1" onclick="mostrarContrasena()">

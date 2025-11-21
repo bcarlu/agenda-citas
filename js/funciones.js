@@ -1,5 +1,5 @@
 function mostrarContrasena(){
-    var tipoInput = document.getElementById("clave-reg");
+    var tipoInput = document.querySelector("[data-tipoInput='password']");
     if(tipoInput.type == "password"){
         tipoInput.type = "text";
     }else{
