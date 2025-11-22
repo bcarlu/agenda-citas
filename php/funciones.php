@@ -722,6 +722,96 @@ function panelCitas(){
 //Fin funcion panelCitas    
 }
 
+/** Imprime tabla con las citas programadas
+ * @return void Componente html con el listado de citas pendientes, o mensaje de error en caso de algun problema
+ */
+function listaCitas() {
+    try {
+        $citasDatos = obtenerCitas();
+        
+        if(count($citasDatos) > 0){            
+            // Listado de citas            
+            foreach ($citasDatos as $cita):
+                $fecha_hora = date("d-M-Y gA", mktime($cita['hora'], 0, 0, $cita['mes'], $cita['dia'], $cita['anio']));
+                $nombreServicio = $cita['nombre_serv'] ?? "-";
+                $nombreCliente = $cita['nombre_cliente'] ?? "-";
+                $celCliente = $cita['cel_cliente'] ?? "-";
+                $nombreEsteticista = $cita['nombre_est'] ?? "-";
+                echo "<tr>
+                    <th scope='row'>". $fecha_hora ."</th>
+                    <td>" . $nombreEsteticista . "</td>
+                    <td>" . $nombreServicio . "</td>
+                    <td>" . $nombreCliente . "</td>
+                    <td>" . $celCliente . "</td>                        
+                </tr>";
+            endforeach;
+        } else {
+            echo "Por el momento no hay citas pendientes.";
+        }
+    } catch (\Throwable $th) {
+        error_log("Error al obtener citas: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        echo "Error al obtener listado de citas.";
+    }
+
+}
+
+/** Obtiene las citas programadas
+ * @return array|false retorna array con el listado de citas pendientes, o false en caso de algun problema
+ */
+function obtenerCitas(): array|false {
+    try {
+        include_once 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+        
+        $citasDatos = []; // Para almacenar todas las citas encontradas.
+        $cuenta = $_SESSION['id_cuenta'];
+        $hoy = date("d");
+        $cantidadDias = 2;
+
+
+        // Consulta las citas programadas para n cantidad de dias.
+        for ($i=0; $i < $cantidadDias; $i++) {
+            $numdia = $hoy + $i;
+
+            //Se establece el timestamp para obtener la fecha correcta y evitar errores cuando hay cambio de mes y de año.      
+            $marcaDeTiempo = mktime(0, 0, 0, date("m"), $numdia, date("Y"));
+
+            // Obtener año, mes y dia 
+            $anio = (int)date("Y", $marcaDeTiempo); 
+            $mes = (int)date("m", $marcaDeTiempo);
+            $dia = (int)date("d", $marcaDeTiempo);
+
+            $sql = "SELECT c.dia, c.mes, c.anio, c.hora, c.horafin, 
+                e.nombre AS nombre_est, 
+                s.nombre AS nombre_serv,
+                u.nombre AS nombre_cliente,
+                u.celular AS cel_cliente
+            FROM t_citas c
+            LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
+            LEFT JOIN t_servicios s ON c.id_serv = s.id
+            LEFT JOIN t_usuarios u ON c.email_cliente = u.email
+            WHERE c.mes=:mes AND c.dia=:dia AND c.anio=:anio AND u.id_cuenta=:cuenta
+            ORDER BY c.dia, c.mes, c.anio, c.hora;";
+            $stmtCitas = $pdo->prepare($sql);
+            $stmtCitas->bindValue("dia", $dia, PDO::PARAM_INT);
+            $stmtCitas->bindValue("mes", $mes, PDO::PARAM_INT);
+            $stmtCitas->bindValue("anio", $anio, PDO::PARAM_INT);
+            $stmtCitas->bindValue("cuenta", $cuenta, PDO::PARAM_INT);
+            $stmtCitas->execute();
+            $citasCliente = $stmtCitas->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (count($citasCliente) > 0) {
+                $citasDatos = array_merge($citasDatos, $citasCliente); // Se unen todas las citas de cada dia en un solo arreglo
+            }
+        }
+        return $citasDatos;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener citas: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
+
 /*#### IMAGEN SERVICIO ############*/
 
 function imagenServicio($categoria){
