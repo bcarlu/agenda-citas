@@ -38,8 +38,17 @@ try {
             $_SESSION['username'] = $usuario["email"];
             $_SESSION['id_usuario'] = $usuario["id"];
             $_SESSION['nombre_usuario'] = $usuario["nombre"] ?? "";
-            header("location:../inicio.php");
-            exit;
+            $_SESSION['id_rol'] = $usuario["id_rol"];
+            $_SESSION['id_cuenta'] = $usuario["id_cuenta"];
+
+            if ($usuario["id_rol"] == 1) { // Redirige al panel de administracion
+               header("location:../inicio_admin.php");
+               exit;
+            }
+            if ($usuario["id_rol"] == 2) { // Redirige al panel de cliente
+               header("location:../inicio.php");
+               exit;
+            }
         } else {
             // Contraseña incorrecta recarga la pagina con mensaje de error
             header("Location:../ingreso.php?error=clave_incorrecta");
