@@ -35,7 +35,10 @@ CREATE TABLE IF NOT EXISTS t_usuarios (
 -- Tabla de categorías
 CREATE TABLE IF NOT EXISTS t_categorias (
     id SERIAL PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL
+    nombre VARCHAR(100) NOT NULL,
+    id_cuenta INT NOT NULL,
+    eliminado_en TIMESTAMP NULL, -- Para borrado logico y no fisico, para evitar alterar el registro de citas.
+    FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE
 );
 
 -- Tabla de servicios
@@ -45,7 +48,10 @@ CREATE TABLE IF NOT EXISTS t_servicios (
     id_cat INT NOT NULL,
     precio INT NOT NULL,
     duracion INT NOT NULL, -- Duracion en horas
-    FOREIGN KEY (id_cat) REFERENCES t_categorias(id) ON DELETE CASCADE
+    id_cuenta INT NOT NULL,
+    eliminado_en TIMESTAMP NULL, -- Para borrado logico y no fisico, para evitar alterar el registro de citas.
+    FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
+    FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE
 );
 
 -- Tabla de esteticistas
@@ -53,7 +59,10 @@ CREATE TABLE IF NOT EXISTS t_esteticistas (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     id_cat INT NOT NULL,
-    FOREIGN KEY (id_cat) REFERENCES t_categorias(id) ON DELETE CASCADE
+    id_cuenta INT NOT NULL,
+    eliminado_en TIMESTAMP NULL, -- Para borrado logico y no fisico, para evitar alterar el registro de citas.
+    FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
+    FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE
 );
 
 -- Tabla de citas
@@ -69,32 +78,43 @@ CREATE TABLE IF NOT EXISTS t_citas (
     hora INT NOT NULL,
     duracion INT NOT NULL,
     horafin INT NOT NULL,
-    FOREIGN KEY (id_serv) REFERENCES t_servicios(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_cat) REFERENCES t_categorias(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_esteticista) REFERENCES t_esteticistas(id) ON DELETE CASCADE,
-    FOREIGN KEY (email_cliente) REFERENCES t_usuarios(email) ON DELETE CASCADE
+    FOREIGN KEY (id_serv) REFERENCES t_servicios(id),
+    FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
+    FOREIGN KEY (id_esteticista) REFERENCES t_esteticistas(id),
+    FOREIGN KEY (email_cliente) REFERENCES t_usuarios(email) ON UPDATE CASCADE
 );
 
+-- Datos de prueba para insertar en la base de datos (Opcional)
+
+-- Insertar roles
+INSERT INTO t_roles (nombre_rol, descripcion)
+VALUES ('administrador', 'Puede configurar completamente la cuenta, crear, editar, eliminar esteticistas, categorias, etc.'), 
+('cliente', 'Puede ver, editar y crear citas.');
+
+-- Insertar cuenta
+INSERT INTO t_cuentas (nombre_empresa, nit_rut)
+VALUES ('Logística Express LTDA', '830.543.210-2');
+
 -- Insertar categorías
-INSERT INTO t_categorias (nombre)
-VALUES ('Uñas'), ('Cera'), ('Spa');
+INSERT INTO t_categorias (nombre, id_cuenta, eliminado_en)
+VALUES ('Uñas', 1, NULL), ('Cera', 1, NULL), ('Spa', 1, NULL);
 
 -- Insertar servicios (uno por uno con SELECT para referenciar id de categoría)
-INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion)
-SELECT 'Manicure', id, 25000, 1 FROM t_categorias WHERE nombre = 'Uñas';
+INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion, id_cuenta, eliminado_en)
+SELECT 'Manicure', id, 25000, 1, 1, NULL FROM t_categorias WHERE nombre = 'Uñas';
 
-INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion)
-SELECT 'Depilación facial', id, 30000, 2 FROM t_categorias WHERE nombre = 'Cera';
+INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion, id_cuenta, eliminado_en)
+SELECT 'Depilación facial', id, 30000, 2, 1, NULL FROM t_categorias WHERE nombre = 'Cera';
 
-INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion)
-SELECT 'Masaje relajante', id, 60000, 1 FROM t_categorias WHERE nombre = 'Spa';
+INSERT INTO t_servicios (nombre, id_cat, precio, id_duracion, id_cuenta, eliminado_en)
+SELECT 'Masaje relajante', id, 60000, 1, 1, NULL FROM t_categorias WHERE nombre = 'Spa';
 
 -- Insertar esteticistas (también uno por uno con SELECT)
-INSERT INTO t_esteticistas (nombre, id_cat)
-SELECT 'Ana Pérez', id FROM t_categorias WHERE nombre = 'Uñas';
+INSERT INTO t_esteticistas (nombre, id_cat, id_cuenta, eliminado_en)
+SELECT 'Ana Pérez', id, 1, NULL FROM t_categorias WHERE nombre = 'Uñas';
 
-INSERT INTO t_esteticistas (nombre, id_cat)
-SELECT 'Carlos Gómez', id FROM t_categorias WHERE nombre = 'Cera';
+INSERT INTO t_esteticistas (nombre, id_cat, id_cuenta, eliminado_en)
+SELECT 'Carlos Gómez', id, 1, NULL FROM t_categorias WHERE nombre = 'Cera';
 
-INSERT INTO t_esteticistas (nombre, id_cat)
-SELECT 'Laura Fernández', id FROM t_categorias WHERE nombre = 'Spa';
+INSERT INTO t_esteticistas (nombre, id_cat, id_cuenta, eliminado_en)
+SELECT 'Laura Fernández', id, 1, NULL FROM t_categorias WHERE nombre = 'Spa';
