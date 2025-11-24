@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href=<?php $_SESSION['rol_usuario'] == 1 ? "inicio_admin.php" : "inicio.php"; ?>><img src="img/user.png" width="30" height="30" class="d-inline-block align-top" alt=""><small class="pl-2"><?php echo htmlspecialchars($_SESSION['nombre_usuario'], ENT_QUOTES); ?></small></a>
+    <!--Se valida rol del usuario-->
+    <?php $inicio = $_SESSION['rol_usuario'] == 1 ? "inicio_admin.php" : "inicio.php"; ?>
+    <a class="navbar-brand" href=<?php echo $inicio; ?>><img src="img/user.png" width="30" height="30" class="d-inline-block align-top" alt=""><small class="pl-2"><?php echo htmlspecialchars($_SESSION['nombre_usuario'], ENT_QUOTES); ?></small></a>
     
     <span>
     <?php setlocale(LC_TIME,'es_CO.utf8'); 
