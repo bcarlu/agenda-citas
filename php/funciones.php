@@ -60,11 +60,15 @@ function listaServiciosPG(){
         // Conectar a la base de datos
         include 'conexionpg.php';
         $db = ConectorPG::obtenerInstancia();
-        $pdo = $db->conectar();      
+        $pdo = $db->conectar();
+        
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
         
         // Obtener servicios de la categoría especificada
-        $stmt = $pdo->prepare("SELECT * FROM t_servicios WHERE id_cat = :id_cat");
+        $stmt = $pdo->prepare("SELECT * FROM t_servicios WHERE id_cat = :id_cat AND id_cuenta=:id_cuenta");
         $stmt->bindValue("id_cat", $idCat, PDO::PARAM_INT);
+        $stmt->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
         $stmt->execute();
         $servicios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -306,11 +310,15 @@ function agendaDisponiblePG(){
         // Conectar a la base de datos
         include 'conexionpg.php';
         $db = ConectorPG::obtenerInstancia();
-        $pdo = $db->conectar(); 
+        $pdo = $db->conectar();
+
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
 
         // Obtener detalles del servicio
-        $stmtServ = $pdo->prepare("SELECT * FROM t_servicios WHERE id = :id_servicio");
+        $stmtServ = $pdo->prepare("SELECT * FROM t_servicios WHERE id = :id_servicio AND id_cuenta=:id_cuenta");
         $stmtServ->bindValue("id_servicio", $idServicio, PDO::PARAM_INT);
+        $stmtServ->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
         $stmtServ->execute();
         $servicio = $stmtServ->fetch(PDO::FETCH_ASSOC);
 
@@ -326,8 +334,9 @@ function agendaDisponiblePG(){
         $nombreServicio = $servicio["nombre"];        
 
         // Obtener esteticistas que atienden la categoria
-        $stmtEstet = $pdo->prepare("SELECT id, nombre, id_cat FROM t_esteticistas WHERE id_cat = :id_categoria");
+        $stmtEstet = $pdo->prepare("SELECT id, nombre, id_cat FROM t_esteticistas WHERE id_cat = :id_categoria AND id_cuenta=:id_cuenta");
         $stmtEstet->bindValue("id_categoria", $idCategoria, PDO::PARAM_INT);
+        $stmtEstet->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
         $stmtEstet->execute();
         $esteticistas = $stmtEstet->fetchAll(PDO::FETCH_ASSOC);
 
@@ -843,8 +852,12 @@ function listaCategorias(){
         $db = ConectorPG::obtenerInstancia();
         $pdo = $db->conectar();      
         
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
+
         // Obtener todas las categorias
-        $stmt = $pdo->prepare("SELECT * FROM t_categorias");
+        $stmt = $pdo->prepare("SELECT * FROM t_categorias WHERE id_cuenta=:id_cuenta");
+        $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->execute();
         $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

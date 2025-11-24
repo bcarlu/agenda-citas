@@ -5,7 +5,7 @@
 
 <?php
 //Valida si la variable global del usuario esta definida
-if (isset($_SESSION['username'])) {
+if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
     $usuario = $_SESSION['username'];
 ?>
 <body>
