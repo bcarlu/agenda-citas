@@ -976,3 +976,63 @@ function eliminarCuenta(int $idCuenta): bool {
         return false;
     }
 }
+
+/** Imprime tabla con los servicios creados
+ * @return void Componente html con el listado de servicios creados
+ */
+function listaServiciosAdmin(): void {
+    try {
+        $serviciosDatos = obtenerServiciosAdmin();
+
+        // Validar si se encontraron servicios
+        if ($serviciosDatos > 0) {
+            //Se listan los servicios de la categoria
+            foreach ($serviciosDatos as $servicio) {
+                echo "<tr>
+                    <th scope='row'>". $servicio["id"] ."</th>
+                    <td>" . $servicio["nombre"] . "</td>
+                    <td>" . $servicio["nombre_cat"] . "</td>
+                    <td>" . $servicio["precio"] . "</td>
+                    <td>" . $servicio["duracion"] . "</td>                        
+                </tr>";
+            }
+        }
+    } catch (\Throwable $th) {
+        error_log("Error al obtener servicios: " . $th->getMessage());
+        echo "Error interno del servidor: ";
+    }
+}
+
+/** Obtiene los servicios creados en la cuenta
+ * @return array|false retorna array con el listado de servicios, o false en caso de algun problema
+ */
+function obtenerServiciosAdmin(): array|false {
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
+        
+        // Obtener servicios de la categoría especificada
+        $stmt = $pdo->prepare("SELECT s.id, s.nombre, s.precio, s.duracion,
+        c.nombre AS nombre_cat
+        FROM t_servicios s
+        LEFT JOIN t_categorias c ON s.id_cat = c.id
+        WHERE s.id_cuenta=:id_cuenta");
+        $stmt->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
+        $stmt->execute();
+        $servicios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron servicios
+        if (!$servicios) {
+            return false;
+        }
+        return $servicios;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener servicios: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}

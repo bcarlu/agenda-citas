@@ -16,22 +16,32 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 <h3 class="py-3">Panel de citas</h3>
             </div>            
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">Esteticista</th>
-                        <th scope="col">Servicio</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Celular</th>                    
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php echo listaCitas(); ?>
-                </tbody>
-            </table>
-        </div>
+        <div class="row">
+            <div class="col-3">
+                <nav class="nav flex-column nav-pills">
+                    <a class="nav-link active" href="inicio_admin.php">Inicio</a>
+                    <a class="nav-link" href="servicios_admin.php">Servicios</a>
+                </nav>
+            </div>
+            <div class="col-9">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Esteticista</th>
+                                <th scope="col">Servicio</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Celular</th>                    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo listaCitas(); ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/main.js"></script>
