@@ -1036,3 +1036,33 @@ function obtenerServiciosAdmin(): array|false {
         return false;
     }
 }
+
+/** Obtiene las categorias creadas en la cuenta
+ * @return array|false retorna array con el listado de categorias, o false en caso de algun problema
+ */
+function obtenerCategorias(): array|false {
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+        
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
+
+        // Obtener todas las categorias
+        $stmt = $pdo->prepare("SELECT * FROM t_categorias WHERE id_cuenta=:id_cuenta");
+        $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
+        $stmt->execute();
+        $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron categorias
+        if (!$categorias) {            
+            return false;
+        }
+        return $categorias;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
