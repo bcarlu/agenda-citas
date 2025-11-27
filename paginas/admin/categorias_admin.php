@@ -9,7 +9,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
     $usuario = $_SESSION['username'];
 ?>
 <body>
-    <?php include 'navbar.php';?>
+    <?php include '../../navbar.php';?>
     <div class="container mt-5">
         <div class="row py-3">
             <div class="col">
