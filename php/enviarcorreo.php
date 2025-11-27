@@ -24,21 +24,14 @@ if (isset($usuario)) {
 
 
     //Se consulta t_usuarios y se define nombre cliente
-    include_once'conexion.php';
-    $sqlCli = "SELECT * FROM t_usuarios WHERE email='$usuario'";
-    $resultCli = $conn->query($sqlCli);
-    $nomCli = $resultCli->fetch_assoc();
-    $nomCli = $nomCli['nombre'];
+    // TODO: Migrar consulta a postgresql cuando se retome envio de correo
+    // TODO: Obtener nombre cliente
+    //$nomCli = $nomCli['nombre'];
     
 
     //Se consulta t_esteticistas y se define nombre esteticista
-    $sqlEst = "SELECT * FROM t_esteticistas WHERE id_estet='$esteticista'";
-    $resultEst = $conn->query($sqlEst);
-    $nomEst = $resultEst->fetch_assoc();
-    $nomEst = $nomEst['nombre'] ." ". $nomEst['apellidos'];
-
-    //Se cierra conexion mysql
-    $conn->close();
+    // TODO: Obtener nombre esteticista
+    // $nomEst = $nomEst['nombre'] ." ". $nomEst['apellidos'];
 
     //Se habilitan mensajes de error
 	ini_set( 'display_errors', 1 );

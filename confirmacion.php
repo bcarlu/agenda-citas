@@ -2,7 +2,6 @@
 <?php $titulo = "Confirmacion";?>
 <?php include_once'head.php';?>
 <?php include_once'php/funciones.php';?>
-<?php include_once'php/conexion.php';?>
 
 <?php
 $usuario = $_SESSION['username'];
