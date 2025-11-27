@@ -1037,6 +1037,31 @@ function obtenerServiciosAdmin(): array|false {
     }
 }
 
+/** Imprime tabla con las categorias creadas
+ * @return void Componente html con el listado de categorias
+ */
+function listaCategoriasAdmin(): void {
+    try {
+        $categoriasDatos = obtenerCategorias();
+
+        // Validar si se encontraron categorias
+        if ($categoriasDatos > 0) {
+            //Se listan los servicios de la categoria
+            foreach ($categoriasDatos as $categoria) {
+                echo "<tr>
+                    <th scope='row'>". $categoria["id"] ."</th>
+                    <td>" . $categoria["nombre"] . "</td>                       
+                </tr>";
+            }
+        } else {
+            echo "Aun no tienes categorias. Crea una.";
+        }
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage());
+        echo "Error interno del servidor: ";
+    }
+}
+
 /** Obtiene las categorias creadas en la cuenta
  * @return array|false retorna array con el listado de categorias, o false en caso de algun problema
  */
