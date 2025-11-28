@@ -40,8 +40,6 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             </div>
         </div>        
     </div>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/main.js"></script>
 
 <?php       
     //Fin if de control sesion
