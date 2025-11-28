@@ -667,3 +667,64 @@ function obtenerCategorias(): array|false {
         return false;
     }
 }
+
+/** Obtiene las esteticistas creadas en la cuenta
+ * @return array|false retorna array con el listado de esteticistas, o false en caso de algun problema
+ */
+function obtenerEsteticistas(): array|false {
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+        
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
+
+        // Obtener todas las esteticistas
+        $sql = "SELECT e.id, e.nombre,
+                c.nombre AS nombre_cat            
+        FROM t_esteticistas e
+        LEFT JOIN t_categorias c ON e.id_cat = c.id
+        WHERE e.id_cuenta=:id_cuenta";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
+        $stmt->execute();
+        $esteticistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Validar si se encontraron categorias
+        if (!$esteticistas) {            
+            return false;
+        }
+        return $esteticistas;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
+
+/** Imprime tabla con las categorias creadas
+ * @return void Componente html con el listado de categorias
+ */
+function listaEsteticistasAdmin(): void {
+    try {
+        $esteticistasDatos = obtenerEsteticistas();
+
+        // Validar si se encontraron categorias
+        if ($esteticistasDatos > 0) {
+            //Se listan los servicios de la categoria
+            foreach ($esteticistasDatos as $esteticista) {
+                echo "<tr>
+                    <th scope='row'>". $esteticista["id"] ."</th>
+                    <td>" . $esteticista["nombre"] . "</td> 
+                    <td>" . $esteticista["nombre_cat"] . "</td>                      
+                </tr>";
+            }
+        } else {
+            echo "Aun no tienes esteticistas. Crea una.";
+        }
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage());
+        echo "Error interno del servidor: ";
+    }
+}
