@@ -33,19 +33,26 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
         <?php
                 } // Cierre if
             } // Cierre if
-        ?>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Categoria</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php echo listaCategoriasAdmin(); ?>
-                </tbody>
-            </table>
+        ?>        
+        <div class="row">
+            <div class="col-3">
+                <?php include 'navbar_lateral.php';?>
+            </div>
+            <div class="col-9">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo listaCategoriasAdmin(); ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 <?php       

@@ -34,21 +34,28 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 } // Cierre if
             } // Cierre if
         ?>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Servicio</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Precio</th>
-                        <th scope="col">Duracion (horas)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php echo listaServiciosAdmin(); ?>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-3">
+                <?php include 'paginas/admin/navbar_lateral.php';?>
+            </div>
+            <div class="col-9">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Servicio</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Duracion (horas)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php echo listaServiciosAdmin(); ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 <?php       
