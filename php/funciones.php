@@ -37,7 +37,7 @@ function listaServiciosPG(){
     
         //Se listan los servicios de la categoria
         foreach ($servicios as $servicio) {
-            echo '<a class="text-decoration-none text-dark" href="agenda.php?serv='.$servicio["nombre"].'&serv_id='.$servicio["id"].'">
+            echo '<a class="text-decoration-none text-dark" href="agenda.php?cat_id='.$servicio["id_cat"].'&serv='.$servicio["nombre"].'&serv_id='.$servicio["id"]. '&serv_duracion='.$servicio["duracion"].'">
                   <div class="row cat-unas mb-2 py-2 d-flex align-items-center justify-content-between">
                       
                   <div class="col">
@@ -387,7 +387,7 @@ function obtenerCitas(): array|false {
             $citasCliente = $stmtCitas->fetchAll(PDO::FETCH_ASSOC);
             
             if (count($citasCliente) > 0) {
-                $citasDatos = array_merge($citasDatos, $citasCliente); // Se unen todas las citas de cada dia en un solo arreglo
+                $citasDatos = array_merge($citasDatos, $citasCliente); // Se unen todas las citas de cada dia en un solo arreglo                
             }
         }
         return $citasDatos;
@@ -726,5 +726,236 @@ function listaEsteticistasAdmin(): void {
     } catch (\Throwable $th) {
         error_log("Error al obtener categorias: " . $th->getMessage());
         echo "Error interno del servidor: ";
+    }
+}
+
+/** Obtiene las horas disponibles en un rango de fechas para las esteticistas de la categoria del servicio solicitado y las imprime en componente HTML
+ * @return void -> Imprime HTML con listado de esteticistas, fechas y horas disponibles, o mensaje de error en caso de algun problema
+ */
+function listaAgendaDisponible(){
+    try {
+        // Obtener id servicio solicitado, duracion y nombre
+        $idServ = isset($_GET['serv_id']) && !empty($_GET['serv_id']) ? (int)$_GET['serv_id'] : null;
+        $duracionServ = isset($_GET['serv_duracion']) && !empty($_GET['serv_duracion']) ? (int)$_GET['serv_duracion'] : null;
+        $nombreServ = isset($_GET['serv']) && !empty($_GET['serv']) ? $_GET['serv'] : null;
+
+        // Obtener id categoria
+        $idCat = isset($_GET['cat_id']) && !empty($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
+
+        // Validar que todos los datos necesarios se hayan recibido
+        if ($idCat === null || $idServ === null || $duracionServ === null || $nombreServ === null) {
+            echo "Categoría o id servicio o duracion o nombre servicio no especificada.";
+            return;
+        }
+
+        // Obtener esteticistas de la categoria    
+        $esteticistas = obtenerEsteticistasCategoria($idCat);
+
+        // Validar si hay esteticistas en la categoria
+        if (empty($esteticistas)) {
+            echo "No hay esteticistas asignadas a la categoria del servicio solicitado.";
+            exit;
+        }
+
+        // Establecer rango de fechas
+        $cantidadDias = 2; // Por el momento se establecen manualmente, luego se pueden obtener dinamicamente.
+        $rangoFechas = []; 
+        for ($i=0; $i < $cantidadDias; $i++) { 
+            $rangoFechas[] = date("d-m-Y", mktime(0, 0, 0, date("m")  , date("d")+$i, date("Y")));
+        }
+        // Crear formateador de fechas para español
+        $formateadorFechaIdioma = new IntlDateFormatter(
+            "es_CO",
+            IntlDateFormatter::FULL, // Estilo para la fecha
+            IntlDateFormatter::NONE, // Estilo para la hora (NONE para no incluir hora)
+            'America/Bogota',        // Zona horaria de Colombia
+            IntlDateFormatter::GREGORIAN,
+            'E, d \'de\' MMM' // Patrón de formato personalizado Ej: lun, 1 de dic
+        );
+
+        // Establecer rango de horas laborales
+        $rangoHoras = [8,9,10,11,12,13,14,15,16];
+
+        // Foreach esteticista
+        foreach ($esteticistas as $esteticista) {
+            // Imprime nombre esteticista
+            echo '<h3 class="h3 mt-3">'. $esteticista["nombre"] . '</h3>';
+            // Foreach fechas
+            foreach ($rangoFechas as $fecha) {                
+                $ts = strtotime($fecha); // timestamp
+                $fechaFormateada = $formateadorFechaIdioma->format($ts);
+                // Definir año, mes y dia para enviarlo a la pag de confirmacion
+                $anio = (int)date("Y", $ts); 
+                $mes = (int)date("m", $ts);
+                $d = (int)date("d", $ts);
+
+                // Imprime fecha
+                echo "<h5>". $fechaFormateada . "</h5>";
+                
+                // Calcular horas disponibles
+                $horasDisponibles = calcularHorasDisponiblesEstet($esteticista["id"], $fecha, $rangoHoras, $duracionServ);
+                
+                // Imprime horas disponibles                
+                if(count($horasDisponibles) > 0){
+                    echo '<div class="btn-toolbar" role="toolbar">';
+                    foreach($horasDisponibles as $hora) {                    
+                        $tsHora = strtotime($fecha . " " . $hora . " hours" ); // Obtener hora                    
+                        echo '<div class="btn-group mr-2" role="group" aria-label="First group"> ';
+                            echo '<a href="confirmacion.php?cat='.$idCat.'&id_serv='.$idServ.'&serv='.$nombreServ.'&est='.$esteticista["id"].'&nomEst='.$esteticista["nombre"].'&hora='.$hora.'&dia='.$d.'&mes='.$mes.'&anio='.$anio.'&duracion='.$duracionServ.'" type="button" class="btn btn-outline-success"> ' . date("g:00 A", $tsHora) . '</a>';
+                        echo '</div>';
+                    }
+                    echo '</div>'; 
+                } else {
+                    echo "<p>No hay horas disponibles en esta fecha!</p>";
+                }
+            }                
+        }            
+    } catch (\Throwable $th) {
+        error_log("Error al obtener agenda disponible: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        echo "Error interno del servidor. No se pudo obtener la agenda disponible.";
+    }
+}
+
+/** Calcula las horas disponibles de un esteticista en una fecha especifica segun la duracion del servicio 
+ * @param int $idEsteticista -> id del esteticista
+ * @param string $fecha -> fecha del dia que se desea consultar en formato "d-m-Y"
+ * @param array<int> $rangoHoras -> rango de horas a calcular. Ejemplo: [8,9,10...]
+ * @param int $duracionServicio -> duracion del servicio que se va a reservar en horas. Ejemplo 1
+ * @return array<int>|false -> arreglo con el listado de horas disponibles del esteticista, o false en caso de error.
+ */
+function calcularHorasDisponiblesEstet(int $idEsteticista, string $fecha, array $rangoHoras, int $duracionServicio): array|false {
+    try {
+        $horasOcupadas = calcularHorasOcupadasEstet($idEsteticista, $fecha);
+        $horasDisponibles = [];
+
+        // Si no hay horas ocupadas se devuelve todo el rango de horas.
+        if (empty($horasOcupadas)) {
+           return $horasDisponibles[] = $rangoHoras;
+        } 
+
+        // Filtrar horas disponibles
+        if ($duracionServicio === 1) { // Para servicios de 1 hora
+           return $horasDisponibles = array_values(array_diff($rangoHoras, $horasOcupadas)); // array_values para devolver un nuevo array sin los indices del array_diff.
+        } 
+        
+        if ($duracionServicio >= 2) { // Para servicios de 2 o mas horas se debe confirmar que las horas disponibles sean consecutivas para cubrir la duracion del servicio.
+            $horasPosibles = array_values(array_diff($rangoHoras, $horasOcupadas));
+            
+            foreach ($rangoHoras as $horaV) {
+                $hDisponible = 0;
+                for ($i=0; $i < $duracionServicio; $i++) { 
+                   if(in_array($horaV + $i,$horasPosibles)){ $hDisponible += 1;}
+                }
+                if ($hDisponible == $duracionServicio){ $horasDisponibles[] = $horaV;}
+            }
+        }
+        return $horasDisponibles;
+    } catch (\Throwable $th) {
+       error_log("Error calculando horas disponibles esteticista: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
+
+/** Calcula las horas ocupadas de un esteticista segun la agenda programada en una fecha.
+ * @param int $idEsteticista -> id del esteticista
+ * @param string $fecha -> fecha del dia que se desea consultar en formato "d-m-Y"
+ * @return array<int>|false -> arreglo con el listado de horas en las que la esteticista esta ocupada, o false en caso de error. 
+ */
+function calcularHorasOcupadasEstet(int $idEsteticista, string $fecha): array|false {
+    try {
+        $citasEsteticista = obtenerCitasEsteticista($idEsteticista, $fecha);
+        $horasOcupadas = [];
+
+        // Si no tiene citas se retorna array vacio lo que indica que todas las horas estan disponibles.
+        if (count($citasEsteticista) == 0) {
+            return $horasOcupadas = [];
+        }
+        
+        //establecer horas ocupadas.
+        foreach ($citasEsteticista as $cita) {            
+            if ($cita["duracion"] > 1) { // si la cita dura 2 o mas horas
+                for($i = 0; $i < $cita["duracion"]; $i++) { // Se marcan las horas siguientes como ocupadas
+                    $horasOcupadas[] = $cita["hora"] + $i;
+                }
+            } else {
+                $horasOcupadas[] = $cita["hora"];
+            }
+        }
+        return $horasOcupadas;
+    } catch (\Throwable $th) {
+        error_log("Error obteniendo horas ocupadas esteticista: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
+
+/** Obtiene las citas programadas de un esteticista especifico 
+ * @param int $idEsteticista -> id del esteticista
+ * @param string $fecha -> fecha del dia que se desea consultar en formato "d-m-Y"
+ * @return array|false -> retorna array con el listado de citas de la esteticista ordenadas por horas de menor a mayor (ASC), o false en caso de error
+ */
+function obtenerCitasEsteticista(int $idEsteticista, string $fecha): array|false {
+    try {
+        include_once 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();
+
+        // Obtener año, mes y dia 
+        $fecha = explode("-",$fecha);
+        $anio = (int)$fecha[2]; 
+        $mes = (int)$fecha[1]; 
+        $dia = (int)$fecha[0]; 
+
+        $idEsteticista = $idEsteticista;
+
+        $citasEsteticista = []; // Inicializa array vacio
+
+        // Obtener citas
+        $sql = "SELECT hora, duracion
+        FROM t_citas 
+        WHERE id_esteticista=:id_esteticista AND dia=:dia AND mes=:mes AND anio=:anio 
+        ORDER BY hora;";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue("id_esteticista", $idEsteticista, PDO::PARAM_INT);
+        $stmt->bindValue("dia", $dia, PDO::PARAM_INT);
+        $stmt->bindValue("mes", $mes, PDO::PARAM_INT);
+        $stmt->bindValue("anio", $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $citasEsteticista = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $citasEsteticista;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener citas del esteticista: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
+    }
+}
+
+/** Obtiene las esteticistas de la categoria
+ * @param int $idCategoria -> id de la categoria del servicio solicitado
+ * @return array|false retorna array con el listado de esteticistas, o false en caso de algun problema
+ */
+function obtenerEsteticistasCategoria(int $idCategoria): array|false {
+    try {
+        // Conectar a la base de datos
+        include 'conexionpg.php';
+        $db = ConectorPG::obtenerInstancia();
+        $pdo = $db->conectar();      
+        
+        // Obtener el id de la cuenta del cliente
+        $cuenta = $_SESSION['id_cuenta'];
+
+        // Obtener todas las esteticistas de la categoria
+        $sql = "SELECT id, nombre           
+        FROM t_esteticistas 
+        WHERE id_cuenta=:id_cuenta AND id_cat=:id_cat";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
+        $stmt->bindValue(':id_cat', $idCategoria, PDO::PARAM_INT);
+        $stmt->execute();
+        $esteticistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $esteticistas;
+    } catch (\Throwable $th) {
+        error_log("Error al obtener categorias: " . $th->getMessage() . "en la linea: "  . $th->getLine() . " en el archivo: " . $th->getFile());
+        return false;
     }
 }

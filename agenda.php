@@ -11,12 +11,12 @@ if (isset($usuario)) {
     <?php include 'navsesion.php';?>
     <div class="container">    
         <div class="text-center h3 alert-primary">
-            <span>Agenda para <?php echo "<b>{$_GET['serv']}</b>"; ?></span>
+            <span>Agenda para <?php echo "<b>{$_GET['serv']}</b>"; ?> con duracion de <?php echo $_GET['serv_duracion']; ?> horas</span> 
         </div>  
         
         <div class='row'>
             <div class='col px-2 pb-2'>
-                <?php agendaDisponiblePG(); ?>
+                <?php listaAgendaDisponible(); ?>
             </div>
         </div>
     </div> 
