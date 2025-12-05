@@ -248,7 +248,12 @@ function citasxClientePG($emailUsuario){
         $pdo = $db->conectar();
         // Definir usuario
         $usuario = $emailUsuario ?? $_SESSION['username'];
-      
+
+        // Obtener fecha actual
+        $a = (int)date("Y");
+        $m = (int)date("m"); 
+        $d = (int)date("d");
+
         //Consulta citas del cliente + datos de servicio y esteticista
         $sql = "SELECT c.dia, c.mes, c.anio, c.hora, c.horafin, 
                     e.nombre AS nombre_est, 
@@ -257,9 +262,13 @@ function citasxClientePG($emailUsuario){
                 LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
                 LEFT JOIN t_servicios s ON c.id_serv = s.id
                 WHERE c.email_cliente = :usuario
-                ORDER BY c.dia, c.mes, c.anio, c.hora;";
+                AND c.anio >= :a AND c.mes >= :m AND c.dia >= :d
+                ORDER BY c.anio, c.mes, c.dia, c.hora;";
         $stmtCitasCliente = $pdo->prepare($sql);
         $stmtCitasCliente->bindValue("usuario", $usuario, PDO::PARAM_STR);
+        $stmtCitasCliente->bindValue("a", $a, PDO::PARAM_STR);
+        $stmtCitasCliente->bindValue("m", $m, PDO::PARAM_STR);
+        $stmtCitasCliente->bindValue("d", $d, PDO::PARAM_STR);
         $stmtCitasCliente->execute();
         $citasCliente = $stmtCitasCliente->fetchAll(PDO::FETCH_ASSOC);
         
@@ -268,35 +277,37 @@ function citasxClientePG($emailUsuario){
             echo "Aun no tienes citas programadas!!";
         }
 
+        // Crear formateador de fechas para español
+        $formateadorFechaIdioma = new IntlDateFormatter(
+            "es_CO",
+            IntlDateFormatter::FULL, // Estilo para la fecha
+            IntlDateFormatter::FULL, // Estilo para la hora
+            'America/Bogota',        // Zona horaria de Colombia
+            IntlDateFormatter::GREGORIAN,
+            'E, d \'de\' MMM \'a las\' h:mm a ' // Patrón de formato personalizado Ej: lun, 1 de dic
+        );
+
+        // Formateador de precio
+        $FormateadorPrecio = new NumberFormatter( 'es_CO', NumberFormatter::CURRENCY);
+        $FormateadorPrecio->setPattern("$#,##0");
+
         //Si tiene citas programadas
         foreach ($citasCliente as $citas){            
-            $fechaServicio = $citas['dia']."-".$citas['mes']."-".$citas['anio'];
-            $horaServicio = $citas['hora'].":00"; // Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
-            $horaFinSer = $citas['horafin'].":00";// Se concatena los dos ceros para que strftime lo interprete correctamente como hora.
+            $fechaServicio = strtotime($citas['dia']."-".$citas['mes']."-".$citas['anio']." ".$citas['hora']." hours");
             $nomServicio = $citas['nombre_serv'];
-            $precioServicio = $citas['precio'];
+            $precioServicio = (float)$citas['precio'];
             $nomEsteticista = $citas['nombre_est'];
 
-            //Se convierte fecha y hora en formato local con am-pm
-            setlocale(LC_TIME, 'es_CO.utf8');
-            $horai = strftime("%l:%M%P", strtotime($horaServicio));
-            $horaf = strftime("%l:%M%P", strtotime($horaFinSer));
+            $fechaServicioFormateada = $formateadorFechaIdioma->format($fechaServicio);
 
-            //Convierte fecha en formato local
-            setlocale(LC_TIME,'es_CO.utf8'); 
-            $fechaser = strftime("%a %e %b",strtotime($fechaServicio));            
+            $precioFormateado = $FormateadorPrecio->formatCurrency($precioServicio, "COP");   
 
-            //Convierte precio en formato moneda se debe tener soporte para 
-            setlocale(LC_MONETARY, 'es_CO.utf8');
-            //$precioPesos = money_format('%.0i', $precioServicio);
-            $precioPesos = number_format($precioServicio, 0, ',', '.');
-
-            //Muestra citas en pantalla      shadow-sm  
+            //Muestra citas en pantalla  
             echo "<div class='mb-3 p-2 shadow-sm rounded bg-citas'>
                 <b>$nomServicio</b><br>
-                $fechaser de $horai-$horaf <br>
+                $fechaServicioFormateada <br>
                 Con $nomEsteticista <br>
-                $precioPesos 
+                $precioFormateado 
                 </div>";   
         }
     } catch (\Throwable $th) {
