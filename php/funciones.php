@@ -442,8 +442,13 @@ function listaCategorias(){
         // Obtener el id de la cuenta del cliente
         $cuenta = $_SESSION['id_cuenta'];
 
-        // Obtener todas las categorias
-        $stmt = $pdo->prepare("SELECT * FROM t_categorias WHERE id_cuenta=:id_cuenta");
+        // Obtener todas las categorias que tengan al menos 1 servicio y 1 esteticista asociada
+        $sql = "SELECT DISTINCT c.* 
+        FROM t_categorias c 
+        INNER JOIN t_servicios s ON s.id_cat = c.id
+        INNER JOIN t_esteticistas e ON e.id_cat = c.id
+        WHERE c.id_cuenta=:id_cuenta";
+        $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->execute();
         $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
