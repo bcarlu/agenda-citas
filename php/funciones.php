@@ -533,16 +533,29 @@ function crearCuenta(?string $nombreEmpresa, ?string $nitEmpresa): int|false {
         $db = ConectorPG::obtenerInstancia();
         $pdo = $db->conectar();
 
+        // Crear uuid cuenta
+        $filtro = "/\w/i"; // Busca solo letras (a-Z) y numeros (0-9)        
+        $nomEmpArr = str_split($nombreEmpresa); // Convierte string en array
+        $nitEmpArr = str_split($nitEmpresa);        
+        $nomEmpLet = preg_grep($filtro, $nomEmpArr); // Obtiene solo letras o numeros
+        $nitEmpLet = preg_grep($filtro, $nitEmpArr);        
+        $nomEmpStr = join("",$nomEmpLet); // Convierte array en string
+        $nitEmpStr = join("",$nitEmpLet);
+        // Convierte a minusculas y obtiene las primeras 3 letras 
+        $uuid = substr(strtolower($nomEmpStr),0,3) . "_". substr(strtolower($nitEmpStr),0,3);
+        
         // Crear nueva cuenta
-        $stmt = $pdo->prepare('INSERT INTO t_cuentas (nombre_empresa,nit_rut) VALUES (:nombre,:nit)');
+        $stmt = $pdo->prepare('INSERT INTO t_cuentas (nombre_empresa,nit_rut, uuid) VALUES (:nombre,:nit,:uuid)');
         $stmt->bindValue(':nombre', $nombreEmpresa, PDO::PARAM_STR);
         $stmt->bindValue(':nit', $nitEmpresa, PDO::PARAM_STR);
+        $stmt->bindValue(':uuid', $uuid, PDO::PARAM_STR);
         if ($stmt->execute()) {
             return (int)$pdo->lastInsertId();
         }
         return false;
     } catch (PDOException $e) {
-        error_log("Error al crear el cuenta: " . $e->getMessage(), (int)$e->getCode());
+        //error_log("Error al crear el cuenta: " . $e->getMessage(), (int)$e->getCode());
+        error_log("Error al crear la cuenta: " . $e->getMessage() . "en la linea: "  . $e->getLine() . " en el archivo: " . $e->getFile());
         return false;
     }
 }

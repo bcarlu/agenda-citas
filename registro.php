@@ -36,6 +36,7 @@
                 } //Cierre if de control
                 ?>
                 <form action="php/validaregistro_pg.php" method="post">
+                    <input type="hidden" class="hidden" name="id_cuenta" id="id_cuenta" value="<?php echo htmlspecialchars($_GET["id_cuenta"],ENT_QUOTES)?>">
                     <div class="form-group">
                         Nombre
                         <input type="text" class="form-control campo-input" id="nombre-reg" name="nombre-reg" aria-describedby="nombreAyuda" placeholder="Escriba su nombre" required>

@@ -14,9 +14,10 @@ $apellidos = isset($_POST['apellidos-reg']) && !empty($_POST['apellidos-reg']) ?
 $email = isset($_POST['email-reg']) && !empty($_POST['email-reg']) ? $_POST['email-reg'] : null;
 $celular = isset($_POST['celular-reg']) && !empty($_POST['celular-reg']) ? $_POST['celular-reg'] : null;
 $clave = isset($_POST['clave-reg']) && !empty($_POST['clave-reg']) ? $_POST['clave-reg'] : null;
+$uuid = isset($_POST['id_cuenta']) && !empty($_POST['id_cuenta']) ? $_POST['id_cuenta'] : null; //  uuid de la cuenta
 
 // Verificar los campos obligatorios
-if ($nombre === null || $email === null || $clave === null) {
+if ($nombre === null || $email === null || $clave === null || $uuid === null) {
     http_response_code(400);
     header("location:../registro.php?error=faltan_campos_obligatorios");
 }
@@ -42,12 +43,25 @@ try {
         http_response_code(409);
         header("location:../registro.php?error=email_ya_registrado");
     } else {
+        // Verificar que la cuenta exista
+        $stmtCuenta = $pdo->prepare('SELECT id FROM t_cuentas WHERE uuid=:uuid');
+        $stmtCuenta->bindValue(':uuid', $uuid, PDO::PARAM_STR);
+        $stmtCuenta->execute();
+        $cuenta = $stmtCuenta->fetch(PDO::FETCH_ASSOC);
+
+        if($cuenta === false){ // Si la cuenta no existe
+            http_response_code(409);
+            error_log("Error: Usuario intentandose registrar en una cuenta inexistente. uuid cuenta:" . $uuid);
+            echo "Error: id_cuenta no existe. Valida con tu administrador!";
+            exit;
+        }
+
         // Registrar nuevo usuario y redirigir a la pagina de login
         $idRol = 2; // Cliente
-        $idCuenta = 1; // Id de la cuenta en la que el cliente se registra. Por el momento se deja estatico para pruebas. TODO:Pendiente definir el id de la cuenta a partir de una url especifica para cada cuenta.
+        $idCuenta = $cuenta["id"];
         $creado =crearUsuario($nombre, $apellidos, $email, $celular, $clavenc, $idRol, $idCuenta);
         if ($creado) {
-            header("location:../ingreso.php?registro=exitoso?nombre=$nombre");
+            header("location:../ingreso.php?registro=exitoso&nombre=$nombre");
         } else {
             http_response_code(500);
             header("location:../registro.php?error=error_al_crear_usuario");

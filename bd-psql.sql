@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS t_roles (
 CREATE TABLE IF NOT EXISTS t_cuentas (
     id SERIAL PRIMARY KEY,
     nombre_empresa VARCHAR NOT NULL,
-    nit_rut VARCHAR NOT NULL -- NIT o RUT de la empresa o usuario que crea la cuenta
+    nit_rut VARCHAR NOT NULL, -- NIT o RUT de la empresa o usuario que crea la cuenta
+    uuid VARCHAR UNIQUE NULL -- Id cuenta para uso en el registro de los usuarios (cliente)
 );
 
 -- Tabla de clientes
@@ -92,8 +93,8 @@ VALUES ('administrador', 'Puede configurar completamente la cuenta, crear, edita
 ('cliente', 'Puede ver, editar y crear citas.');
 
 -- Insertar cuenta
-INSERT INTO t_cuentas (nombre_empresa, nit_rut)
-VALUES ('Logística Express LTDA', '830.543.210-2');
+INSERT INTO t_cuentas (nombre_empresa, nit_rut, uuid)
+VALUES ('Logística Express LTDA', '830.543.210-2', 'abc_123');
 
 -- Insertar categorías
 INSERT INTO t_categorias (nombre, id_cuenta, eliminado_en)
