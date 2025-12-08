@@ -25,7 +25,7 @@ function resaltarItemActivo () {
     // Recorrer los enlaces
     for (let i = 0; i < enlaces.length; i++) {
         const enlace = enlaces[i];
-        if (enlace.href == paginaActual) {
+        if (paginaActual.match(enlace.href)) {
             enlace.classList.add('active');
         } else {
             if (enlace.classList.contains('active')) {
