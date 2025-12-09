@@ -38,23 +38,23 @@
                 <form action="php/validaregistro_pg.php" method="post">
                     <input type="hidden" class="hidden" name="id_cuenta" id="id_cuenta" value="<?php echo htmlspecialchars($_GET["id_cuenta"],ENT_QUOTES)?>">
                     <div class="form-group">
-                        Nombre
+                        <label for="nombre-reg">Nombre <span class="text-danger">*</span></label>
                         <input type="text" class="form-control campo-input" id="nombre-reg" name="nombre-reg" aria-describedby="nombreAyuda" placeholder="Escriba su nombre" required>
                     </div>
                     <div class="form-group">
-                        Apellidos
+                        <label for="apellidos-reg">Apellidos</label>
                         <input type="text" class="form-control campo-input" id="apellidos-reg" name="apellidos-reg" aria-describedby="apellidosAyuda" placeholder="Escriba sus apellidos">
                     </div>
                     <div class="form-group">
-                        Email
+                        <label for="email-reg">Email <span class="text-danger">*</span></label>
                         <input type="email" class="form-control campo-input" id="email-reg" name="email-reg" aria-describedby="emailAyuda" placeholder="Escriba su email" required>
                     </div>
                     <div class="form-group">
-                        Celular
+                        <label for="celular-reg">Celular</label>
                         <input type="tel" class="form-control campo-input" id="celular-reg" name="celular-reg" aria-describedby="celularAyuda" placeholder="Escriba su numero celular" pattern="[0-9]{10}">
                     </div>
                     <div class="form-group">
-                        Contraseña
+                        <label for="password-usu-cuenta">Contraseña <span class="text-danger">*</span></label>
                         <input type="password" class="form-control campo-input" id="clave-reg" name="clave-reg" placeholder="Escriba una contraseña para su cuenta" required data-tipoInput='password'>
                     </div>
                     <div class="custom-control custom-checkbox mb-3">
