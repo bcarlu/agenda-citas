@@ -3,4 +3,5 @@
     <a class="nav-link" href="/servicios_admin.php">Servicios</a>
     <a class="nav-link" href="/paginas/admin/categorias_admin.php">Categorias</a>
     <a class="nav-link" href="/paginas/admin/esteticistas_admin.php">Esteticistas</a>
+    <a class="nav-link" href="/paginas/admin/configuracion_admin.php">Configuracion</a>
 </nav>

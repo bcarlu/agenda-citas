@@ -26,7 +26,11 @@ try {
     $pdo = $db->conectar();
 
     // Verificar si el usuario existe
-    $stmt = $pdo->prepare('SELECT * FROM t_usuarios WHERE email=:email LIMIT 1');
+    $sql = 'SELECT u.*, c.uuid
+        FROM t_usuarios u
+        LEFT JOIN t_cuentas c ON c.id = u.id_cuenta
+        WHERE u.email=:email LIMIT 1';
+    $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -40,6 +44,7 @@ try {
             $_SESSION['nombre_usuario'] = $usuario["nombre"] ?? "";
             $_SESSION['id_rol'] = $usuario["id_rol"];
             $_SESSION['id_cuenta'] = $usuario["id_cuenta"];
+            $_SESSION['uuid_cuenta'] = $usuario["uuid"];
 
             if ($usuario["id_rol"] == 1) { // Redirige al panel de administracion
                header("location:../inicio_admin.php");
