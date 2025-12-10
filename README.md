@@ -1,22 +1,36 @@
 # agenda-citas
+Aplicacion para gestionar la reservacion de citas en salones de belleza.
 
 ## Requisitos
 - PHP = 8.4
 - Base de datos:
 -- PostgreSQL = 17.5
+- Composer (para gestión de dependencias)
 
 ## Caracteristicas
 
-Esta es una aplicación web para agendamiento de citas en salones de belleza. Entre sus caracteristicas estan:
+El sistema incluye las siguientes funcionalidades:
 
-- Se ha configurado la creacion de cuentas de usuario con contraseña encriptada, inicio de sesion y validacion de usuarios.
+- Registro para creacion de cuenta de administrador. Esto crea una nueva cuenta (Empresa) a la cual se asociaran los nuevos usuarios.
 
-- Se implementa la navegacion por paginas segun categoria y servicios, se presenta dinamicamente los servicios, tambien las fechas y horas disponibles para cada empleado.
+- Registro de usuarios (clientes) con contraseña encriptada, inicio de sesion y validacion de usuarios. Los usuarios se registran a traves de la URL personalizada que aparece en el panel del administrador de la cuenta.
 
-- Se implementa validacion de citas antes de registrarla en la base de datos para evitar duplicidad y se emite alerta en caso de que la cita haya sido tomada por alguien mas en el mismo momento, para que el usuario quede informado y pueda tomar otra hora diferente.
+- Panel para administrador de la cuenta, en el cual se puede ver la agenda de citas diarias, crear servicios, categorias y esteticistas.
+
+- URL personalizada de registro de usuarios (clientes) para la cuenta.
+
+- Panel de usuarios (clientes) con listado de citas pendientes y opcion de reservar nuevas citas.
+
+- Funcion para calcular y mostrar la disponibilidad de agenda por esteticista.
+
+Tambien cuenta con validaciones de seguridad como:
+
+- Validacion de duplicidad de cita antes de registrar una cita nueva.
+- Validacion de rol de usuarios.
+- Creacion de contraseñas encriptadas.
 
 ## Configuracion
 
-Para configurar el entorno se debe tener php instalado al igual que el motor de bases de datos y se debe crear la base de datos con la estructura relacionada en el archivo bd-psql.sql. Modificar el archivo conexionpg.php con las variables de entorno de la base de datos creada. 
+Para configurar el entorno se debe tener php + composer instalado al igual que el motor de bases de datos y se debe crear la base de datos con la estructura relacionada en el archivo bd-psql.sql. Modificar el archivo conexionpg.php con las variables de entorno de la base de datos creada. 
 
-Aun no esta finalizada, esta en fase de desarrollo pero el funcional para la parte del cliente. Esta pendiente desarrollar el modulo de administracion, por el momento se debe crear manualmente en la base de datos los servicios, categorias y esteticistas.
+Aun no esta finalizada, esta en fase de desarrollo pero es funcional para la parte del cliente, para el agendamiento de citas y funcion de creacion para el panel de administracion.
