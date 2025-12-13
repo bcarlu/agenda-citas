@@ -23,6 +23,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         if ($nombre === null || $idCategoria === null || $precio === null || $duracion === null) {
             http_response_code(400);
             header("location:/../../paginas/admin/nuevo_servicio.php?error=faltan_campos_obligatorios");
+            exit;
         }
         
         //Se crea servicio
@@ -34,6 +35,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         
         if ($servicio > 0) {            
             header('location: ../../servicios_admin.php?servicio=exito');
+            exit;
         } else {
             echo "Error al crear el servicio, por favor intenta de nuevo. <a href='../../paginas/admin/nuevo_servicio.php'>Volver</a>";
         }

@@ -21,6 +21,7 @@ $password = isset($_POST['password-usu-cuenta']) && !empty($_POST['password-usu-
 if ($nombre === null || $email === null || $password === null || $nombreEmpresa === null || $nitEmpresa === null) {
     http_response_code(400);
     header("location:../registro_cuenta.php?error=faltan_campos_obligatorios");
+    exit;
 }
 
 try {
@@ -43,12 +44,14 @@ try {
         // Email ya registrado
         http_response_code(409);
         header("location:../registro_cuenta.php?error=email_ya_registrado");
+        exit;
     } else {
         // Crear cuenta
         $cuentaCreada = crearCuenta($nombreEmpresa, $nitEmpresa);
         if (!$cuentaCreada) {
             http_response_code(500);
             header("location:../registro_cuenta.php?error=error_al_crear_cuenta");
+            exit;
         }
 
         // Si se creo la cuenta, registrar nuevo usuario y redirigir a la pagina de login
@@ -57,6 +60,7 @@ try {
         $creado = crearUsuario($nombre, $apellidos, $email, $celular, $passwordEnc, $idRol, $idCuenta);
         if ($creado) {
             header("location:../ingreso.php?registro=exitoso&nombre=$nombre");
+            exit;
         } else {
             $cuentaEliminada = eliminarCuenta($cuentaCreada); // En caso de error al crear el usuario se elimina la cuenta creada para evitar registros duplicados o huerfanos.
             if (!$cuentaEliminada) {
@@ -64,10 +68,12 @@ try {
             }
             http_response_code(500);
             header("location:../registro_cuenta.php?error=error_al_crear_usuario");
+            exit;
         }
     }
 } catch (\Throwable $e) {
     error_log("Error en el proceso de registro cuenta: " . $e->getMessage() . " con codigo: " .(int)$e->getCode() . " en linea: " . $e->getLine() . " en archivo: " . $e->getFile());
     http_response_code(500);
     header("location:../registro_cuenta.php?error=error_interno");
+    exit;
 }

@@ -47,6 +47,7 @@ if (isset($usuario)) {
     
     //Despues de enviar el correo se redirecciona a la home del cliente
     header('location: ../inicio.php?agenda=exito');
+    exit;
     
 }else{
 	echo "<div class='container'><h3 class='alert alert-danger text-center mt-3'>:( no has ingresado, por favor <a href='../'>inicia sesión</a> :)</h3></div> ";

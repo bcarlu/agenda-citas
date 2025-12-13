@@ -20,6 +20,7 @@ $uuid = isset($_POST['id_cuenta']) && !empty($_POST['id_cuenta']) ? $_POST['id_c
 if ($nombre === null || $email === null || $clave === null || $uuid === null) {
     http_response_code(400);
     header("location:../registro.php?error=faltan_campos_obligatorios");
+    exit;
 }
 
 try {
@@ -42,6 +43,7 @@ try {
         // Email ya registrado
         http_response_code(409);
         header("location:../registro.php?error=email_ya_registrado");
+        exit;
     } else {
         // Verificar que la cuenta exista
         $stmtCuenta = $pdo->prepare('SELECT id FROM t_cuentas WHERE uuid=:uuid');
@@ -62,13 +64,16 @@ try {
         $creado =crearUsuario($nombre, $apellidos, $email, $celular, $clavenc, $idRol, $idCuenta);
         if ($creado) {
             header("location:../ingreso.php?registro=exitoso&nombre=$nombre");
+            exit;
         } else {
             http_response_code(500);
             header("location:../registro.php?error=error_al_crear_usuario");
+            exit;
         }
     }
 } catch (\Throwable $e) {
     error_log("Error en el proceso de registro: " . $e->getMessage(), (int)$e->getCode());
     http_response_code(500);
     header("location:../registro.php?error=error_interno");
+    exit;
 }

@@ -21,6 +21,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         if ($nombre === null || $idCategoria === null) {
             http_response_code(400);
             header("location:/../../paginas/admin/nueva_esteticista.php?error=faltan_campos_obligatorios");
+            exit;
         }
         
         //Se crea categoria
@@ -32,6 +33,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         
         if ($esteticista > 0) {            
             header('location: ../../paginas/admin/esteticistas_admin.php?esteticista=exito');
+            exit;
         } else {
             echo "Error al crear esteticista, por favor intenta de nuevo. <a href='../../paginas/admin/nueva_categoria.php'>Volver</a>";
         }

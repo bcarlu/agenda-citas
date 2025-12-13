@@ -17,6 +17,7 @@ $clave = isset($_POST['clave']) && !empty($_POST['clave']) ? $_POST['clave'] : n
 if ($email === null || $clave === null) {
     http_response_code(400);
     header("location:../ingreso.php?error=faltan_campos_obligatorios");
+    exit;
 }
 
 try {

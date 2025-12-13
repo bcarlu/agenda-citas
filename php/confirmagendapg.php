@@ -40,6 +40,7 @@ if (isset($usuario)) {
         // Si el esteticista ya tiene cita en la fecha solicitada se regresa a la pagina de agenda para que escoja otra
         if ($citas) {            
             header("location: ../agenda.php?serv_id=$idServicio&serv=$nombreServ&agendado=si");
+            exit;
         }
         //Si no se registra normalmente
         else {
@@ -56,6 +57,7 @@ if (isset($usuario)) {
 
                 // Por el momento se comenta la redireccion a la pagina de envio de correo para simplificar el proceso, y se redirige directamente a la pagina de inicio del usuario.
                 header('location: ../inicio.php?agenda=exito');
+                exit;
             } else {
                 echo "Error al registrar la cita, por favor intenta de nuevo. <a href='../agenda.php?serv_id=$idServicio&serv=$nombreServ'>Volver</a>";
             }

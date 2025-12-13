@@ -20,6 +20,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         if ($nombre === null || $idCategoria === null || $precio === null || $duracion === null) {
             http_response_code(400);
             header("location:/../../paginas/admin/nuevo_servicio.php?error=faltan_campos_obligatorios");
+            exit;
         }
         
         //Se crea categoria
@@ -31,6 +32,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         
         if ($categoria > 0) {            
             header('location: ../../paginas/admin/categorias_admin.php?categoria=exito');
+            exit;
         } else {
             echo "Error al crear categoria, por favor intenta de nuevo. <a href='../../paginas/admin/nueva_categoria.php'>Volver</a>";
         }
