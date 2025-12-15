@@ -20,8 +20,8 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             </div>                    
         </div>
         <?php
-            // Alerta de error
-            if (isset($_GET['servicio'])) { // Valida si se recibe la variable
+            // Alertas
+            if (isset($_GET['servicio']) || isset($_GET['error'])) { // Valida si se recibe la variable
                 if ($_GET['servicio'] == "exito") {
         ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -31,7 +31,27 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 </button>
             </div>
         <?php
-                } // Cierre if
+                } // Cierre if exito
+                if ($_GET['servicio'] == "sin_cambios" || $_GET['error'] == "servicio_no_existe") {
+        ?>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>No se hicieron cambios!</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php
+                } // Cierre if sin_cambios
+                if ($_GET['servicio'] == "actualizado") {
+        ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Servicio actualizado!</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <?php
+                } // Cierre if actualizado            
             } // Cierre if
         ?>
         <div class="row">
@@ -40,7 +60,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             </div>
             <div class="col-9">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">Id</th>
@@ -48,6 +68,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                                 <th scope="col">Categoria</th>
                                 <th scope="col">Precio</th>
                                 <th scope="col">Duracion (horas)</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
