@@ -1,3 +1,4 @@
 vendor/
 rector.php
 .env
+pruebas_insertar.sql
