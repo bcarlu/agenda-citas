@@ -17,9 +17,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $idCuenta = $_SESSION['id_cuenta'] ?? 0;
 
         // Verificar los campos obligatorios
-        if ($nombre === null || $idCategoria === null || $precio === null || $duracion === null) {
+        if ($nombre === null) {
             http_response_code(400);
-            header("location:/../../paginas/admin/nuevo_servicio.php?error=faltan_campos_obligatorios");
+            header("location:/../../paginas/admin/nueva_categoria.php?error=faltan_campos_obligatorios");
             exit;
         }
         
