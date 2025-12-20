@@ -78,7 +78,38 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 </div>
             </div>
         </div>
+    </div>    
+
+    <!-- Modal Confirmacion eliminar servicio -->
+    <div class="modal fade" id="modal-eliminar-servicio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            En realidad deseas eliminar el servicio?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <form action="php/admin/eliminar_servicio.php" method="post">
+                <input type="hidden" class="hidden" name="id-servicio" id="id-servicio"> <!-- El valor se pasa con jquery-->
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>            
+        </div>
+        </div>
     </div>
+    </div>
+    <script>
+        // Se utiliza jquery de bootstrap para pasar el id del servicio que se va a eliminar al modal.
+        $('.btn-eliminar-servicio').on('click', function () {
+            $('#id-servicio').val($(this).data('idservicio'))
+            console.log("Id servicio: ",$(this).data('idservicio'))
+        })        
+    </script>
 <?php       
     //Fin if de control sesion
     }
