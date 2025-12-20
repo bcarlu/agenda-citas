@@ -74,7 +74,7 @@ if (isset($usuario) && $idRolUsuario === 1) {
         }
         $textoSet = implode(",", $camposParaSet); // Se convierte a string para pasar en la consulta
 
-        $stmtActualizar = $pdo->prepare("UPDATE t_servicios SET $textoSet WHERE id=:id");
+        $stmtActualizar = $pdo->prepare("UPDATE t_servicios SET $textoSet, actualizado_en=NOW() WHERE id=:id");
         foreach ($camposActualizados as $campo => $valor) { // Se asocia el valor a los campos dinamicamente
             $stmtActualizar->bindValue(":$campo", $valor);
         }
