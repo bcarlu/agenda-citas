@@ -240,14 +240,14 @@ function agendaDisponiblePG(){
 
 /*####FUNCION CITAS USUARIO#########*/
 
-function citasxClientePG($emailUsuario){  
+function citasxClientePG($idUsuario){  
     try {
         //Incluye y abre conexion
         include 'conexionpg.php';
         $db = ConectorPG::obtenerInstancia();
         $pdo = $db->conectar();
         // Definir usuario
-        $usuario = $emailUsuario ?? $_SESSION['username'];
+        $usuario = $idUsuario ?? $_SESSION['id_usuario'];
 
         // Obtener fecha actual
         $a = (int)date("Y");
@@ -261,11 +261,11 @@ function citasxClientePG($emailUsuario){
                 FROM t_citas c
                 LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
                 LEFT JOIN t_servicios s ON c.id_serv = s.id
-                WHERE c.email_cliente = :usuario
+                WHERE c.id_usuario = :usuario
                 AND c.anio >= :a AND c.mes >= :m AND c.dia >= :d
                 ORDER BY c.anio, c.mes, c.dia, c.hora;";
         $stmtCitasCliente = $pdo->prepare($sql);
-        $stmtCitasCliente->bindValue("usuario", $usuario, PDO::PARAM_STR);
+        $stmtCitasCliente->bindValue("usuario", $usuario, PDO::PARAM_INT);
         $stmtCitasCliente->bindValue("a", $a, PDO::PARAM_STR);
         $stmtCitasCliente->bindValue("m", $m, PDO::PARAM_STR);
         $stmtCitasCliente->bindValue("d", $d, PDO::PARAM_STR);
@@ -386,7 +386,7 @@ function obtenerCitas(): array|false {
             FROM t_citas c
             LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
             LEFT JOIN t_servicios s ON c.id_serv = s.id
-            LEFT JOIN t_usuarios u ON c.email_cliente = u.email
+            LEFT JOIN t_usuarios u ON c.id_usuario = u.id
             WHERE c.mes=:mes AND c.dia=:dia AND c.anio=:anio AND u.id_cuenta=:cuenta
             ORDER BY c.dia, c.mes, c.anio, c.hora;";
             $stmtCitas = $pdo->prepare($sql);

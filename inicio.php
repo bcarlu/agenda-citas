@@ -6,7 +6,7 @@
 <?php
 //Valida si la variable global del usuario esta definida
 if (isset($_SESSION['username'])) {
-    $usuario = $_SESSION['username'];
+    $usuario = $_SESSION['id_usuario'];
 ?>
 
     <body class="bodyinicio">

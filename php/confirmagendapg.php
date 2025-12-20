@@ -2,7 +2,7 @@
 session_start();
 
 
-$usuario = $_SESSION['username'];
+$usuario = $_SESSION['id_usuario'];
 
 if (isset($usuario)) {
     try {
@@ -15,7 +15,7 @@ if (isset($usuario)) {
         $idServicio = $_GET['id_serv'];
         $idEsteticista = $_GET['est'];
         $idCategoria = $_GET['cat'];
-        $emailUsuario = $usuario;
+        $idUsuario = $usuario;
         $anio = $_GET['anio'];
         $mes = $_GET['mes'];
         $dia = $_GET['dia'];
@@ -45,8 +45,8 @@ if (isset($usuario)) {
         //Si no se registra normalmente
         else {
             //Registra cita
-            $datosCita = [$idServicio, $idCategoria, $idEsteticista, $emailUsuario, $anio, $mes, $dia, $hora, $duracionServicio, $horafin];
-            $stmtRegCitas = $pdo->prepare("INSERT INTO t_citas (id_serv, id_cat, id_esteticista, email_cliente, anio, mes, dia, hora, duracion, horafin)
+            $datosCita = [$idServicio, $idCategoria, $idEsteticista, $idUsuario, $anio, $mes, $dia, $hora, $duracionServicio, $horafin];
+            $stmtRegCitas = $pdo->prepare("INSERT INTO t_citas (id_serv, id_cat, id_esteticista, id_usuario, anio, mes, dia, hora, duracion, horafin)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmtRegCitas->execute($datosCita);
             $citaRegistrada = $stmtRegCitas->rowCount();
