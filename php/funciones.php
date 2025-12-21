@@ -3,7 +3,9 @@
 
 
 /*####FUNCION LISTA SERVICIOS####*/
-
+/** Lista los servicios de la categoria de la cuenta que esten en estado activo (1)
+ * @return void Imprime componente html con el listado de servicios, o mensaje de error en caso de algun problema
+ */
 function listaServiciosPG(){
 
     $idCat = isset($_GET['cat_id']) && !empty($_GET['cat_id']) ? (int)$_GET['cat_id'] : null;
@@ -23,7 +25,7 @@ function listaServiciosPG(){
         $cuenta = $_SESSION['id_cuenta'];
         
         // Obtener servicios de la categoría especificada
-        $stmt = $pdo->prepare("SELECT * FROM t_servicios WHERE id_cat = :id_cat AND id_cuenta=:id_cuenta");
+        $stmt = $pdo->prepare("SELECT * FROM t_servicios WHERE id_cat = :id_cat AND id_cuenta=:id_cuenta AND id_estado=1");
         $stmt->bindValue("id_cat", $idCat, PDO::PARAM_INT);
         $stmt->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
         $stmt->execute();
@@ -239,7 +241,9 @@ function agendaDisponiblePG(){
 }
 
 /*####FUNCION CITAS USUARIO#########*/
-
+/** Lista las citas pendientes del cliente en estado activo (1)
+ * @return void Imprime componente html con el listado de citas pendientes, o mensaje de error en caso de algun problema
+ */
 function citasxClientePG($idUsuario){  
     try {
         //Incluye y abre conexion
@@ -262,7 +266,7 @@ function citasxClientePG($idUsuario){
                 LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
                 LEFT JOIN t_servicios s ON c.id_serv = s.id
                 WHERE c.id_usuario = :usuario
-                AND c.anio >= :a AND c.mes >= :m AND c.dia >= :d
+                AND c.anio >= :a AND c.mes >= :m AND c.dia >= :d AND c.id_estado=1
                 ORDER BY c.anio, c.mes, c.dia, c.hora;";
         $stmtCitasCliente = $pdo->prepare($sql);
         $stmtCitasCliente->bindValue("usuario", $usuario, PDO::PARAM_INT);
@@ -429,7 +433,7 @@ function imagenServicio($categoria){
 //Fin funcion imagenServicio
 }
 
-/** Lista las categorias de servicios
+/** Lista las categorias de servicios que tengan al menos 1 servicio y 1 esteticista asociada y que esten en estado activo (1)
  * @return string Componente html con el listado de categorias, o mensaje de error en caso de algun problema
  */
 function listaCategorias(){
@@ -443,11 +447,11 @@ function listaCategorias(){
         $cuenta = $_SESSION['id_cuenta'];
 
         // Obtener todas las categorias que tengan al menos 1 servicio y 1 esteticista asociada
-        $sql = "SELECT DISTINCT c.* 
+        $sql = "SELECT c.* 
         FROM t_categorias c 
-        INNER JOIN t_servicios s ON s.id_cat = c.id
-        INNER JOIN t_esteticistas e ON e.id_cat = c.id
-        WHERE c.id_cuenta=:id_cuenta";
+        WHERE c.id_cuenta=:id_cuenta AND c.id_estado=1
+        AND EXISTS (SELECT 1 FROM t_servicios s WHERE s.id_cat = c.id AND s.id_estado=1)
+        AND EXISTS (SELECT 1 FROM t_esteticistas e WHERE e.id_cat = c.id AND e.id_estado=1)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->execute();
@@ -977,7 +981,7 @@ function obtenerCitasEsteticista(int $idEsteticista, string $fecha): array|false
     }
 }
 
-/** Obtiene las esteticistas de la categoria
+/** Obtiene las esteticistas de la categoria en estado activo (1)
  * @param int $idCategoria -> id de la categoria del servicio solicitado
  * @return array|false retorna array con el listado de esteticistas, o false en caso de algun problema
  */
@@ -994,7 +998,7 @@ function obtenerEsteticistasCategoria(int $idCategoria): array|false {
         // Obtener todas las esteticistas de la categoria
         $sql = "SELECT id, nombre           
         FROM t_esteticistas 
-        WHERE id_cuenta=:id_cuenta AND id_cat=:id_cat";
+        WHERE id_cuenta=:id_cuenta AND id_cat=:id_cat AND id_estado=1";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->bindValue(':id_cat', $idCategoria, PDO::PARAM_INT);
