@@ -351,7 +351,7 @@ function listaCitas() {
 
 }
 
-/** Obtiene las citas programadas
+/** Obtiene las citas programadas en estado activo (1)
  * @return array|false retorna array con el listado de citas pendientes, o false en caso de algun problema
  */
 function obtenerCitas(): array|false {
@@ -387,7 +387,7 @@ function obtenerCitas(): array|false {
             LEFT JOIN t_esteticistas e ON c.id_esteticista = e.id
             LEFT JOIN t_servicios s ON c.id_serv = s.id
             LEFT JOIN t_usuarios u ON c.id_usuario = u.id
-            WHERE c.mes=:mes AND c.dia=:dia AND c.anio=:anio AND u.id_cuenta=:cuenta
+            WHERE c.mes=:mes AND c.dia=:dia AND c.anio=:anio AND u.id_cuenta=:cuenta AND c.id_estado=1
             ORDER BY c.dia, c.mes, c.anio, c.hora;";
             $stmtCitas = $pdo->prepare($sql);
             $stmtCitas->bindValue("dia", $dia, PDO::PARAM_INT);
@@ -618,6 +618,8 @@ function listaServiciosAdmin(): void {
                     </td>                        
                 </tr>';
             }
+        } else {
+            echo '<tr><td scope="row" colspan="6" class="text-center alert alert-secondary">Aun no tienes servicios creados o activos</td></tr>';
         }
     } catch (\Throwable $th) {
         error_log("Error al obtener servicios: " . $th->getMessage());
@@ -625,7 +627,7 @@ function listaServiciosAdmin(): void {
     }
 }
 
-/** Obtiene los servicios creados en la cuenta
+/** Obtiene los servicios creados en la cuenta en estado activo (1)
  * @return array|false retorna array con el listado de servicios, o false en caso de algun problema
  */
 function obtenerServiciosAdmin(): array|false {
@@ -643,7 +645,7 @@ function obtenerServiciosAdmin(): array|false {
         c.nombre AS nombre_cat
         FROM t_servicios s
         LEFT JOIN t_categorias c ON s.id_cat = c.id
-        WHERE s.id_cuenta=:id_cuenta");
+        WHERE s.id_cuenta=:id_cuenta AND s.id_estado=1");
         $stmt->bindValue("id_cuenta", $cuenta, PDO::PARAM_INT);
         $stmt->execute();
         $servicios = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -684,7 +686,7 @@ function listaCategoriasAdmin(): void {
     }
 }
 
-/** Obtiene las categorias creadas en la cuenta
+/** Obtiene las categorias creadas en la cuenta en estado activo (1)
  * @return array|false retorna array con el listado de categorias, o false en caso de algun problema
  */
 function obtenerCategorias(): array|false {
@@ -698,7 +700,7 @@ function obtenerCategorias(): array|false {
         $cuenta = $_SESSION['id_cuenta'];
 
         // Obtener todas las categorias
-        $stmt = $pdo->prepare("SELECT * FROM t_categorias WHERE id_cuenta=:id_cuenta");
+        $stmt = $pdo->prepare("SELECT * FROM t_categorias WHERE id_cuenta=:id_cuenta AND id_estado=1");
         $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->execute();
         $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -714,7 +716,7 @@ function obtenerCategorias(): array|false {
     }
 }
 
-/** Obtiene las esteticistas creadas en la cuenta
+/** Obtiene las esteticistas creadas en la cuenta en estado activo (1)
  * @return array|false retorna array con el listado de esteticistas, o false en caso de algun problema
  */
 function obtenerEsteticistas(): array|false {
@@ -732,7 +734,7 @@ function obtenerEsteticistas(): array|false {
                 c.nombre AS nombre_cat            
         FROM t_esteticistas e
         LEFT JOIN t_categorias c ON e.id_cat = c.id
-        WHERE e.id_cuenta=:id_cuenta";
+        WHERE e.id_cuenta=:id_cuenta AND e.id_estado=1";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id_cuenta', $cuenta, PDO::PARAM_INT);
         $stmt->execute();
