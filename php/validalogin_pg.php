@@ -65,8 +65,8 @@ try {
         header("Location:../ingreso.php?error=usuario_no_registrado");
         exit;
     }
-} catch (\Throwable $th) {
-    error_log("Error en el proceso de ingreso: " . $e->getMessage(), (int)$e->getCode());
+} catch (\Throwable $e) {
+    error_log("Error en el proceso de ingreso: " . $e->getMessage() . " con codigo: " .(int)$e->getCode() . " en linea: " . $e->getLine() . " en archivo: " . $e->getFile());
     http_response_code(500);
     header("location:../ingreso.php?error=error_interno");
     exit;
