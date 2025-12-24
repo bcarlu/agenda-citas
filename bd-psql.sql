@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS t_cuentas (
     nit_rut VARCHAR NOT NULL, -- NIT o RUT de la empresa o usuario que crea la cuenta
     uuid VARCHAR UNIQUE NULL, -- Id cuenta para uso en el registro de los usuarios (cliente)
     id_estado INT NOT NULL DEFAULT 1,
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE WITH TIME ZONE NULL,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
 );
 
@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS t_usuarios (
     id_rol INT NOT NULL,
     id_cuenta INT NOT NULL,
     id_estado INT NOT NULL DEFAULT 1, -- Para borrado logico, esto evita alterar los registros en t_citas.
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_rol) REFERENCES t_roles(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS t_categorias (
     nombre VARCHAR(100) NOT NULL,
     id_cuenta INT NOT NULL,
     id_estado INT NOT NULL DEFAULT 1,
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
 );
@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS t_servicios (
     duracion INT NOT NULL, -- Duracion en horas
     id_cuenta INT NOT NULL,
     id_estado INT NOT NULL DEFAULT 1,
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
     FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
@@ -82,8 +82,8 @@ CREATE TABLE IF NOT EXISTS t_esteticistas (
     id_cat INT NOT NULL,
     id_cuenta INT NOT NULL,
     id_estado INT NOT NULL DEFAULT 1,
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
     FOREIGN KEY (id_cuenta) REFERENCES t_cuentas(id) ON DELETE CASCADE,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
@@ -103,8 +103,8 @@ CREATE TABLE IF NOT EXISTS t_citas (
     duracion INT NOT NULL,
     horafin INT NOT NULL,
     id_estado INT NOT NULL DEFAULT 1,
-    creado_en TIMESTAMP NULL DEFAULT NOW(),
-    actualizado_en TIMESTAMP NULL,
+    creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
+    actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_serv) REFERENCES t_servicios(id),
     FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
     FOREIGN KEY (id_esteticista) REFERENCES t_esteticistas(id),
