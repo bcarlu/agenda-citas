@@ -826,7 +826,7 @@ function listaAgendaDisponible(){
         );
 
         // Establecer rango de horas laborales
-        $rangoHoras = [8,9,10,11,12,13,14,15,16];
+        $rangoHoras = [8,9,10,11,12,13,14,15,16,17,18];
 
         // Foreach esteticista
         foreach ($esteticistas as $esteticista) {
@@ -850,10 +850,27 @@ function listaAgendaDisponible(){
                 // Imprime horas disponibles                
                 if(count($horasDisponibles) > 0){
                     echo '<div class="btn-toolbar" role="toolbar">';
+                    $horasDisponiblesHoy = 0; // En caso de que no hayan horas disponibles debido a la hora actual del cliente, ej si son las 5pm ya no se pueden mostrar horas disponibles al cliente.
                     foreach($horasDisponibles as $hora) {                    
-                        $tsHora = strtotime($fecha . " " . $hora . " hours" ); // Obtener hora                    
-                        echo '<div class="btn-group mr-2" role="group" aria-label="First group"> ';
-                            echo '<a href="confirmacion.php?cat='.$idCat.'&id_serv='.$idServ.'&serv='.$nombreServ.'&est='.$esteticista["id"].'&nomEst='.$esteticista["nombre"].'&hora='.$hora.'&dia='.$d.'&mes='.$mes.'&anio='.$anio.'&duracion='.$duracionServ.'" type="button" class="btn btn-outline-success"> ' . date("g:00 A", $tsHora) . '</a>';
+                        $tsHora = strtotime($fecha . " " . $hora . " hours" ); // Obtener hora 
+                        // para el dia actual (hoy) se debe mostrar la disponibilidad mimino 2 horas adelante osea si son las 8am se deben mostrar a partir de las 10am
+                        if (date("d-m") == date("d-m", $ts)) {                            
+                            if(date("H", $tsHora) >= date("H", strtotime("+2 hours"))) {
+                                $horasDisponiblesHoy += 1;
+                                echo '<div class="btn-group mr-2" role="group" aria-label="First group"> ';
+                                    echo '<a href="confirmacion.php?cat='.$idCat.'&id_serv='.$idServ.'&serv='.$nombreServ.'&est='.$esteticista["id"].'&nomEst='.$esteticista["nombre"].'&hora='.$hora.'&dia='.$d.'&mes='.$mes.'&anio='.$anio.'&duracion='.$duracionServ.'" type="button" class="btn btn-outline-success"> ' . date("g:00 A", $tsHora) . '</a>';
+                                echo '</div>';
+                            }                            
+                        } else {
+                            $horasDisponiblesHoy += 1;
+                            echo '<div class="btn-group mr-2" role="group" aria-label="First group"> ';
+                                echo '<a href="confirmacion.php?cat='.$idCat.'&id_serv='.$idServ.'&serv='.$nombreServ.'&est='.$esteticista["id"].'&nomEst='.$esteticista["nombre"].'&hora='.$hora.'&dia='.$d.'&mes='.$mes.'&anio='.$anio.'&duracion='.$duracionServ.'" type="button" class="btn btn-outline-success"> ' . date("g:00 A", $tsHora) . '</a>';
+                            echo '</div>'; 
+                        }
+                    }
+                    if ($horasDisponiblesHoy == 0) { // Si no hay horas disponibles debido a la hora del cliente se muestra mensaje
+                        echo '<div class="alert alert-danger" role="alert"> ';
+                            echo 'No hay horas disponibles para esta fecha.';
                         echo '</div>';
                     }
                     echo '</div>'; 
