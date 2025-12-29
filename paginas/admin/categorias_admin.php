@@ -56,6 +56,36 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             </div>
         </div>
     </div>
+
+    <!-- Modal Confirmacion eliminar categoria -->
+    <div class="modal fade" id="modal-eliminar-categoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            En realidad deseas eliminar la categoria?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <form action="../../php/admin/eliminar_categoria.php" method="post">
+                <input type="hidden" class="hidden" name="id-categoria" id="id-categoria"> <!-- El valor se pasa con jquery-->
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>            
+        </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        // Se utiliza jquery de bootstrap para pasar el id de la categoria que se va a eliminar al modal.
+        $('.btn-eliminar-categoria').on('click', function () {
+            $('#id-categoria').val($(this).data('idcategoria'))
+        })        
+    </script>
 <?php       
     //Fin if de control sesion
     }
