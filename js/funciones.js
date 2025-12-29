@@ -37,3 +37,11 @@ function resaltarItemActivo () {
 
 // Se escucha evento para resaltar el item correspondiente en la barra lateral del panel admin
 document.addEventListener("DOMContentLoaded", resaltarItemActivo);
+
+// Listener para llamar la funcion showToast cuando sea necesario mostrar alertas. showToast se define en el archivo mostrar_alerta.js
+document.addEventListener("DOMContentLoaded", function() {
+    const parametrosURL = new URLSearchParams(window.location.search);
+    if (parametrosURL.has('tipo') && parametrosURL.has('mensaje')) {
+        showToast(parametrosURL.get("mensaje"), parametrosURL.get("tipo"))
+    }
+});
