@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS t_esteticistas (
 CREATE TABLE IF NOT EXISTS t_citas (
     id SERIAL PRIMARY KEY,
     id_serv INT NOT NULL,
-    id_cat INT NOT NULL,
     id_esteticista INT NOT NULL,
     id_usuario INT NOT NULL,
     anio INT NOT NULL,
@@ -106,7 +105,6 @@ CREATE TABLE IF NOT EXISTS t_citas (
     creado_en TIMESTAMP WITH TIME ZONE NULL DEFAULT NOW(),
     actualizado_en TIMESTAMP WITH TIME ZONE NULL,
     FOREIGN KEY (id_serv) REFERENCES t_servicios(id),
-    FOREIGN KEY (id_cat) REFERENCES t_categorias(id),
     FOREIGN KEY (id_esteticista) REFERENCES t_esteticistas(id),
     FOREIGN KEY (id_usuario) REFERENCES t_usuarios(id) ON UPDATE CASCADE,
     FOREIGN KEY (id_estado) REFERENCES t_estados(id) ON UPDATE CASCADE
