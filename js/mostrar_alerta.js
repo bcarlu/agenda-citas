@@ -12,13 +12,13 @@ function ensureContainer() {
 // Genera el HTML para la alerta
 function makeToastHtml(message, type) {
     if (type === 'exito') {
-        return '<div class="alert alert-success mb-0" role="alert">' + message + '</div>';
+        return '<div class="alert alert-success mb-0 alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + message + '</div>';
     }
     if (type === 'error') {
-        return '<div class="alert alert-danger mb-0" role="alert">' + message + '</div>';
+        return '<div class="alert alert-danger mb-0 alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + message + '</div>';
     }
     if (type === 'aviso') {
-        return '<div class="alert alert-warning mb-0" role="alert">' + message + '</div>';
+        return '<div class="alert alert-warning mb-0 alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + message + '</div>';
     }    
 }
 

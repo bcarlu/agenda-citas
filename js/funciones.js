@@ -41,7 +41,8 @@ document.addEventListener("DOMContentLoaded", resaltarItemActivo);
 // Listener para llamar la funcion showToast cuando sea necesario mostrar alertas. showToast se define en el archivo mostrar_alerta.js
 document.addEventListener("DOMContentLoaded", function() {
     const parametrosURL = new URLSearchParams(window.location.search);
+    const timeout = parametrosURL.has('timeout') ? parseInt(parametrosURL.get('timeout')) : 3000;
     if (parametrosURL.has('tipo') && parametrosURL.has('mensaje')) {
-        showToast(parametrosURL.get("mensaje"), parametrosURL.get("tipo"))
+        showToast(parametrosURL.get("mensaje"), parametrosURL.get("tipo"), timeout);
     }
 });
