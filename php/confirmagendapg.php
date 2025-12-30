@@ -14,7 +14,6 @@ if (isset($usuario)) {
         // Definir variables GET para registrar la cita
         $idServicio = $_GET['id_serv'];
         $idEsteticista = $_GET['est'];
-        $idCategoria = $_GET['cat'];
         $idUsuario = $usuario;
         $anio = $_GET['anio'];
         $mes = $_GET['mes'];
@@ -45,9 +44,9 @@ if (isset($usuario)) {
         //Si no se registra normalmente
         else {
             //Registra cita
-            $datosCita = [$idServicio, $idCategoria, $idEsteticista, $idUsuario, $anio, $mes, $dia, $hora, $duracionServicio, $horafin];
-            $stmtRegCitas = $pdo->prepare("INSERT INTO t_citas (id_serv, id_cat, id_esteticista, id_usuario, anio, mes, dia, hora, duracion, horafin)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $datosCita = [$idServicio, $idEsteticista, $idUsuario, $anio, $mes, $dia, $hora, $duracionServicio, $horafin];
+            $stmtRegCitas = $pdo->prepare("INSERT INTO t_citas (id_serv, id_esteticista, id_usuario, anio, mes, dia, hora, duracion, horafin)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmtRegCitas->execute($datosCita);
             $citaRegistrada = $stmtRegCitas->rowCount();
             
