@@ -18,22 +18,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             <div class="col-auto">
                 <a class="btn btn-outline-primary" href="/paginas/admin/nueva_categoria.php" role="button">Nueva Categoria</a>
             </div>                    
-        </div>
-        <?php
-            // Alerta de exito
-            if (isset($_GET['categoria'])) { // Valida si se recibe la variable
-                if ($_GET['categoria'] == "exito") {
-        ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Categoria creada con exito!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php
-                } // Cierre if
-            } // Cierre if
-        ?>        
+        </div>       
         <div class="row">
             <div class="col-3">
                 <?php include 'navbar_lateral.php';?>

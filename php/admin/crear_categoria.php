@@ -18,8 +18,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Verificar los campos obligatorios
         if ($nombre === null) {
-            http_response_code(400);
-            header("location:/../../paginas/admin/nueva_categoria.php?error=faltan_campos_obligatorios");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+            $urlRedireccion = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] . '?tipo=' . $tipo . '&mensaje=' . $mensaje : '/../../paginas/admin/nueva_categoria.php?tipo=' . $tipo . '&mensaje=' . $mensaje;
+            header('location:' . $urlRedireccion);
             exit;
         }
         
@@ -30,8 +32,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $stmt->execute($datosCategoria);
         $categoria = $stmt->rowCount();
         
-        if ($categoria > 0) {            
-            header('location: ../../paginas/admin/categorias_admin.php?categoria=exito');
+        if ($categoria > 0) {
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Categoria creda con éxito.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al crear categoria, por favor intenta de nuevo. <a href='../../paginas/admin/nueva_categoria.php'>Volver</a>";

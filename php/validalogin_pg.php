@@ -16,7 +16,9 @@ $clave = isset($_POST['clave']) && !empty($_POST['clave']) ? $_POST['clave'] : n
 // Verificar los campos obligatorios
 if ($email === null || $clave === null) {
     http_response_code(400);
-    header("location:../ingreso.php?error=faltan_campos_obligatorios");
+    $tipo = urlencode("error");
+    $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+    header('location:../ingreso.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
     exit;
 }
 
@@ -57,17 +59,23 @@ try {
             }
         } else {
             // Contraseña incorrecta recarga la pagina con mensaje de error
-            header("Location:../ingreso.php?error=clave_incorrecta");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Clave o usuario incorrectos. Revisa e intenta de nuevo.");
+            header('location:../ingreso.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
             exit;
         } 
     } else {
         // Usuario no registrado
-        header("Location:../ingreso.php?error=usuario_no_registrado");
+        $tipo = urlencode("error");
+        $mensaje  = urlencode("Clave o usuario incorrectos. Revisa e intenta de nuevo.");
+        header('location:../ingreso.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
         exit;
     }
 } catch (\Throwable $e) {
     error_log("Error en el proceso de ingreso: " . $e->getMessage() . " con codigo: " .(int)$e->getCode() . " en linea: " . $e->getLine() . " en archivo: " . $e->getFile());
     http_response_code(500);
-    header("location:../ingreso.php?error=error_interno");
+    $tipo = urlencode("error");
+    $mensaje  = urlencode("Error interno del servidor. Intenta de nuevo o informa al administrador.");
+    header('location:../ingreso.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
     exit;
 }

@@ -23,31 +23,6 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 <h2 class="h4">Editar servicio</h2>
             </div>
             <div class="col-12 col-md-5">
-                <?php
-                // Alerta de error
-                if (isset($_GET['error'])) { // Valida si se recibe la variable
-                    if ($_GET['error'] == "faltan_campos_obligatorios") { // Error 1
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Faltan campos obligatorios!</strong> Por favor llena todos los campos.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 1
-                    if ($_GET['error'] == "error_al_actualizar_servicio" || $_GET['error'] == "error_interno" || $_GET['error'] == "servicio_no_existe") { // Error 2
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error al actualizar el servicio!</strong> Por favor intentalo de nuevo.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 2              
-                } //Cierre if de control isset
-                ?>
                 <form id="form-crear-cuenta" action="/php/admin/actualizar_servicio.php" method="post">
                     <input type="hidden" class="hidden" name="id-servicio" id="id-servicio" value="<?php echo htmlspecialchars($idServicio)?>">
                     <div class="form-group">
@@ -78,7 +53,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                         <button type="submit" class="btn btn-block btn-primary">Actualizar</button>
                         <a type="button" class="btn btn-block btn-danger" href="/servicios_admin.php">Cancelar</a>
                     </div>
-                </form>                
+                </form>   
             </div>
         </div>        
     </div>

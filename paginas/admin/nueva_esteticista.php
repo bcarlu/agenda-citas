@@ -17,31 +17,6 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
             </div>
             <div class="col-12 col-md-5">
                 <?php
-                // Alerta de error
-                if (isset($_GET['error'])) { // Valida si se recibe la variable
-                    if ($_GET['error'] == "faltan_campos_obligatorios") { // Error 1
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Faltan campos obligatorios!</strong> Por favor llena todos los campos.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 1
-                    if ($_GET['error'] == "error_al_crear_esteticista" || $_GET['error'] == "error_interno") { // Error 2
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error al crear esteticista!</strong> Por favor intentalo de nuevo.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 2              
-                } //Cierre if de control isset
-                ?>
-                <?php
                 // Validar si hay categorias creadas, si no informar y agregar boton para crear categoria.
                     $categoriasDatos = obtenerCategorias();
                     if($categoriasDatos) {

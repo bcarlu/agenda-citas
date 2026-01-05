@@ -27,8 +27,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Verificar los campos obligatorios
         if ($idCategoria === null || $idCategoria === false) {
-            http_response_code(400);
-            header("location: ../../paginas/admin/categorias_admin.php?error=categoria_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("La categoria no existe.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -39,9 +40,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // En caso de inconsistencia en categoria
         if ($categoriaCuenta === false) {
-            http_response_code(400);
             error_log("Error al eliminar categoria: Categoria no encontrada o id de cuenta no corresponde");
-            header("location: ../../paginas/admin/categorias_admin.php?error=categoria_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("La categoria no existe.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -60,8 +62,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Si la categoria tiene servicios o esteticistas asociados se emite alerta para desasociarlos primero
         if($categoriaServEstet > 0){
-            http_response_code(401);
-            header("location: ../../paginas/admin/categorias_admin.php?error=servicio_o_esteticista_asociado");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("La categoria esta asociada a un servicio o esteticista. Primero debes desasociarla.");
+            $timeout = 10000;
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje . '&timeout=' . $timeout);
             exit;
         }
 
@@ -74,8 +78,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         }
 
         // Redireccionar a la lista de categorias
-        if ($categoriaEliminada > 0) {            
-            header('location: ../../paginas/admin/categorias_admin.php?categoria=eliminada');
+        if ($categoriaEliminada > 0) { 
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Categoria eliminada con éxito.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al eliminar el categoria, por favor intenta de nuevo. <a href='/paginas/admin/categorias_admin.php'>Volver</a>";

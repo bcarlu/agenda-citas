@@ -19,31 +19,6 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 <h2 class="h4">Editar categoria</h2>
             </div>
             <div class="col-12 col-md-5">
-                <?php
-                // Alerta de error
-                if (isset($_GET['error'])) { // Valida si se recibe la variable
-                    if ($_GET['error'] == "faltan_campos_obligatorios") { // Error 1
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Faltan campos obligatorios!</strong> Por favor llena todos los campos.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 1
-                    if ($_GET['error'] == "error_al_actualizar_categoria" || $_GET['error'] == "error_interno" || $_GET['error'] == "categoria_no_existe") { // Error 2
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error al actualizar categoria!</strong> Por favor intentalo de nuevo.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 2              
-                } //Cierre if de control isset
-                ?>
                 <form id="form-editar-categoria" action="/php/admin/actualizar_categoria.php" method="post">
                     <input type="hidden" class="hidden" name="id-categoria" id="id-categoria" value="<?php echo htmlspecialchars($idCategoria)?>">
                     <div class="form-group">

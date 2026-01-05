@@ -29,7 +29,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
         // Verificar los campos obligatorios
         if ($idCategoria === null || $idCategoria === false || $nombreCategoria === null || $nombreCategoria === false) {
             http_response_code(400);
-            header("location:/../../paginas/admin/editar_categoria.php?id_cat='. urlencode($idCategoria) .'&nom_cat='. urlencode($nombreCategoria) .'error=faltan_campos_obligatorios");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+            header('location:/../../paginas/admin/editar_categoria.php?tipo=' . $tipo . '&mensaje=' . $mensaje . '&id_cat='. urlencode($idCategoria) .'&nom_cat='. urlencode($nombreCategoria) );
             exit;
         }
 
@@ -47,7 +49,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
         if ($categoriaCuenta === false) {
             http_response_code(400);
             error_log("Error al actualizar categoria: Categoria no encontrada o id de cuenta no corresponde");
-            header("location: ../../paginas/admin/categorias_admin.php?error=categoria_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("La categoria no existe.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -57,7 +61,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // si no hay campos para actualizar se redirige a la lista de categorias
         if (empty($camposActualizados)) {
-            header('location: ../../paginas/admin/categorias_admin.php?categoria=sin_cambios');
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("No se hicieron cambios.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -76,8 +82,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $stmtActualizar->execute();
         $categoriaActualizada = $stmtActualizar->rowCount();
         
-        if ($categoriaActualizada > 0) {            
-            header('location: ../../paginas/admin/categorias_admin.php?categoria=actualizada');
+        if ($categoriaActualizada > 0) {  
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Categoria actualizada con exito.");
+            header('location:/../../paginas/admin/categorias_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al actualizar la categoria, por favor intenta de nuevo. <a href='/paginas/admin/categorias_admin.php'>Volver</a>";

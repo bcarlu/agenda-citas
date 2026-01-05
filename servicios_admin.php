@@ -19,41 +19,6 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                 <a class="btn btn-outline-primary" href="/paginas/admin/nuevo_servicio.php" role="button">Nuevo Servicio</a>
             </div>                    
         </div>
-        <?php
-            // Alertas
-            if (isset($_GET['servicio']) || isset($_GET['error'])) { // Valida si se recibe la variable
-                if ($_GET['servicio'] == "exito") {
-        ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Servicio creado con exito!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php
-                } // Cierre if exito
-                if ($_GET['servicio'] == "sin_cambios" || $_GET['error'] == "servicio_no_existe") {
-        ?>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>No se hicieron cambios!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php
-                } // Cierre if sin_cambios
-                if ($_GET['servicio'] == "actualizado") {
-        ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Servicio actualizado!</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php
-                } // Cierre if actualizado            
-            } // Cierre if
-        ?>
         <div class="row">
             <div class="col-3">
                 <?php include 'paginas/admin/navbar_lateral.php';?>

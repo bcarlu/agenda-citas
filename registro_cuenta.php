@@ -10,41 +10,6 @@
                 <h2 class="h4">Crea una cuenta gratis y gestiona la agenda de tu negocio!</h2>
             </div>
             <div class="col-12 col-md-5">
-                <?php
-                // Alerta de error
-                if (isset($_GET['error'])) { // Valida si se recibe la variable
-                    if ($_GET['error'] == "faltan_campos_obligatorios") { // Error 1
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Faltan campos obligatorios!</strong> Por favor llena todos los campos.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    }
-                    if ($_GET['error'] == "email_ya_registrado") { // Error 2
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Email ya registrado!</strong> Inicia sesion o intenta con otro correo.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 2
-                    if ($_GET['error'] == "error_al_crear_usuario" || $_GET['error'] == "error_al_crear_cuenta" || $_GET['error'] == "error_interno") { // Error 3
-                ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error al crear cuenta!</strong> Por favor intentalo de nuevo.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <?php
-                    } // Cierre if error 3              
-                } //Cierre if de control isset
-                ?>
                 <form id="form-crear-cuenta" action="php/validaregistro_cuenta.php" method="post">
                     <div class="form-group">
                         <label for="nombre-usu-cuenta">Nombre <span class="text-danger">*</span></label>

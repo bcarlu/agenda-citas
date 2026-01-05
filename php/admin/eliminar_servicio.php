@@ -27,8 +27,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Verificar los campos obligatorios
         if ($idServicio === null || $idServicio === false) {
-            http_response_code(400);
-            header("location: ../../servicios_admin.php?error=servicio_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("El servicio no existe.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -38,8 +39,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $servicio = $stmtServicio->fetch(PDO::FETCH_ASSOC);
         
         if($servicio === false || $servicio["id_cuenta"] != $idCuenta) {
-            http_response_code(400);
-            header("location: ../../servicios_admin.php?error=servicio_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("El servicio no existe.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -70,8 +72,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         } 
 
         // Redireccionar a la lista de servicios
-        if ($servicioEliminado > 0) {            
-            header('location: ../../servicios_admin.php?servicio=eliminado');
+        if ($servicioEliminado > 0) {
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Servicio eliminado con éxito.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al eliminar el servicio, por favor intenta de nuevo. <a href='../../servicios_admin.php'>Volver</a>";

@@ -21,8 +21,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Verificar los campos obligatorios
         if ($nombre === null || $idCategoria === null || $precio === null || $duracion === null) {
-            http_response_code(400);
-            header("location:/../../paginas/admin/nuevo_servicio.php?error=faltan_campos_obligatorios");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+            $urlRedireccion = '/../../paginas/admin/nuevo_servicio.php?tipo=' . $tipo . '&mensaje=' . $mensaje;
+            header('location:' . $urlRedireccion);
             exit;
         }
         
@@ -33,8 +35,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $stmt->execute($datosServicio);
         $servicio = $stmt->rowCount();
         
-        if ($servicio > 0) {            
-            header('location: ../../servicios_admin.php?servicio=exito');
+        if ($servicio > 0) { 
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Servicio creado con éxito.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al crear el servicio, por favor intenta de nuevo. <a href='../../paginas/admin/nuevo_servicio.php'>Volver</a>";

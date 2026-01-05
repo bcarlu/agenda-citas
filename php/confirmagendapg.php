@@ -37,8 +37,12 @@ if (isset($usuario)) {
         $citas = $stmtCitas->fetch(PDO::FETCH_ASSOC);
 
         // Si el esteticista ya tiene cita en la fecha solicitada se regresa a la pagina de agenda para que escoja otra
-        if ($citas) {            
-            header("location: ../agenda.php?serv_id=$idServicio&serv=$nombreServ&agendado=si");
+        if ($citas) {
+            $tipo = urlencode("error");
+            $mensaje = urlencode("Upss! la cita ya fue tomada por alguien mas, por favor escoje otra hora.");
+            $timeout = 10000;
+            $parametros = "tipo=" . $tipo . "&mensaje=". $mensaje . "&timeout=". $timeout;
+            header("Location: ../inicio.php?" . $parametros);
             exit;
         }
         //Si no se registra normalmente
@@ -55,7 +59,10 @@ if (isset($usuario)) {
                 //header("location: enviarcorreo.php?serv=$servicioEscogido&est=$esteticista&dia=$dia&mes=$mes&hora=$hora&horafin=$horafin&precio=$precio");
 
                 // Por el momento se comenta la redireccion a la pagina de envio de correo para simplificar el proceso, y se redirige directamente a la pagina de inicio del usuario.
-                header('location: ../inicio.php?agenda=exito');
+                $tipo = urlencode("exito");
+                $mensaje = urlencode("Cita creada con exito. Te esperamos pronto!");
+                $parametros = "tipo=" . $tipo . "&mensaje=". $mensaje;
+                header("Location: ../inicio.php?" . $parametros);
                 exit;
             } else {
                 echo "Error al registrar la cita, por favor intenta de nuevo. <a href='../agenda.php?serv_id=$idServicio&serv=$nombreServ'>Volver</a>";

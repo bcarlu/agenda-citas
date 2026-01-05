@@ -19,8 +19,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // Verificar los campos obligatorios
         if ($nombre === null || $idCategoria === null) {
-            http_response_code(400);
-            header("location:/../../paginas/admin/nueva_esteticista.php?error=faltan_campos_obligatorios");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+            $urlRedireccion = '/../../paginas/admin/nueva_esteticista.php?tipo=' . $tipo . '&mensaje=' . $mensaje;
+            header('location:' . $urlRedireccion);
             exit;
         }
         
@@ -31,8 +33,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $stmt->execute($datosEsteticista);
         $esteticista = $stmt->rowCount();
         
-        if ($esteticista > 0) {            
-            header('location: ../../paginas/admin/esteticistas_admin.php?esteticista=exito');
+        if ($esteticista > 0) { 
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Esteticista creada con éxito.");
+            header('location:/../../paginas/admin/esteticistas_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al crear esteticista, por favor intenta de nuevo. <a href='../../paginas/admin/nueva_categoria.php'>Volver</a>";

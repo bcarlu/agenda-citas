@@ -19,7 +19,9 @@ $uuid = isset($_POST['id_cuenta']) && !empty($_POST['id_cuenta']) ? $_POST['id_c
 // Verificar los campos obligatorios
 if ($nombre === null || $email === null || $clave === null || $uuid === null) {
     http_response_code(400);
-    header("location:../registro.php?error=faltan_campos_obligatorios");
+    $tipo = urlencode("error");
+    $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+    header('location:../registro.php?tipo=' . $tipo . '&mensaje=' . $mensaje . '&id_cuenta=' . $uuid );
     exit;
 }
 
@@ -42,7 +44,9 @@ try {
     if ($registrado && $registrado["count"] > 0) {
         // Email ya registrado
         http_response_code(409);
-        header("location:../registro.php?error=email_ya_registrado");
+        $tipo = urlencode("error");
+        $mensaje  = urlencode("El email suministrado ya esta registrado. Inicia sesion o intenta con otro email.");
+        header('location:../registro.php?tipo=' . $tipo . '&mensaje=' . $mensaje . '&id_cuenta=' . $uuid );
         exit;
     } else {
         // Verificar que la cuenta exista
@@ -63,17 +67,25 @@ try {
         $idCuenta = $cuenta["id"];
         $creado =crearUsuario($nombre, $apellidos, $email, $celular, $clavenc, $idRol, $idCuenta);
         if ($creado) {
-            header("location:../ingreso.php?registro=exitoso&nombre=$nombre");
+            http_response_code(200);
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Usuario registrado con éxito! Ahora puedes iniciar sesion.");
+            header('location:../ingreso.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
             exit;
         } else {
             http_response_code(500);
-            header("location:../registro.php?error=error_al_crear_usuario");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Error al crear usuario. Intentalo de nuevo.");
+            header('location:../registro.php?tipo=' . $tipo . '&mensaje=' . $mensaje );
             exit;
         }
     }
 } catch (\Throwable $e) {
     error_log("Error en el proceso de registro: " . $e->getMessage(), (int)$e->getCode());
     http_response_code(500);
-    header("location:../registro.php?error=error_interno");
+    $tipo = urlencode("error");
+    $mensaje  = urlencode("Error interno del servidor. Intentalo nuevamente o informa al administrador.");
+    $timeout = 5000;
+    header('location:../registro.php?tipo=' . $tipo . '&mensaje=' . $mensaje . '&timeout=' . $timeout);
     exit;
 }

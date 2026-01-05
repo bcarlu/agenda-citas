@@ -30,9 +30,11 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $idCuenta = $_SESSION['id_cuenta'] ?? 0;
 
         // Verificar los campos obligatorios
-        if ($nombre === null || $nombre === false || $idCategoria === null || $idCategoria === false || $precio === null || $precio === false || $duracion === null || $duracion === false) {
-            http_response_code(400);
-            header("location:/../../paginas/admin/editar_servicio.php?error=faltan_campos_obligatorios");
+            if ($nombre === null || $nombre === false || $idCategoria === null || $idCategoria === false || $precio === null || $precio === false || $duracion === null || $duracion === false) {  
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("Faltan campos obligatorios, por favor revisa tus datos.");
+            $urlRedireccion = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] . '&tipo=' . $tipo . '&mensaje=' . $mensaje : '/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje;
+            header('location:' . $urlRedireccion);
             exit;
         }
 
@@ -50,7 +52,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
         if (!$servicio || $servicio["id_cuenta"] != $idCuenta || $categoriaCuenta === false) {
             http_response_code(400);
             error_log("Error al actualizar servicio: Servicio no encontrado o id de cuenta no corresponde");
-            header("location: ../../servicios_admin.php?error=servicio_no_existe");
+            $tipo = urlencode("error");
+            $mensaje  = urlencode("El servicio no existe.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -63,7 +67,9 @@ if (isset($usuario) && $idRolUsuario === 1) {
 
         // si no hay campos para actualizar se redirige a la lista de servicios
         if (empty($camposActualizados)) {
-            header('location: ../../servicios_admin.php?servicio=sin_cambios');
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("No se hicieron cambios.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         }
 
@@ -82,8 +88,10 @@ if (isset($usuario) && $idRolUsuario === 1) {
         $stmtActualizar->execute();
         $servicioActualizado = $stmtActualizar->rowCount();
         
-        if ($servicioActualizado > 0) {            
-            header('location: ../../servicios_admin.php?servicio=actualizado');
+        if ($servicioActualizado > 0) {  
+            $tipo = urlencode("exito");
+            $mensaje  = urlencode("Servicio actualizado con exito.");
+            header('location:/../../servicios_admin.php?tipo=' . $tipo . '&mensaje=' . $mensaje);
             exit;
         } else {
             echo "Error al actualizar el servicio, por favor intenta de nuevo. <a href='../../servicios_admin.php'>Volver</a>";
