@@ -46,6 +46,7 @@ if (isset($_SESSION['username']) && $_SESSION['id_rol'] === 1) {
                                 <th scope="col">Id</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Categoria</th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
